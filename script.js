@@ -1,8 +1,20 @@
 // Définition du sélecteur de bars
-let dropDown = d3.select('#filter')
+let dropDownBar = d3.select('#filterbar')
                  .append("select")
-                //  .attr("class", "form-control") --> pour bootstrap
-                 .attr("name", "bar-list");
+                 .attr("name", "bar-list")
+                 .attr("class","selectpicker")
+                 .attr("title", "Un bar en particulier ?")
+                 
+
+// Définition du sélecteur de bars
+let dropDownBinch = d3.select('#filterbinch')
+                 .append("select")
+                 .attr("name", "binch-list")
+                 .attr("class","selectpicker")
+                 .attr("data-live-search","true")
+                 .attr("title", "Tapez pour rechercher");
+
+
 
 // Définitions des éléments relatifs au scatteplot
 let margins = {
@@ -85,15 +97,17 @@ d3.json('binches.json', function(error, binches) {
   let brasserieUnique = [...new Set(binches.map(item => item.Brasserie))];
 
   // Assignement des bars au sélecteur
-  let optDrop = dropDown.selectAll("option")
+  let optDropBar = dropDownBar.selectAll("option")
                         .data(["TOUS"].concat(bars))
                         .enter()
                         .append("option");
 
-  optDrop.text(d => d)
+  optDropBar.text(d => d)
          .attr("value", d => d);
+
+
   // Si on sélectionne un bar, cache les autres
-  dropDown.on("change", function(binches) {
+  dropDownBar.on("change", function(binches) {
               let selected = this.value;
               display = this.checked ? "none" : "inline";
               displayOthers = this.checked ? "inline" : "none";
@@ -110,7 +124,46 @@ d3.json('binches.json', function(error, binches) {
                        .filter(function(d) {return selected == d.Bar;})
                        .attr("display", display);
               }
+
+
   });
+
+
+  let optDropBinch = dropDownBinch.selectAll("option")
+                        .data(["TOUTES"].concat(biereUnique))
+                        .enter()
+                        .append("option");
+
+  optDropBinch.text(d => d)
+         .attr("value", d => d);
+
+
+  // Si on sélectionne une bière, cache les autres à voir ce qu'on fait de ça (disparaître ou mettre en valeur)
+
+
+  dropDownBinch.on("change", function(binches) {
+              let selected = this.value;
+              display = this.checked ? "none" : "inline";
+              displayOthers = this.checked ? "inline" : "none";
+
+              if (selected == 'TOUTES') {
+                svgScat.selectAll("circle")
+                       .attr("display", display);
+              } else {
+
+// à éventuellement modifier pour mise en valeur au lieu de la disparition
+
+                svgScat.selectAll("circle")
+                       .filter(function(d) {return selected !== d.Biere;})
+                       .attr("display", displayOthers);
+
+                svgScat.selectAll("circle")
+                       .filter(function(d) {return selected == d.Biere;})
+                       .attr("display", display);
+              }
+
+});
+
 
 // Définition du domain des échelles selon les données
   xScale.domain(d3.extent(binches, d => d.ABV));
