@@ -47,6 +47,32 @@ let SrmColorScale = d3.scaleLinear()
 // Couleurs selon le bar
 let barColorScale = d3.scaleOrdinal(d3.schemeCategory20);
 
+/////////////////////////////////////////////////////////
+// Parties relatives à la carte
+let brassMarker = L.AwesomeMarkers.icon({
+    icon: 'industry',
+    prefix: 'fa',
+    markerColor: 'white',
+    iconColor: 'black'
+  });
+
+let barMarker = L.AwesomeMarkers.icon({
+    icon: 'beer',
+    prefix: 'fa',
+    markerColor: 'blue',
+    iconColor: 'white'
+  });
+
+// Nouveau cluster de markers
+let brassMarkers = L.markerClusterGroup({
+  showCoverageOnHover: false, //Ne pas montrer les limites
+});
+// A voir si on veut cluster les bars... TODO
+// let barMarkers = L.markerClusterGroup({
+//   showCoverageOnHover: false, //Ne pas montrer les limites
+// });
+
+////////////////////////////////////
 // Import des données et affichage des visus
 d3.json('binches.json', function(error, binches) {
   if (error) { // Si le fichier n'est pas chargé, log de l'erreur
@@ -148,31 +174,42 @@ d3.json('binches.json', function(error, binches) {
               .style("opacity", 0.5);
           })
 
-let map = L.map('map').setView([50, 2], 5);
+  let map = L.map('map').setView([50, 2], 5);
 
- L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.{ext}', {
-	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-	subdomains: 'abcd',
-	minZoom: 0,
-	maxZoom: 18,
-	ext: 'png'
-}).addTo(map);
+   L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.{ext}', {
+  	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  	subdomains: 'abcd',
+  	minZoom: 0,
+  	maxZoom: 18,
+  	ext: 'png'
+  }).addTo(map);
 
-// Nouveau cluster de markers
-let markers = L.markerClusterGroup({
-  showCoverageOnHover: false, //Ne pas montrer les limites
-});
+  // Pour chaque brasserie, récupèrer les coordonnées et les assigner au pop-up + nom
+  brasserieUnique.forEach(function(brass){
+    let brasserie = binches.find(x => x.Brasserie === brass);
 
-// Pour chaque brasserie, récupèrer les coordonnées et les assigner au pop-up + nom
-brasserieUnique.forEach(function(brass){
-  let brasserie = binches.find(x => x.Brasserie === brass);
+    let marker = new L.marker([brasserie.Lat, brasserie.Long], {icon: brassMarker})
+        .bindPopup(brasserie.Brasserie)
+        .addTo(brassMarkers);
+  });
 
-  let marker = new L.marker([brasserie.Lat, brasserie.Long])
-      .bindPopup(brasserie.Brasserie)
-      .addTo(markers);
-});
-// Ajout des marqueurs à la carte
-map.addLayer(markers);
+  d3.json('bars.json', function(error, barsLsne) {
+    if (error) { // Si le fichier n'est pas chargé, log de l'erreur
+      console.log(error);
+    }
+
+    for (let i = 0 ; i < barsLsne.length; i++) {
+      let marker = new L.marker([barsLsne[i].Lat, barsLsne[i].Long], {icon: barMarker})
+          .bindPopup(barsLsne[i].Bar)
+          .addTo(map); //.addTo(barMarkers); si cluster
+    }
+  });
+
+  // Ajout des marqueurs à la carte
+  map.addLayer(brassMarkers);
+  // map.addLayer(barMarkers); si cluster
+
+  L.control.locate().addTo(map);
 
 });
 
