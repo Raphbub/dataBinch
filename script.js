@@ -6,7 +6,8 @@ let dropDownBar = d3.select('#filterbar')
                  .attr("title", "Un bar en particulier ?")
                  
 
-// Définition du sélecteur de bars
+// Définition du sélecteur de bieres
+
 let dropDownBinch = d3.select('#filterbinch')
                  .append("select")
                  .attr("name", "binch-list")
