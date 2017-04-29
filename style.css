@@ -1,0 +1,31 @@
+body { font-family: Arial;}
+
+.axis, .axis path {
+  fill: none;
+  stroke: #ACB849;
+}
+text {
+  stroke: none;
+  fill: #666666;
+}
+
+div.tooltip {
+  position: absolute;
+  background-color:#424242;
+  color: white;
+  text-align: center;
+  padding: 8px;
+  margin-top: -20px;
+  pointer-events: none;
+}
+
+.dot{
+  stroke:black;
+  stroke-width:0.5;
+  cursor:pointer;
+}
+
+#map {
+  width: 960px;
+  height: 500px;
+}
