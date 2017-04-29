@@ -55,6 +55,8 @@ d3.json('binches.json', function(error, binches) {
 
   // Récupération des différents bars
   let bars = [...new Set(binches.map(item => item.Bar))];
+  let biereUnique = [...new Set(binches.map(item => item.Biere))];
+  let brasserieUnique = [...new Set(binches.map(item => item.Brasserie))];
 
   // Assignement des bars au sélecteur
   let optDrop = dropDown.selectAll("option")
@@ -146,7 +148,7 @@ d3.json('binches.json', function(error, binches) {
               .style("opacity", 0.5);
           })
 
-var map = L.map('map').setView([50, 2], 5);
+let map = L.map('map').setView([50, 2], 5);
 
  L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.{ext}', {
 	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
@@ -156,11 +158,21 @@ var map = L.map('map').setView([50, 2], 5);
 	ext: 'png'
 }).addTo(map);
 
-		for (var i = 0; i < binches.length; i++) {
-			marker = new L.marker([binches[i].Lat,binches[i].Long])
-        .bindPopup(binches[i].Brasserie)
-				.addTo(map);
-		};
+// Nouveau cluster de markers
+let markers = L.markerClusterGroup({
+  showCoverageOnHover: false, //Ne pas montrer les limites
+});
+
+// Pour chaque brasserie, récupèrer les coordonnées et les assigner au pop-up + nom
+brasserieUnique.forEach(function(brass){
+  let brasserie = binches.find(x => x.Brasserie === brass);
+
+  let marker = new L.marker([brasserie.Lat, brasserie.Long])
+      .bindPopup(brasserie.Brasserie)
+      .addTo(markers);
+});
+// Ajout des marqueurs à la carte
+map.addLayer(markers);
 
 });
 
@@ -180,5 +192,3 @@ svgScat.append("text")
        .attr("dy", ".75em")
        .attr("transform", "rotate(-90)")
        .text("Amertume (IBU)");
-
-
