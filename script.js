@@ -15,6 +15,12 @@ let dropDownBinch = d3.select('#filterbinch')
                  .attr("data-live-search","true")
                  .attr("title", "Tapez pour rechercher");
 
+let dropDownBrass = d3.select('#filterbrass')
+                 .append("select")
+                 .attr("name", "binch-list")
+                 .attr("class","selectpicker")
+                 .attr("data-live-search","true")
+                 .attr("title", "Tapez pour rechercher");
 
 
 // Définitions des éléments relatifs au scatteplot
@@ -164,6 +170,43 @@ d3.json('binches.json', function(error, binches) {
               }
 
 });
+
+
+    let optDropBrass = dropDownBrass.selectAll("option")
+                        .data(["TOUTES"].concat(brasserieUnique))
+                        .enter()
+                        .append("option");
+
+  optDropBrass.text(d => d)
+         .attr("value", d => d);
+
+
+  // Si on sélectionne une bière, cache les autres à voir ce qu'on fait de ça (disparaître ou mettre en valeur)
+
+
+  dropDownBrass.on("change", function(binches) {
+              let selected = this.value;
+              display = this.checked ? "none" : "inline";
+              displayOthers = this.checked ? "inline" : "none";
+
+              if (selected == 'TOUTES') {
+                svgScat.selectAll("circle")
+                       .attr("display", display);
+              } else {
+
+// à éventuellement modifier pour mise en valeur au lieu de la disparition
+
+                svgScat.selectAll("circle")
+                       .filter(function(d) {return selected !== d.Brasserie;})
+                       .attr("display", displayOthers);
+
+                svgScat.selectAll("circle")
+                       .filter(function(d) {return selected == d.Brasserie;})
+                       .attr("display", display);
+              }
+
+});
+
 
 
 // Définition du domain des échelles selon les données
