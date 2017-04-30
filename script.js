@@ -34,13 +34,13 @@ let margins = {
   "bottom": 30
 };
 
-let width = 900 - margins.left - margins.right;
-let height = 600 - margins.top - margins.bottom;
+let width = window.innerWidth - margins.left - margins.right;
+let height = window.innerHeight - margins.top - margins.bottom;
 
 let svgScat = d3.select("#scatter-load")
                 .append("svg")
-                .attr("width", width + margins.left + margins.right)
-                .attr("height", height + margins.top + margins.bottom)
+                .attr("width", width/2 + margins.left + margins.right)
+                .attr("height", height/2 + margins.top + margins.bottom)
                 .append("g")
                 .attr("transform", `translate(${margins.left},${margins.top})`);
 
@@ -53,11 +53,11 @@ let radius = 4;
 
 // Axiales
 let xScale = d3.scaleLinear()
-               .range([0, width])
+               .range([0, width/2])
                .nice();
 
 let yScale = d3.scaleLinear()
-               .range([height, 0])
+               .range([height/2, 0])
                .nice();
 
 // Couleurs selon le SRM/EBC
@@ -220,7 +220,7 @@ d3.json('binches.json', function(error, binches) {
 // Ajout des axes du graphique
   svgScat.append("g")
          .attr("class", "x axis")
-         .attr("transform", `translate(0, ${height})`)
+         .attr("transform", `translate(0, ${height/2})`)
          .call(d3.axisBottom(xScale).tickPadding(5));
 
   svgScat.append("g")
@@ -274,7 +274,7 @@ d3.json('binches.json', function(error, binches) {
               .style("opacity", 0.5);
           });
 
-  let map = L.map('map').setView([50, 2], 5);
+  let map = L.map('map').setView([48, 4], 6);
 
    L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.{ext}', {
   	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
@@ -317,8 +317,8 @@ d3.json('binches.json', function(error, binches) {
 svgScat.append("text")
        .attr("class", "x label")
        .attr("text-anchor", "end")
-       .attr("x", width-5)
-       .attr("y", height-7)
+       .attr("x", width/2-5)
+       .attr("y", height/2-7)
        .text("Alcool par volume (%)");
 
 svgScat.append("text")
@@ -329,3 +329,14 @@ svgScat.append("text")
        .attr("dy", ".75em")
        .attr("transform", "rotate(-90)")
        .text("Amertume (IBU)");
+
+
+d3.json('matrix.json', function(error, distances) {
+  if (error) { // Si le fichier n'est pas chargé, log de l'erreur
+    console.log(error);
+  }
+
+let binchesDist;
+let dist;
+
+});
