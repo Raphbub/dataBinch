@@ -1,10 +1,13 @@
+/*jshint esnext: true */
+
+
 // Définition du sélecteur de bars
 let dropDownBar = d3.select('#filterbar')
                  .append("select")
                  .attr("name", "bar-list")
                  .attr("class","selectpicker")
-                 .attr("title", "Un bar en particulier ?")
-                 
+                 .attr("title", "Un bar en particulier ?");
+
 
 // Définition du sélecteur de bieres
 
@@ -245,7 +248,7 @@ d3.json('binches.json', function(error, binches) {
          .on("mouseover", function(d) {
             toolTip.transition()
                   .duration(200)
-                  .style("opacity", .9);
+                  .style("opacity", 0.9);
 
             toolTip.html(`<b>${d.Biere}</b><br><i>Style : ${d.STYLE4}\
               <br>Amertume : ${d.IBU} IBU<br>Alcool : ${d.ABV} %\
@@ -269,7 +272,7 @@ d3.json('binches.json', function(error, binches) {
               .duration(300)
               .attr("r", radius)
               .style("opacity", 0.5);
-          })
+          });
 
   let map = L.map('map').setView([50, 2], 5);
 
