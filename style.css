@@ -29,3 +29,11 @@ div.tooltip {
   width: 960px;
   height: 500px;
 }
+
+.bootstrap-select  li.selected a{
+    background: #3086E4;
+    color: white;
+}
+.bootstrap-select  li.selected a:hover{
+    background: #256CB8;
+}
