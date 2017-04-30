@@ -34,7 +34,7 @@ let margins = {
   "bottom": 30
 };
 
-let width = 1000 - margins.left - margins.right;
+let width = 900 - margins.left - margins.right;
 let height = 600 - margins.top - margins.bottom;
 
 let svgScat = d3.select("#scatter-load")

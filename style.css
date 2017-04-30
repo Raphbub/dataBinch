@@ -26,8 +26,8 @@ div.tooltip {
 }
 
 #map {
-  width: 960px;
-  height: 500px;
+  width: 500px;
+  height: 600px;
 }
 
 .bootstrap-select  li.selected a{
@@ -36,4 +36,13 @@ div.tooltip {
 }
 .bootstrap-select  li.selected a:hover{
     background: #256CB8;
+}
+
+.box {
+  border: 1px solid #EEE;
+  margin: 3px;
+  padding: 5px;
+  background-color: white;
+  font-family: sans-serif;
+  font-size: 12px;
 }

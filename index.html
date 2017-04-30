@@ -18,19 +18,27 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.60.0/L.Control.Locate.min.js" charset="utf-8"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-dropdown/2.0.3/jquery.dropdown.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.11/js/app.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.11/js/pages/dashboard.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.11/js/demo.js"></script>
+
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.js"></script>
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.11/css/AdminLTE.css"/>
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-dropdown/2.0.3/jquery.dropdown.css">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.0.5/dist/MarkerCluster.Default.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.0.5/dist/MarkerCluster.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.60.0/L.Control.Locate.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.60.0/L.Control.Locate.min.css">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
 
@@ -41,25 +49,100 @@
 </head>
 
 <body>
-  <div id="filterbar">
-      <b>Bar :</b>
-  </div>
 
-<div id="filterbrass">
-<b>Brasserie :</b>
-  </div>
+          <!-- Content Header (Page header) -->
+          <section class="content-header">
+              <h1>
+                  DataBinch<br>
+                  <small>Projet de Visualisation de données UNIL. Visualisations de divers aspects des bières trouvées dans une sélection de bars lausannois</small>
+              </h1>
 
-<div id="filterbinch">
-<b>Bière :</b>
-  </div>
+              <ol class="breadcrumb">
 
-  <div id="scatter-load" class="dropdown"></div>
+                  <li>
+                      <i class="fa fa-code"></i> <a href="http://www.unil.ch/mastergeographie/home/menuinst/presentation-master-geo/analyse-spatiale-et-syst-compl.html" class="text-blue" target="_blank">Romain Lacroix et Raphaël Bubloz</a>
+                      <br>
+                      <i class="fa fa-github"></i> Code sur <a href="https://github.com/Raphbub/dataBinch" target="_blank" class="text-blue">Github</a>
+                  </li>
 
-  <div id="map"></div>
+              </ol>
+          </section>
+
+          <!-- Main row -->
+          <div class="row">
+              <!-- Left col -->
+              <section class="col-lg-6 connectedSortable" padding="5px">
+                  <!-- Box (with bar chart) -->
+
+                  <div class="box box-primary" padding="5px">
+                    <div class="pull-right box-tools">
+                        <button class="btn btn-primary btn-sm pull-right" data-widget="collapse" data-toggle="tooltip" title="Collapse" style="margin-right: 5px;"><i class="fa fa-minus"></i></button>
+                        <button class="btn btn-primary btn-sm pull-right" data-toggle="tooltip"
+                        title="Filtrer" style="margin-right: 5px;"><i class="fa fa-info"></i></button>
+                    </div><!-- /. tools -->
+
+                    <div id="filterbar" padding="5px">
+                        <b>Bar :</b>
+                    </div>
+
+                  <div id="filterbrass" padding="5px">
+                  <b>Brasserie :</b>
+                    </div>
+
+                  <div id="filterbinch" padding="5px">
+                  <b>Bière :</b>
+                    </div>
 
 
+                  </div>
+
+                  <div class="box box-primary">
+                      <div class="box-header">
+                          <!-- tools box -->
+                          <div class="pull-right box-tools">
+                              <button class="btn btn-primary btn-sm pull-right" data-widget="collapse" data-toggle="tooltip" title="Collapse" style="margin-right: 5px;"><i class="fa fa-minus"></i></button>
+                              <button class="btn btn-primary btn-sm pull-right" data-toggle="tooltip"
+                               style="margin-right: 5px;"><i class="fa fa-info"></i></button>
+                          </div><!-- /. tools -->
+                          <i class="fa icon ion-merge"></i>
+                          <h3 class="box-title">
+                              Scatterplot :
+                          </h3>
+                      </div>
+                      <div class="box-body" >
+                          <div id="scatter-load" class="dropdown" style="width: 100%">
+                          </div>
+                      </div>
+                 </div>
+
+
+                </section>
+
+                <!-- right col (We are only adding the ID to make the widgets sortable)-->
+                          <section class="col-lg-6 connectedSortable">
+                              <!-- network box -->
+                              <div class="box box-primary">
+                                  <div class="box-header">
+                                      <!-- tools box -->
+                                      <div class="pull-right box-tools">
+                                          <button class="btn btn-primary btn-sm pull-right" data-widget="collapse" data-toggle="tooltip" title="Collapse" style="margin-right: 5px;"><i class="fa fa-minus"></i></button>
+                                          <button class="btn btn-primary btn-sm pull-right" data-toggle="tooltip"
+                                           style="margin-right: 5px;"><i class="fa fa-info"></i></button>
+                                      </div><!-- /. tools -->
+                                      <i class="fa icon ion-merge"></i>
+                                      <h3 class="box-title">
+                                          Carte :
+                                      </h3>
+                                  </div>
+                                  <div class="box-body" id="map" style="width: 90%" padding="5px">
+
+                                  </div>
+                                </div>
+
+
+                        </section>
+    </div>
   <script src="script.js" charset="utf-8"></script>
-
 
 
 </body>
