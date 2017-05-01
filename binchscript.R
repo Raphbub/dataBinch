@@ -1,5 +1,6 @@
 library("RJSONIO")
 library("cluster")
+library("igraph")
 
 setwd("dataBinch")
 binches <- fromJSON("binches.json")
@@ -30,7 +31,13 @@ rownames(dist) <- binchUnique[,1]
 colnames(dist) <- binchUnique[,1] 
 
  json <- toJSON(dist, pretty = TRUE)
-write(json, file = "matrix.json")
 
-write(dist, file="binches_distance_matrix.csv")
-
+ g <- graph.adjacency(dist, mode = "undirected", weighted = TRUE)
+ e <- cbind( get.edgelist(g) , round( E(g)$weight, 3 ))
+ e <- as.data.frame(e)
+ colnames(e)[1]<-"Source"
+ colnames(e)[2]<-"Target"
+ colnames(e)[3]<-"Weight"
+ 
+ write.csv(e, file="rowdist.csv", row.names = FALSE)
+ 
