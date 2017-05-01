@@ -29,5 +29,8 @@ dist <- as.matrix(dist)
 rownames(dist) <- binchUnique[,1] 
 colnames(dist) <- binchUnique[,1] 
 
-write.csv(dist, file="binches_distance_matrix.csv")
+ json <- toJSON(dist, pretty = TRUE)
+write(json, file = "matrix.json")
+
+write(dist, file="binches_distance_matrix.csv")
 

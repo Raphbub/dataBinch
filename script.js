@@ -4,7 +4,7 @@
 // Définition du sélecteur de bars
 let dropDownBar = d3.select('#filterbar')
                  .append("select")
-                 .attr("name", "bar-list")
+                 .attr("id", "bar-list")
                  .attr("class","selectpicker")
                  .attr("title", "Un bar en particulier ?");
 
@@ -13,14 +13,14 @@ let dropDownBar = d3.select('#filterbar')
 
 let dropDownBinch = d3.select('#filterbinch')
                  .append("select")
-                 .attr("name", "binch-list")
+                 .attr("id", "binch-list")
                  .attr("class","selectpicker")
                  .attr("data-live-search","true")
                  .attr("title", "Tapez pour rechercher");
 
 let dropDownBrass = d3.select('#filterbrass')
                  .append("select")
-                 .attr("name", "binch-list")
+                 .attr("id", "brass-list")
                  .attr("class","selectpicker")
                  .attr("data-live-search","true")
                  .attr("title", "Tapez pour rechercher");
@@ -134,6 +134,7 @@ d3.json('binches.json', function(error, binches) {
                        .filter(function(d) {return selected == d.Bar;})
                        .attr("display", display);
               }
+                console.log("Bar choisi :" + $('select#bar-list.selectpicker').val() + ", un bar magnifique");
 
 
   });
@@ -171,6 +172,7 @@ d3.json('binches.json', function(error, binches) {
                        .filter(function(d) {return selected == d.Biere;})
                        .attr("display", display);
               }
+              console.log("Bière choisie :" + $('select#binch-list.selectpicker').val() + ", très bon choix !");
 
 });
 
@@ -207,6 +209,7 @@ d3.json('binches.json', function(error, binches) {
                        .filter(function(d) {return selected == d.Brasserie;})
                        .attr("display", display);
               }
+              console.log("Brasserie choisie :" + $('select#brass-list.selectpicker').val()+", un travail incomparable pour des bières (pas toujours) de qualité");
 
 });
 
