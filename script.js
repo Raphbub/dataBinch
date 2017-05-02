@@ -125,7 +125,8 @@ let barMarker = L.AwesomeMarkers.icon({
 // Rassemblement des marqueurs en clusters
 let brassMarkers = L.markerClusterGroup({
   showCoverageOnHover: false, //Ne pas montrer les limites
-  disableClusteringAtZoom: 12
+  disableClusteringAtZoom: 12,
+  spiderfyOnMaxZoom: false
 });
 // A voir si on veut cluster les bars... TODO
 // let barMarkers = L.markerClusterGroup({
