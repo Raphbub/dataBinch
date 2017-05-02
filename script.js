@@ -34,13 +34,13 @@ let margins = {
   "bottom": 30
 };
 
-let width = window.innerWidth - margins.left - margins.right;
-let height = window.innerHeight - margins.top - margins.bottom;
+let width = $('.2r2c').width() - margins.left - margins.right;
+let height = $('.2emeRang').height() - margins.top - margins.bottom;
 
 let svgScat = d3.select("#scatter-load")
                 .append("svg")
-                .attr("width", width/2 + margins.left + margins.right)
-                .attr("height", height/2 + margins.top + margins.bottom)
+                .attr("width", width + margins.left + margins.right)
+                .attr("height", height + margins.top + margins.bottom)
                 .append("g")
                 .attr("transform", `translate(${margins.left},${margins.top})`);
 
@@ -53,11 +53,11 @@ let radius = 4;
 
 // Axiales
 let xScale = d3.scaleLinear()
-               .range([0, width/2])
+               .range([0, width])
                .nice();
 
 let yScale = d3.scaleLinear()
-               .range([height/2, 0])
+               .range([height, 0])
                .nice();
 
 // Couleurs selon le SRM/EBC
@@ -260,7 +260,7 @@ d3.json('binches.json', function(error, binches) {
 // Ajout des axes du graphique
   svgScat.append("g")
          .attr("class", "x axis")
-         .attr("transform", `translate(0, ${height/2})`)
+         .attr("transform", `translate(0, ${height})`)
          .call(d3.axisBottom(xScale).tickPadding(5));
 
   svgScat.append("g")
@@ -348,8 +348,8 @@ d3.json('binches.json', function(error, binches) {
 svgScat.append("text")
        .attr("class", "x label")
        .attr("text-anchor", "end")
-       .attr("x", width/2-5)
-       .attr("y", height/2-7)
+       .attr("x", width-5)
+       .attr("y", height-7)
        .text("Alcool par volume (%)");
 
 svgScat.append("text")
