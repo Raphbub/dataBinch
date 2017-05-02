@@ -49,7 +49,7 @@ let toolTip = d3.select("body").append("div")
                 .style("opacity", 0);
 
 // Définitions des différentes échelles
-let radius = 4;
+let radius = 6.5;
 
 // Axiales
 let xScale = d3.scaleLinear()
