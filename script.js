@@ -71,23 +71,61 @@ let barColorScale = d3.scaleOrdinal(d3.schemeCategory20);
 
 /////////////////////////////////////////////////////////
 // Parties relatives à la carte
+//Définition des couches de base de la carte
+let cartodbLayer =  L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',{
+  attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+}); // Fond simple clair
+
+let stamenLayer =  L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.{ext}', {
+  attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  subdomains: 'abcd',
+  minZoom: 0,
+  ext: 'png'
+}); // Fond terrain
+
+// Définition de la carte
+let map = L.map('map', {
+  center: [46.52, 6.62],
+  zoom: 6
+});
+
+// Ajout des couches à la carte
+map.addLayer(cartodbLayer, stamenLayer);
+
+// Attribution des couches de bases pour le sélecteur
+var baseMaps = {
+    "Simple": cartodbLayer,
+    "Terrain": stamenLayer
+};
+// Ajout des noms au sélecteur
+L.control.layers(baseMaps).addTo(map);
+
+L.control.scale({
+  imperial: false
+}).addTo(map);
+
+// Ajout du bouton et fonction de localisation
+L.control.locate().addTo(map);
+
+// Définition des marqueurs des brasseries
 let brassMarker = L.AwesomeMarkers.icon({
     icon: 'industry',
     prefix: 'fa',
     markerColor: 'white',
     iconColor: 'black'
-  });
-
+});
+// Définition des marqueurs des bars
 let barMarker = L.AwesomeMarkers.icon({
     icon: 'beer',
     prefix: 'fa',
     markerColor: 'blue',
     iconColor: 'white'
-  });
+});
 
-// Nouveau cluster de markers
+// Rassemblement des marqueurs en clusters
 let brassMarkers = L.markerClusterGroup({
   showCoverageOnHover: false, //Ne pas montrer les limites
+  disableClusteringAtZoom: 12
 });
 // A voir si on veut cluster les bars... TODO
 // let barMarkers = L.markerClusterGroup({
@@ -135,8 +173,6 @@ d3.json('binches.json', function(error, binches) {
                        .attr("display", display);
               }
                 console.log("Bar choisi :" + $('select#bar-list.selectpicker').val() + ", un bar magnifique");
-
-
   });
 
 
@@ -277,16 +313,7 @@ d3.json('binches.json', function(error, binches) {
               .style("opacity", 0.5);
           });
 
-  let map = L.map('map').setView([48, 4], 6);
-
-   L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.{ext}', {
-  	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-  	subdomains: 'abcd',
-  	minZoom: 0,
-  	maxZoom: 18,
-  	ext: 'png'
-  }).addTo(map);
-
+  //////////////////////////// Parties cartes
   // Pour chaque brasserie, récupèrer les coordonnées et les assigner au pop-up + nom
   brasserieUnique.forEach(function(brass){
     let brasserie = binches.find(x => x.Brasserie === brass);
@@ -296,6 +323,10 @@ d3.json('binches.json', function(error, binches) {
         .addTo(brassMarkers);
   });
 
+  // Ajout des marqueurs à la carte
+  map.addLayer(brassMarkers);
+
+  // Import du fichier des bars et ajout à la carte
   d3.json('bars.json', function(error, barsLsne) {
     if (error) { // Si le fichier n'est pas chargé, log de l'erreur
       console.log(error);
@@ -308,11 +339,7 @@ d3.json('binches.json', function(error, binches) {
     }
   });
 
-  // Ajout des marqueurs à la carte
-  map.addLayer(brassMarkers);
   // map.addLayer(barMarkers); si cluster
-
-  L.control.locate().addTo(map);
 
 });
 
