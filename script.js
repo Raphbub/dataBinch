@@ -361,7 +361,7 @@ svgScat.append("text")
        .text("Amertume (IBU)");
 
 
-d3.json('matrix.json', function(error, distances) {
+d3.csv('rowdist.csv', function(error, distances) {
   if (error) { // Si le fichier n'est pas chargé, log de l'erreur
     console.log(error);
   }
