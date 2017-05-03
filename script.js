@@ -49,8 +49,9 @@ let toolTip = d3.select("body").append("div")
                 .style("opacity", 0);
 
                 // Add a place to save markers
-var markers = {};
 
+                var markers = {};
+var marker;
 // Définitions des différentes échelles
 let radius = 6.5;
 
@@ -319,6 +320,9 @@ d3.json('binches.json', function(error, binches) {
               .duration(300)
               .attr("r", radius)
               .style("opacity", 0.5);
+          })
+          .on("click",function(d){
+              map.panTo(marker[d.Brasserie].getLatLng());
           });
 
   //////////////////////////// Parties cartes
@@ -329,10 +333,16 @@ d3.json('binches.json', function(error, binches) {
     let marker = new L.marker([brasserie.Lat, brasserie.Long], {icon: brassMarker})
         .bindPopup(brasserie.Brasserie)
         .addTo(brassMarkers);
+
+        marker[brasserie.Brasserie]= brass.Brasserie;
+        console.log(brasserie.Brasserie);
+
   });
 
   // Ajout des marqueurs à la carte
   map.addLayer(brassMarkers);
+
+
 
   // Import du fichier des bars et ajout à la carte
   d3.json('bars.json', function(error, barsLsne) {
@@ -348,13 +358,15 @@ d3.json('binches.json', function(error, binches) {
     console.log(person.Lat);
     // Create and save a reference to each marker
     markers[person.Bar] = L.marker([person.Lat, person.Long], {
-    }).addTo(map);
+    })
+    .bindPopup(person.Bar)
+    .addTo(map);
 
     // Add the ID
     markers[person.Bar]._icon.id = person.Bar;
   }
 
-  console.log(markers)
+  console.log(markers);
   // Add click event to markers
   $('.leaflet-marker-icon').on('click', function(e) {
      // Use the event to find the clicked element
@@ -407,14 +419,4 @@ d3.csv('rowdist.csv', function(error, distances) {
 let binchesDist;
 let dist;
 
-});
-
-// Add click event to markers
-$('circle').on('click', function(e) {
-  console.log("Salut");
-   // Use the event to find the clicked element
-   var el = $(e.srcElement || e.target),
-       id = el.attr('id');
-
-    alert('Here is the markers ID: ' + id + '. Use it as you wish. Hit ok and watch the map.');
 });
