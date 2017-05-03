@@ -332,23 +332,34 @@ d3.json('binches.json', function(error, binches) {
     if (error) { // Si le fichier n'est pas chargé, log de l'erreur
       console.log(error);
     }
+
     // Add a place to save markers
-    let barMrkId = {};
+  var markers = {};
 
-    // Loop through the data
-    for (let i = 0; i < barsLsne.length; i++) {
-      let bar = barsLsne[i];
+  // Loop through the data
+  for (var i = 0; i < barsLsne.length; i++) {
+    var person = barsLsne[i];
+    console.log(person.Lat);
+    // Create and save a reference to each marker
+    markers[person.Bar] = L.marker([person.Lat, person.Long], {
+    }).addTo(map);
 
-      barMrkId[bar.Bar] = L.marker([barsLsne[i].Lat, barsLsne[i].Long], {icon: barMarker})
-        .bindPopup(barsLsne[i].Bar)
-        .addTo(map);
+    // Add the ID
+    markers[person.Bar]._icon.id = person.Bar;
+  }
 
+  console.log(markers)
+  // Add click event to markers
+  $('.leaflet-marker-icon').on('click', function(e) {
+     // Use the event to find the clicked element
+     var el = $(e.srcElement || e.target),
+         id = el.attr('id');
 
-        barMrkId[bar.Bar]._icon.id = bar.Bar;
+      alert('Here is the markers ID: ' + id + '. Use it as you wish. Hit ok and watch the map.');
 
-        console.log(barMrkId[0]);
-
-
+      // One way you could use the id
+      map.panTo( markers[id].getLatLng() );
+  });
 
 
     // for (let i = 0 ; i < barsLsne.length; i++) {
@@ -357,7 +368,7 @@ d3.json('binches.json', function(error, binches) {
     //       .addTo(map); //.addTo(barMarkers); si cluster
     // }
 
-    }
+
   });
 
   // map.addLayer(barMarkers); si cluster
