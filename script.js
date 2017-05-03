@@ -332,11 +332,31 @@ d3.json('binches.json', function(error, binches) {
     if (error) { // Si le fichier n'est pas chargé, log de l'erreur
       console.log(error);
     }
+    // Add a place to save markers
+    let barMrkId = {};
 
-    for (let i = 0 ; i < barsLsne.length; i++) {
-      let marker = new L.marker([barsLsne[i].Lat, barsLsne[i].Long], {icon: barMarker})
-          .bindPopup(barsLsne[i].Bar)
-          .addTo(map); //.addTo(barMarkers); si cluster
+    // Loop through the data
+    for (let i = 0; i < barsLsne.length; i++) {
+      let bar = barsLsne[i];
+
+      barMrkId[bar.Bar] = L.marker([barsLsne[i].Lat, barsLsne[i].Long], {icon: barMarker})
+        .bindPopup(barsLsne[i].Bar)
+        .addTo(map);
+
+
+        barMrkId[bar.Bar]._icon.id = bar.Bar;
+
+        console.log(barMrkId[0]);
+
+
+
+
+    // for (let i = 0 ; i < barsLsne.length; i++) {
+    //   let marker = new L.marker([barsLsne[i].Lat, barsLsne[i].Long], {icon: barMarker})
+    //       .bindPopup(barsLsne[i].Bar)
+    //       .addTo(map); //.addTo(barMarkers); si cluster
+    // }
+
     }
   });
 
@@ -370,4 +390,14 @@ d3.csv('rowdist.csv', function(error, distances) {
 let binchesDist;
 let dist;
 
+});
+
+// Add click event to markers
+$('circle').on('click', function(e) {
+  console.log("Salut");
+   // Use the event to find the clicked element
+   var el = $(e.srcElement || e.target),
+       id = el.attr('id');
+
+    alert('Here is the markers ID: ' + id + '. Use it as you wish. Hit ok and watch the map.');
 });
