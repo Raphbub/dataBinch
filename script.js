@@ -48,6 +48,9 @@ let toolTip = d3.select("body").append("div")
                 .attr("class", "tooltip")
                 .style("opacity", 0);
 
+                // Add a place to save markers
+var markers = {};
+
 // Définitions des différentes échelles
 let radius = 6.5;
 
@@ -174,6 +177,10 @@ d3.json('binches.json', function(error, binches) {
                        .attr("display", display);
               }
                 console.log("Bar choisi :" + $('select#bar-list.selectpicker').val() + ", un bar magnifique");
+                map.setZoom(17);
+
+                map.panTo( markers[$('select#bar-list.selectpicker').val()].getLatLng());
+
   });
 
 
@@ -333,8 +340,7 @@ d3.json('binches.json', function(error, binches) {
       console.log(error);
     }
 
-    // Add a place to save markers
-  var markers = {};
+
 
   // Loop through the data
   for (var i = 0; i < barsLsne.length; i++) {
