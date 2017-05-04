@@ -316,7 +316,7 @@ d3.json('binches.json', function(error, binches) {
 
             toolTip.html(`<b>${d.Biere}</b><br><i>Style : ${d.STYLE4}\
               <br>Amertume : ${d.IBU} IBU<br>Alcool : ${d.ABV} %\
-              <br>Brasserie : ${d.Brasserie}</i>`)
+              <br>Brasserie : ${d.Brasserie} <br> Bar : ${d.Bar}</i>`)
               .style("left", `${d3.event.pageX+20}px`)
               .style("top", `${d3.event.pageY+20}px`);
 
@@ -339,16 +339,19 @@ d3.json('binches.json', function(error, binches) {
           })
           .on("click",function(d){
             var spanBeer = d3.select("#selectedBeer")
-                .html("La bière sélectionnées est : <b>"+ d.Biere+"</b>,<br>");
+                .html("La bière sélectionnée est : <b>"+ d.Biere+"</b>,<br>");
 
             var spanABV = d3.select("#ABVselectedBeer")
-                .html("Son taux d'alcool est de " + d.ABV + " %"+" alors que la médiane est à 6.5 %,<br>");
+                .html("Son taux d'alcool est de " + d.ABV + " %"+" alors que la médiane est à 6.5 %, <br>");
+
+            var spanBrass = d3.select("#BrassselectedBeer")
+                    .html(" brassée par " + d.Brasserie + ",<br>");
 
             var spanIBU = d3.select("#IBUselectedBeer")
                     .html("Son amertume est mesurée à " + d.IBU +" IBU"+" alors que la médiane est à 32 IBU,<br>");
 
             var spanStyle = d3.select("#SytleselectedBeer")
-                .html("C'est une bière de type "+ d.STYLE4+",<br>");
+                .html("C'est une bière de type "+ d.STYLE4);
 
             var spanBar = d3.select("#BarselectedBeer")
                     .html("On peut la trouver ici : " + d.Bar);
