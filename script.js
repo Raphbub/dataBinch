@@ -218,6 +218,22 @@ d3.json('binches.json', function(error, binches) {
                        .attr("display", display);
               }
               console.log("Bière choisie :" + $('select#binch-list.selectpicker').val() + ", très bon choix !");
+              
+                var spanBeer = d3.select("#selectedBeer")
+                    .html("La bière sélectionnées est : "+ d.Biere+",<br>");
+
+                var spanABV = d3.select("#ABVselectedBeer")
+                    .html("Son taux d'alcool est de " + d.ABV + " %"+" alors que la médiane est à 6.5 %,<br>");
+
+                var spanIBU = d3.select("#IBUselectedBeer")
+                        .html("Son amertume est mesurée à " + d.IBU +" IBU"+" alors que la médiane est à 32 IBU,<br>");
+
+                var spanStyle = d3.select("#SytleselectedBeer")
+                    .html("C'est une bière de type "+ d.STYLE4+",<br>");
+
+                var spanBar = d3.select("#BarselectedBeer")
+                        .html("On peut la trouver ici : " + d.Bar);
+
 
 });
 
@@ -322,7 +338,21 @@ d3.json('binches.json', function(error, binches) {
               .style("opacity", 0.5);
           })
           .on("click",function(d){
-              map.panTo(marker[d.Brasserie].getLatLng());
+            var spanBeer = d3.select("#selectedBeer")
+                .html("La bière sélectionnées est : "+ d.Biere+",<br>");
+
+            var spanABV = d3.select("#ABVselectedBeer")
+                .html("Son taux d'alcool est de " + d.ABV + " %"+" alors que la médiane est à 6.5 %,<br>");
+
+            var spanIBU = d3.select("#IBUselectedBeer")
+                    .html("Son amertume est mesurée à " + d.IBU +" IBU"+" alors que la médiane est à 32 IBU,<br>");
+
+            var spanStyle = d3.select("#SytleselectedBeer")
+                .html("C'est une bière de type "+ d.STYLE4+",<br>");
+
+            var spanBar = d3.select("#BarselectedBeer")
+                    .html("On peut la trouver ici : " + d.Bar);
+
           });
 
   //////////////////////////// Parties cartes
@@ -334,10 +364,10 @@ d3.json('binches.json', function(error, binches) {
         .bindPopup(brasserie.Brasserie)
         .addTo(brassMarkers);
 
-        marker[brasserie.Brasserie]= brass.Brasserie;
         console.log(brasserie.Brasserie);
 
   });
+
 
   // Ajout des marqueurs à la carte
   map.addLayer(brassMarkers);
