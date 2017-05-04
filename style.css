@@ -46,3 +46,12 @@ div.tooltip {
   font-family: sans-serif;
   font-size: 12px;
 }
+
+#infos-bieres{
+  position: absolute;
+  background-color:#424242;
+  color: white;
+  text-align: center;
+  pointer-events: none;
+
+}

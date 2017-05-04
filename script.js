@@ -218,7 +218,7 @@ d3.json('binches.json', function(error, binches) {
                        .attr("display", display);
               }
               console.log("Bière choisie :" + $('select#binch-list.selectpicker').val() + ", très bon choix !");
-              
+
                 var spanBeer = d3.select("#selectedBeer")
                     .html("La bière sélectionnées est : "+ d.Biere+",<br>");
 
@@ -339,7 +339,7 @@ d3.json('binches.json', function(error, binches) {
           })
           .on("click",function(d){
             var spanBeer = d3.select("#selectedBeer")
-                .html("La bière sélectionnées est : "+ d.Biere+",<br>");
+                .html("La bière sélectionnées est : <b>"+ d.Biere+"</b>,<br>");
 
             var spanABV = d3.select("#ABVselectedBeer")
                 .html("Son taux d'alcool est de " + d.ABV + " %"+" alors que la médiane est à 6.5 %,<br>");
@@ -441,12 +441,24 @@ svgScat.append("text")
        .text("Amertume (IBU)");
 
 
-d3.csv('rowdist.csv', function(error, distances) {
-  if (error) { // Si le fichier n'est pas chargé, log de l'erreur
-    console.log(error);
-  }
+d3.csv('rowdist.csv', function(d) {
 
-let binchesDist;
-let dist;
+
+  return {
+    source : d.Source,
+    target : d.Target,
+    weight : +d.Weight,
+  };
+},
+  function(data){
+
+        console.log("data[1]:", data[1]);
+
+        distances = d3.nest()
+                    .key(function(data) { return data.source; })
+                    .key(function(data) { return data.weight; })
+                    .map(data);
+    console.log("distances:", distances);
+
 
 });
