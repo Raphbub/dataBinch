@@ -354,8 +354,34 @@ d3.json('binches.json', function(error, binches) {
                 .html("C'est une bière de type "+ d.STYLE4);
 
             var spanBar = d3.select("#BarselectedBeer")
-                    .html("On peut la trouver ici : " + d.Bar);
+                    .html("On peut la trouver ici : " + d.Bar+"<br>");
 
+
+                    d3.csv('rowdist.csv', function(data) {
+
+                      data.forEach(function(d) {
+                      d.weight = +d.Weight;
+
+                    });
+
+// retourne les 10 bières les plus proches
+
+                    var filtered = data.filter(function (item) {
+                        return item.Source === d.Biere;
+                    });
+
+                    var rankdist = filtered.filter(function (item){
+                      return item.weight < 0.5;
+                    });
+                    rankdist.sort(function(a, b) { return a.weight - b.weight;});
+
+
+                    for (var current = 0; current < 10; current++){
+
+                    console.log("Bière proche de "+d.Biere +" #", current, ": ", rankdist[current].Target);
+                  }
+
+});
           });
 
   //////////////////////////// Parties cartes
@@ -367,7 +393,7 @@ d3.json('binches.json', function(error, binches) {
         .bindPopup(brasserie.Brasserie)
         .addTo(brassMarkers);
 
-        console.log(brasserie.Brasserie);
+      //  console.log(brasserie.Brasserie);
 
   });
 
@@ -388,7 +414,7 @@ d3.json('binches.json', function(error, binches) {
   // Loop through the data
   for (var i = 0; i < barsLsne.length; i++) {
     var person = barsLsne[i];
-    console.log(person.Lat);
+  //  console.log(person.Lat);
     // Create and save a reference to each marker
     markers[person.Bar] = L.marker([person.Lat, person.Long], {
     })
@@ -399,7 +425,8 @@ d3.json('binches.json', function(error, binches) {
     markers[person.Bar]._icon.id = person.Bar;
   }
 
-  console.log(markers);
+//  console.log(markers);
+
   // Add click event to markers
   $('.leaflet-marker-icon').on('click', function(e) {
      // Use the event to find the clicked element
@@ -442,26 +469,3 @@ svgScat.append("text")
        .attr("dy", ".75em")
        .attr("transform", "rotate(-90)")
        .text("Amertume (IBU)");
-
-
-d3.csv('rowdist.csv', function(d) {
-
-
-  return {
-    source : d.Source,
-    target : d.Target,
-    weight : +d.Weight,
-  };
-},
-  function(data){
-
-        console.log("data[1]:", data[1]);
-
-        distances = d3.nest()
-                    .key(function(data) { return data.source; })
-                    .key(function(data) { return data.weight; })
-                    .map(data);
-    console.log("distances:", distances);
-
-
-});
