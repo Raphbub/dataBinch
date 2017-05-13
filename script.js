@@ -338,6 +338,8 @@ d3.json('binches.json', function(error, binches) {
               .style("opacity", 0.5);
           })
           .on("click",function(d){
+
+
             var spanBeer = d3.select("#selectedBeer")
                 .html("La bière sélectionnée est : <b>"+ d.Biere+"</b>,<br>");
 
@@ -356,32 +358,34 @@ d3.json('binches.json', function(error, binches) {
             var spanBar = d3.select("#BarselectedBeer")
                     .html("On peut la trouver ici : " + d.Bar+"<br>");
 
+            document.getElementById('Biereproches').innerHTML="";
 
                     d3.csv('rowdist.csv', function(data) {
 
-                      data.forEach(function(d) {
-                      d.weight = +d.Weight;
+                            data.forEach(function(d) {
+                            d.weight = +d.Weight;
+
+                          });
+
+      // retourne les 10 bières les plus proches
+
+                          var filtered = data.filter(function (item) {
+                              return item.Source === d.Biere;
+                          });
+
+                          var rankdist = filtered.filter(function (item){
+                            return item.weight < 0.5;
+                          });
+                          rankdist.sort(function(a, b) { return a.weight - b.weight;});
+
+
+                          for (var current = 0; current < 10; current++){
+
+                          document.getElementById('Biereproches').innerHTML += ("Bière proche de <b>"+d.Biere +"</b> #" + current + ": <b>" + rankdist[current].Target +"</b><br>");
+                          console.log("Bière proche de "+d.Biere +" #", current, ": ", rankdist[current].Target);
+                          }
 
                     });
-
-// retourne les 10 bières les plus proches
-
-                    var filtered = data.filter(function (item) {
-                        return item.Source === d.Biere;
-                    });
-
-                    var rankdist = filtered.filter(function (item){
-                      return item.weight < 0.5;
-                    });
-                    rankdist.sort(function(a, b) { return a.weight - b.weight;});
-
-
-                    for (var current = 0; current < 10; current++){
-
-                    console.log("Bière proche de "+d.Biere +" #", current, ": ", rankdist[current].Target);
-                  }
-
-});
           });
 
   //////////////////////////// Parties cartes
