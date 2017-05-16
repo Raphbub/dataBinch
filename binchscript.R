@@ -32,7 +32,7 @@ colnames(dist) <- binchUnique[,1]
 
  json <- toJSON(dist, pretty = TRUE)
 
- g <- graph.adjacency(dist, mode = "undirected", weighted = TRUE)
+ g <- graph.adjacency(dist, mode = "directed", weighted = TRUE)
  e <- cbind( get.edgelist(g) , round( E(g)$weight, 3 ))
  e <- as.data.frame(e)
  colnames(e)[1]<-"Source"
