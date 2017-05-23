@@ -8,10 +8,10 @@ Accessible à l'adresse suivante : https://databinch.github.io./
 
 ## Données
 
-Les bières représentées sont celles qui ont été disponibles dans les bars choisis.
-Elles ne sont ainsi pas forcément représentatives de l'état actuel des cartes respectives.
+Les bières représentées sont celles qui *ont été* disponibles dans les bars choisis.
+Elles ne sont ainsi pas forcément représentatives de l'état actuel des cartes.
 
-Si les données concernant le taux d'alcool ou le style de bière sont aisément accessibles à tout un chacun, la couleur (SRM/EBC) et l'amertume (IBU/EBU) ont subi une étape préalable de recherche intensive parfois fructueuse, mais pas toujours. Dans ce dernier cas, une interpolation depuis le style de bière ou les "clones" pour le brassage amateur est effectuée. En dernier recours, les auteurs ont du recourir à l'expérimentation directe via la consommation.
+Si les données concernant le taux d'alcool ou le style de bière sont aisément accessibles à tout un chacun, la couleur (SRM/EBC) et l'amertume (IBU/EBU) ont subi une étape préalable de recherche intensive, mais pas toujours fructueuse. Dans ce dernier cas, une interpolation depuis le style de bière ou les "clones" pour le brassage amateur est effectuée. En dernier recours, les auteurs ont du recourir à l'expérimentation directe via la consommation.
 
 ## Distances et _recommender system_
 
