@@ -161,20 +161,20 @@ d3.json('binches.json', function(error, binches) {
 
   // Si on sélectionne un bar, cache les autres
   dropDownBar.on("change", function(binches) {
-              let selected = this.value;
+              let selectedBar = this.value;
               display = this.checked ? "none" : "inline";
               displayOthers = this.checked ? "inline" : "none";
 
-              if (selected == 'TOUS') {
+              if (selectedBar == 'TOUS') {
                 svgScat.selectAll("circle")
                        .attr("display", display);
               } else {
                 svgScat.selectAll("circle")
-                       .filter(function(d) {return selected !== d.Bar;})
+                       .filter(function(d) {return selectedBar !== d.Bar;})
                        .attr("display", displayOthers);
 
                 svgScat.selectAll("circle")
-                       .filter(function(d) {return selected == d.Bar;})
+                       .filter(function(d) {return selectedBar == d.Bar;})
                        .attr("display", display);
               }
                 console.log("Bar choisi :" + $('select#bar-list.selectpicker').val() + ", un bar magnifique");
@@ -198,11 +198,11 @@ d3.json('binches.json', function(error, binches) {
 
 
   dropDownBinch.on("change", function(binches) {
-              let selected = this.value;
+              let selectedBinch = this.value;
               display = this.checked ? "none" : "inline";
               displayOthers = this.checked ? "inline" : "none";
 
-              if (selected == 'TOUTES') {
+              if (selectedBinch == 'TOUTES') {
                 svgScat.selectAll("circle")
                        .attr("display", display);
               } else {
@@ -210,31 +210,15 @@ d3.json('binches.json', function(error, binches) {
 // à éventuellement modifier pour mise en valeur au lieu de la disparition
 
                 svgScat.selectAll("circle")
-                       .filter(function(d) {return selected !== d.Biere;})
+                       .filter(function(d) {return selectedBinch !== d.Biere;})
                        .attr("display", displayOthers);
 
                 svgScat.selectAll("circle")
-                       .filter(function(d) {return selected == d.Biere;})
+                       .filter(function(d) {return selectedBinch == d.Biere;})
                        .attr("display", display);
+
+                       console.log("Bière choisie :" + selectedBinch + ", très bon choix !");
               }
-              console.log("Bière choisie :" + $('select#binch-list.selectpicker').val() + ", très bon choix !");
-
-                var spanBeer = d3.select("#selectedBeer")
-                    .html("La bière sélectionnées est : "+ d.Biere+",<br>");
-
-                var spanABV = d3.select("#ABVselectedBeer")
-                    .html("Son taux d'alcool est de " + d.ABV + " %"+" alors que la médiane est à 6.5 %,<br>");
-
-                var spanIBU = d3.select("#IBUselectedBeer")
-                        .html("Son amertume est mesurée à " + d.IBU +" IBU"+" alors que la médiane est à 32 IBU,<br>");
-
-                var spanStyle = d3.select("#SytleselectedBeer")
-                    .html("C'est une bière de type "+ d.STYLE4+",<br>");
-
-                var spanBar = d3.select("#BarselectedBeer")
-                        .html("On peut la trouver ici : " + d.Bar);
-
-
 });
 
 
@@ -251,11 +235,11 @@ d3.json('binches.json', function(error, binches) {
 
 
   dropDownBrass.on("change", function(binches) {
-              let selected = this.value;
+              let selectedBrasserie = this.value;
               display = this.checked ? "none" : "inline";
               displayOthers = this.checked ? "inline" : "none";
 
-              if (selected == 'TOUTES') {
+              if (selectedBrasserie == 'TOUTES') {
                 svgScat.selectAll("circle")
                        .attr("display", display);
               } else {
@@ -263,11 +247,11 @@ d3.json('binches.json', function(error, binches) {
 // à éventuellement modifier pour mise en valeur au lieu de la disparition
 
                 svgScat.selectAll("circle")
-                       .filter(function(d) {return selected !== d.Brasserie;})
+                       .filter(function(d) {return selectedBrasserie !== d.Brasserie;})
                        .attr("display", displayOthers);
 
                 svgScat.selectAll("circle")
-                       .filter(function(d) {return selected == d.Brasserie;})
+                       .filter(function(d) {return selectedBrasserie == d.Brasserie;})
                        .attr("display", display);
               }
               console.log("Brasserie choisie :" + $('select#brass-list.selectpicker').val()+", un travail incomparable pour des bières (pas toujours) de qualité");
