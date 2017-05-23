@@ -421,8 +421,6 @@ d3.json('binches.json', function(error, binches) {
      var el = $(e.srcElement || e.target),
          id = el.attr('id');
 
-      alert('Here is the markers ID: ' + id + '. Use it as you wish. Hit ok and watch the map.');
-
       // One way you could use the id
       map.panTo( markers[id].getLatLng() );
   });
