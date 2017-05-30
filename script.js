@@ -168,8 +168,11 @@ d3.json('binches.json', function(error, binches) {
                         .enter()
                         .append("option");
 
+
   optDropBar.text(d => d)
          .attr("value", d => d);
+
+
 
   // Si on sélectionne un bar, cache les autres
 
