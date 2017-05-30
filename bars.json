@@ -1,10 +1,13 @@
-[{"Bar":"PI BAR","Lat":46.527799,"Long":6.631237},
-{"Bar":"SATELLITE","Lat":46.520536,"Long":6.567814},
-{"Bar":"MISE EN BIERE","Lat":46.523741,"Long":6.628769},
-{"Bar":"BRUXELLES CAFE","Lat":46.523259,"Long":6.631601},
-{"Bar":"ZELIG","Lat":46.526012,"Long":6.580038},
-{"Bar":"BAVARIA","Lat":46.519287,"Long":6.631832},
-{"Bar":"BOUCANIERS","Lat":46.519516,"Long":6.638150},
-{"Bar":"BOSSETTE","Lat":46.526037,"Long":6.636724},
-{"Bar":"HAPPY DAYS","Lat":46.519593,"Long":6.637257},
-{"Bar":"BLEU LEZARD","Lat":46.520073,"Long":6.637729}]
+[
+  {"Bar":"BAVARIA","Lat":46.519287,"Long":6.631832},
+  {"Bar":"BLEU LEZARD","Lat":46.520073,"Long":6.637729},
+  {"Bar":"BOSSETTE","Lat":46.526037,"Long":6.636724},
+  {"Bar":"BOUCANIERS","Lat":46.519516,"Long":6.638150},
+  {"Bar":"BRUXELLES CAFE","Lat":46.523259,"Long":6.631601},
+  {"Bar":"HAPPY DAYS","Lat":46.519593,"Long":6.637257},
+  {"Bar":"LES GOSSES DU QUEBEC","Lat":46.517119,"Long":6.633192},
+  {"Bar":"MISE EN BIERE","Lat":46.523741,"Long":6.628769},
+  {"Bar":"PI BAR","Lat":46.527799,"Long":6.631237},
+  {"Bar":"SATELLITE","Lat":46.520536,"Long":6.567814},
+  {"Bar":"THE GREAT ESCAPE","Lat":46.522779,"Long":6.633166},
+  {"Bar":"ZELIG","Lat":46.526012,"Long":6.580038}]
