@@ -192,9 +192,7 @@ d3.json('binches.json', function(error, binches) {
                        .attr("r", radius);
               }
                 console.log("Bar choisi :" + $('select#bar-list.selectpicker').val() + ", un bar magnifique");
-                map.setZoom(17);
-
-                map.panTo( markers[$('select#bar-list.selectpicker').val()].getLatLng());
+                map.setView(markers[$('select#bar-list.selectpicker').val()].getLatLng(), 18);
 
   });
 
