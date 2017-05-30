@@ -4,6 +4,8 @@
 
 // zoom brasserie on click
 
+// interaction click marqueur carte -> actualisation scatterplot
+
 // interaction entre les sélecteurs -> sinon remise à zéro des autres quand un est sélectionné
 
 // optimisation graphique de l'affichage du recommender system
@@ -169,24 +171,22 @@ d3.json('binches.json', function(error, binches) {
   optDropBar.text(d => d)
          .attr("value", d => d);
 
-
   // Si on sélectionne un bar, cache les autres
+
   dropDownBar.on("change", function(binches) {
               let selectedBar = this.value;
-              display = this.checked ? "none" : "inline";
-              displayOthers = this.checked ? "inline" : "none";
 
               if (selectedBar == 'TOUS') {
                 svgScat.selectAll("circle")
-                       .attr("display", display);
+                        .attr("r", radius);
               } else {
                 svgScat.selectAll("circle")
                        .filter(function(d) {return selectedBar !== d.Bar;})
-                       .attr("display", displayOthers);
+                       .attr("r", 0);
 
                 svgScat.selectAll("circle")
                        .filter(function(d) {return selectedBar == d.Bar;})
-                       .attr("display", display);
+                       .attr("r", radius);
               }
                 console.log("Bar choisi :" + $('select#bar-list.selectpicker').val() + ", un bar magnifique");
                 map.setZoom(17);
@@ -210,23 +210,21 @@ d3.json('binches.json', function(error, binches) {
 
   dropDownBinch.on("change", function(binches) {
               let selectedBinch = this.value;
-              display = this.checked ? "none" : "inline";
-              displayOthers = this.checked ? "inline" : "none";
 
               if (selectedBinch == 'TOUTES') {
                 svgScat.selectAll("circle")
-                       .attr("display", display);
+                      .attr("r", radius);
               } else {
 
 // à éventuellement modifier pour mise en valeur au lieu de la disparition
 
                 svgScat.selectAll("circle")
                        .filter(function(d) {return selectedBinch !== d.Biere;})
-                       .attr("display", displayOthers);
+                       .attr("r", 0);
 
                 svgScat.selectAll("circle")
                        .filter(function(d) {return selectedBinch == d.Biere;})
-                       .attr("display", display);
+                       .attr("r", radius);
 
                        console.log("Bière choisie :" + selectedBinch + ", très bon choix !");
               }
@@ -245,27 +243,26 @@ d3.json('binches.json', function(error, binches) {
   // Si on sélectionne une bière, cache les autres à voir ce qu'on fait de ça (disparaître ou mettre en valeur)
 
 
-  dropDownBrass.on("change", function(binches) {
+  dropDownBrass.on("change", function() {
               let selectedBrasserie = this.value;
-              display = this.checked ? "none" : "inline";
-              displayOthers = this.checked ? "inline" : "none";
 
               if (selectedBrasserie == 'TOUTES') {
                 svgScat.selectAll("circle")
-                       .attr("display", display);
+                          .attr("r", radius);
               } else {
 
 // à éventuellement modifier pour mise en valeur au lieu de la disparition
 
                 svgScat.selectAll("circle")
                        .filter(function(d) {return selectedBrasserie !== d.Brasserie;})
-                       .attr("display", displayOthers);
+                       .attr("r", 0);
 
                 svgScat.selectAll("circle")
                        .filter(function(d) {return selectedBrasserie == d.Brasserie;})
-                       .attr("display", display);
+                       .attr("r", radius);
               }
-              console.log("Brasserie choisie :" + $('select#brass-list.selectpicker').val()+", un travail incomparable pour des bières (pas toujours) de qualité");
+              console.log("Brasserie choisie :" + selectedBrasserie);
+
 
 });
 
@@ -334,7 +331,6 @@ d3.json('binches.json', function(error, binches) {
           })
           .on("click",function(d){
 
-
             var spanBeer = d3.select("#selectedBeer")
                 .html("La bière sélectionnée est : <b>"+ d.Biere+"</b>,<br>");
 
@@ -381,6 +377,8 @@ d3.json('binches.json', function(error, binches) {
                           }
 
                     });
+
+                    map.setView(new L.LatLng(d.Lat, d.Long), 12);
           });
 
   //////////////////////////// Parties cartes
@@ -390,9 +388,24 @@ d3.json('binches.json', function(error, binches) {
 
     let marker = new L.marker([brasserie.Lat, brasserie.Long], {icon: brassMarker})
         .bindPopup(brasserie.Brasserie)
-        .addTo(brassMarkers);
+        .addTo(brassMarkers)
+        .on("click", function (d){
+          let selectedBrass = brasserie.Brasserie;
+            svgScat.selectAll("circle")
+                   .data(binches)
+                   .filter(function(d) {return selectedBrass !== d.Brasserie;})
+                   .attr("r",0);
 
+            svgScat.selectAll("circle")
+                   .data(binches)
+                   .filter(function(d) {return selectedBrass == d.Brasserie;})
+                   .attr("r",radius);
+
+            console.log("Brasserie choisie :" + selectedBrass);
+
+        });
       //  console.log(brasserie.Brasserie);
+
 
   });
 
@@ -400,6 +413,8 @@ d3.json('binches.json', function(error, binches) {
   // Ajout des marqueurs à la carte
   map.addLayer(brassMarkers);
 
+
+});
 
 
   // Import du fichier des bars et ajout à la carte
@@ -422,7 +437,7 @@ d3.json('binches.json', function(error, binches) {
 
     // Add the ID
     markers[person.Bar]._icon.id = person.Bar;
-  }
+
 
 //  console.log(markers);
 
@@ -433,9 +448,22 @@ d3.json('binches.json', function(error, binches) {
          id = el.attr('id');
 
       // One way you could use the id
-      map.panTo( markers[id].getLatLng() );
-  });
+      map.panTo(markers[id].getLatLng() );
 
+      let selectedBar = id;
+
+        svgScat.selectAll("circle")
+               .filter(function(d) {return selectedBar !== d.Bar;})
+               .attr("r",0);
+
+        svgScat.selectAll("circle")
+               .filter(function(d) {return selectedBar == d.Bar;})
+               .attr("r",radius);
+
+        console.log("Bar choisi :" + selectedBar + ", un bar magnifique");
+
+  });
+  }
 
     // for (let i = 0 ; i < barsLsne.length; i++) {
     //   let marker = new L.marker([barsLsne[i].Lat, barsLsne[i].Long], {icon: barMarker})
@@ -444,7 +472,7 @@ d3.json('binches.json', function(error, binches) {
     // }
 
 
-  });
+
 
   // map.addLayer(barMarkers); si cluster
 
