@@ -1,5 +1,16 @@
 /*jshint esnext: true */
 
+// to do
+
+// zoom brasserie on click
+
+// interaction entre les sélecteurs -> sinon remise à zéro des autres quand un est sélectionné
+
+// optimisation graphique de l'affichage du recommender system
+
+// affichage du recommender system lors du choix de la biere via le selecteur de biere
+
+
 
 // Définition du sélecteur de bars
 let dropDownBar = d3.select('#filterbar')
