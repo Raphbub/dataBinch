@@ -1,10 +1,6 @@
 /*jshint esnext: true */
 
-// to do
-
-// zoom brasserie on click
-
-// interaction click marqueur carte -> actualisation scatterplot
+// TODO
 
 // interaction entre les sélecteurs -> sinon remise à zéro des autres quand un est sélectionné
 
