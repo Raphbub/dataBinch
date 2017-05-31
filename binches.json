@@ -10,6 +10,7 @@
 
   {"ID":135,"Bar":"HAPPY DAYS","Brasserie":"BUDVAR","Biere":"Budweiser Budvar","Format":"Bouteille","ABV":5,"SRM":8,"STYLE1":"LAGER","STYLE2":"PALE LAGER","STYLE3":"LIGHT LAGER","STYLE4":"Premium Lager","IBU":32,"Lat":48.974722,"Long":14.474722},
   {"ID":616,"Bar":"KING SIZE","Brasserie":"LINDEMANS","Biere":"Pecheresse","Format":"Bouteille","ABV":2.5,"SRM":10,"STYLE1":"SOUR","STYLE2":"LAMBIC","STYLE3":"LAMBIC","STYLE4":"Lambic","IBU":12,"Lat":50.815751,"Long":4.212783},
+  {"ID":1087,"Bar":"LES ARCHES","Brasserie":"DR GABS","Biere":"Houleuse","Format":"Bouteille","ABV":5,"SRM":5,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"WHEAT","STYLE4":"Witbier","IBU":40,"Lat":46.539196,"Long":6.706419},
   {"ID":929,"Bar":"LES GOSSES DU QUEBEC","Brasserie":"KRONENBOURG","Biere":"Grimbergen Rouge","Format":"Pression","ABV":6,"SRM":4,"STYLE1":"SOUR","STYLE2":"LAMBIC","STYLE3":"LAMBIC","STYLE4":"Lambic fruit","IBU":13,"Lat":48.475062,"Long":7.504628},
   {"ID":1007,"Bar":"L'ETOILE BLANCHE","Brasserie":"SPATEN-FRANZISKANER","Biere":"Franziskaner Hefe-Weissbier","Format":"Pression","ABV":5,"SRM":4,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"WHEAT","STYLE4":"Hefeweizen","IBU":4,"Lat":48.144989,"Long":11.554033},
   {"ID":6,"Bar":"MISE EN BIERE","Brasserie":"ST-SYLVESTRE","Biere":"3 Monts","Format":"Bouteille","ABV":8.5,"SRM":5,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"BELGIAN PALE ALE","STYLE4":"Biere de garde","IBU":30,"Lat":50.777924,"Long":2.554388},
@@ -1055,7 +1056,7 @@
 {"ID":1037,"Bar":"ZOO BURGER","Brasserie":"CAP'TAINE MOUSSE","Biere":"Captaine Mousse Blonde Lager","Format":"Pression","ABV":4.6,"SRM":3,"STYLE1":"LAGER","STYLE2":"PALE LAGER","STYLE3":"PALE LAGER","STYLE4":"Pale Lager","IBU":25,"Lat":46.384063,"Long":6.218155},
 {"ID":1038,"Bar":"ZOO BURGER","Brasserie":"LA DRECHE","Biere":"I PA dans ta geule","Format":"Bouteille","ABV":6.3,"SRM":7,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"INDIA PALE ALE","STYLE4":"India Pale Ale","IBU":50,"Lat":46.533843,"Long":6.591884},
 {"ID":1039,"Bar":"ZOO BURGER","Brasserie":"DR GABS","Biere":"Houleuse","Format":"Bouteille","ABV":5,"SRM":5,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"WHEAT","STYLE4":"Witbier","IBU":40,"Lat":46.539196,"Long":6.706419},
-{"ID":1040,"Bar":"ZOO BURGER","Brasserie":"NEBULEUSE","Biere":"Zepp","Format":"Bouteille","ABV":5.12,"SRM":6,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"AMERICAN PALE ALE","STYLE4":"American Pale Ale","IBU":21,"Lat":46.531992,"Long":6.591780},
+{"ID":1040,"Bar":"ZOO BURGER","Brasserie":"NEBULEUSE","Biere":"Zepp","Format":"Bouteille","ABV":4.7,"SRM":5.5,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"AMERICAN PALE ALE","STYLE4":"American Pale Ale","IBU":21,"Lat":46.531992,"Long":6.591780},
 {"ID":1041,"Bar":"ZOO BURGER","Brasserie":"SAMUEL SMITH","Biere":"Samuel Smith's Imperial Stout","Format":"Bouteille","ABV":7,"SRM":50,"STYLE1":"ALE","STYLE2":"DARK ALE","STYLE3":"STOUT","STYLE4":"Imperial Stout","IBU":35,"Lat":53.883794,"Long":-1.261375},
 {"ID":1042,"Bar":"ZOO BURGER","Brasserie":"BFM","Biere":"La Cuivree","Format":"Bouteille","ABV":4.5,"SRM":14,"STYLE1":"ALE","STYLE2":"AMBER ALE","STYLE3":"AMBER ALE","STYLE4":"Amber Ale","IBU":48,"Lat":47.254405,"Long":7.002461},
 {"ID":1043,"Bar":"ZOO BURGER","Brasserie":"NEBULEUSE","Biere":"Embuscade","Format":"Pression","ABV":6.5,"SRM":8.2,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"INDIA PALE ALE","STYLE4":"India Pale Ale","IBU":65,"Lat":46.531992,"Long":6.591780},
@@ -1097,7 +1098,18 @@
 {"ID":1080,"Bar":"TACOS","Brasserie":"GUINNESS","Biere":"Guinness Draught Stout","Format":"Pression","ABV":4.2,"SRM":66,"STYLE1":"ALE","STYLE2":"DARK ALE","STYLE3":"STOUT","STYLE4":"Dry Stout","IBU":45,"Lat":53.345083,"Long":-6.288221},
 {"ID":1081,"Bar":"TACOS","Brasserie":"MURPHY","Biere":"Murphys Irish Red","Format":"Bouteille","ABV":5,"SRM":18,"STYLE1":"ALE","STYLE2":"AMBER ALE","STYLE3":"AMBER ALE","STYLE4":"Irish Red Ale","IBU":30,"Lat":51.903626,"Long":-8.472824},
 {"ID":1082,"Bar":"TACOS","Brasserie":"BREWDOG","Biere":"Punk IPA","Format":"Pression","ABV":5.6,"SRM":7.6,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"INDIA PALE ALE","STYLE4":"India Pale Ale","IBU":40,"Lat":57.370217,"Long":-2.052061},
-{"ID":1083,"Bar":"TACOS","Brasserie":"ERDINGER","Biere":"Erdinger Weissbier","Format":"Bouteille","ABV":5.3,"SRM":4,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"WHEAT","STYLE4":"Witbier","IBU":14,"Lat":48.306710,"Long":11.906653}
+{"ID":1083,"Bar":"TACOS","Brasserie":"ERDINGER","Biere":"Erdinger Weissbier","Format":"Bouteille","ABV":5.3,"SRM":4,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"WHEAT","STYLE4":"Witbier","IBU":14,"Lat":48.306710,"Long":11.906653},
+{"ID":1084,"Bar":"LES ARCHES","Brasserie":"DR GABS","Biere":"Chameau","Format":"Bouteille","ABV":7,"SRM":11.5,"STYLE1":"ALE","STYLE2":"DARK ALE","STYLE3":"ENGLISH DARK ALE","STYLE4":"Brown Ale","IBU":34,"Lat":46.539196,"Long":6.706419},
+{"ID":1085,"Bar":"LES ARCHES","Brasserie":"ALKEN-MAES","Biere":"Affligem Tripel","Format":"Pression","ABV":9,"SRM":6.5,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"TRAPPIST","STYLE4":"Tripel","IBU":26,"Lat":51.051659,"Long":4.454598},
+{"ID":1086,"Bar":"LES ARCHES","Brasserie":"ERDINGER","Biere":"Erdinger Weissbier","Format":"Bouteille","ABV":5.3,"SRM":4,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"WHEAT","STYLE4":"Witbier","IBU":14,"Lat":48.306710,"Long":11.906653},
+{"ID":1088,"Bar":"LES ARCHES","Brasserie":"DR GABS","Biere":"Ipanema","Format":"Bouteille","ABV":6,"SRM":15,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"INDIA PALE ALE","STYLE4":"India Pale Ale","IBU":50,"Lat":46.539196,"Long":6.706419},
+{"ID":1089,"Bar":"LES ARCHES","Brasserie":"ALKEN-MAES","Biere":"Affligem Blonde","Format":"Pression","ABV":6.8,"SRM":6.5,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"BELGIAN PALE ALE","STYLE4":"Belgian Golden Strong Ale","IBU":30,"Lat":51.051659,"Long":4.454598},
+{"ID":1090,"Bar":"LES ARCHES","Brasserie":"HOEGAARDEN","Biere":"Hoegaarden blanche","Format":"Pression","ABV":4.9,"SRM":3,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"WHEAT","STYLE4":"Witbier","IBU":15,"Lat":50.777388,"Long":4.887045},
+{"ID":1091,"Bar":"LES ARCHES","Brasserie":"HEINEKEN","Biere":"Desperados","Format":"Bouteille","ABV":5.9,"SRM":2,"STYLE1":"LAGER","STYLE2":"PALE LAGER","STYLE3":"PALE LAGER","STYLE4":"Pale Lager","IBU":13,"Lat":48.605268,"Long":7.741983},
+{"ID":1092,"Bar":"LES ARCHES","Brasserie":"JOHN SMITH","Biere":"Newcastle Brown Ale","Format":"Bouteille","ABV":3.6,"SRM":30,"STYLE1":"ALE","STYLE2":"DARK ALE","STYLE3":"ENGLISH DARK ALE","STYLE4":"Brown Ale","IBU":18,"Lat":53.883352,"Long":-1.262572},
+{"ID":1093,"Bar":"LES ARCHES","Brasserie":"CALANDA","Biere":"Calanda","Format":"Bouteille","ABV":4.8,"SRM":3,"STYLE1":"LAGER","STYLE2":"PALE LAGER","STYLE3":"LIGHT LAGER","STYLE4":"Helles Lager","IBU":15,"Lat":46.847512,"Long":9.523134},
+{"ID":1094,"Bar":"LES ARCHES","Brasserie":"HEINEKEN","Biere":"Heineken Lager Beer","Format":"Pression","ABV":5,"SRM":3.5,"STYLE1":"LAGER","STYLE2":"PALE LAGER","STYLE3":"PALE LAGER","STYLE4":"Pale Lager","IBU":23,"Lat":48.605268,"Long":7.741983},
+{"ID":1095,"Bar":"LES ARCHES","Brasserie":"DR GABS","Biere":"Casaniere","Format":"Bouteille","ABV":10,"SRM":21,"STYLE1":"ALE","STYLE2":"DARK ALE","STYLE3":"WHEAT","STYLE4":"Dunkelweizen","IBU":39,"Lat":46.539196,"Long":6.706419}
 
 
 
