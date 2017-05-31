@@ -272,12 +272,12 @@ d3.json('binches.json', function(error, binches) {
   barColorScale.domain(bars);
 
 // Ajout des axes du graphique
-  svgScat.append("g")
+var xAxis =  svgScat.append("g")
          .attr("class", "x axis")
          .attr("transform", `translate(0, ${height})`)
          .call(d3.axisBottom(xScale).tickPadding(5));
 
-  svgScat.append("g")
+var yAxis =   svgScat.append("g")
          .attr("class", "y axis")
          .call(d3.axisLeft(yScale).tickPadding(5));
 
@@ -296,6 +296,7 @@ d3.json('binches.json', function(error, binches) {
          .style("fill", d => SrmColorScale(d.SRM))
          .style("stroke", "none")
          .style("opacity", 0.5);
+
   // Définition des interactions
   svgScat.selectAll(".dot")
          .data(binches)
