@@ -10,4 +10,12 @@
   {"Bar":"PI BAR","Lat":46.527799,"Long":6.631237},
   {"Bar":"SATELLITE","Lat":46.520536,"Long":6.567814},
   {"Bar":"THE GREAT ESCAPE","Lat":46.522779,"Long":6.633166},
-  {"Bar":"ZELIG","Lat":46.526012,"Long":6.580038}]
+  {"Bar":"ZELIG","Lat":46.526012,"Long":6.580038},
+  {"Bar":"QWERTZ CAFE","Lat":46.518499,"Long":6.634043},
+  {"Bar":"KING SIZE", "Lat":46.522013,"Long":6.626885},
+  {"Bar":"CAFE DES ARTISANS", "Lat":46.520712, "Long":6.634478},
+  {"Bar":"BAR TABAC", "Lat":46.518185,"Long":6.634881},
+  {"Bar":"L'ETOILE BLANCHE", "Lat": 46.519594, "Long":6.637591},
+  {"Bar":"CAPTAIN COOK", "Lat":46.519846, "Long":6.636892},
+  {"Bar":"ZOO BURGER", "Lat":46.521329, "Long":6.639722},
+  {"Bar":"TACOS BAR", "Lat":46.521382, "Long":6.628463}]
