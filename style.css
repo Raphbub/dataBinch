@@ -30,6 +30,10 @@ div.tooltip {
   height:600px;
 }
 
+.leaflet-tooltip .barTooltip {
+  background: #267fca;
+}
+
 .bootstrap-select  li.selected a{
     background: #3086E4;
     color: white;
