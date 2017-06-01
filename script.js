@@ -185,6 +185,12 @@ d3.json('binches.json', function(error, binches) {
 
   dropDownBar.on("change", function(binches) {
               let selectedBar = this.value;
+              $('#brass-list').val("");
+              $('#brass-list').selectpicker("refresh");
+
+              $('#binch-list').val("");
+              $('#binch-list').selectpicker("refresh");
+
 
               if (selectedBar == 'TOUS') {
                 svgScat.selectAll("circle")
@@ -218,6 +224,11 @@ d3.json('binches.json', function(error, binches) {
 
   dropDownBinch.on("change", function(binches) {
               let selectedBinch = this.value;
+              $('#brass-list').val("");
+              $('#brass-list').selectpicker("refresh");
+
+              $('#bar-list').val("");
+              $('#bar-list').selectpicker("refresh");
 
               if (selectedBinch == 'TOUTES') {
                 svgScat.selectAll("circle")
@@ -253,6 +264,11 @@ d3.json('binches.json', function(error, binches) {
 
   dropDownBrass.on("change", function() {
               let selectedBrasserie = this.value;
+              $('#bar-list').val("");
+              $('#bar-list').selectpicker("refresh");
+
+              $('#binch-list').val("");
+              $('#binch-list').selectpicker("refresh");
 
               if (selectedBrasserie == 'TOUTES') {
                 svgScat.selectAll("circle")
