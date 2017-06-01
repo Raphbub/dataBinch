@@ -205,7 +205,7 @@ d3.json('binches.json', function(error, binches) {
                        .attr("r", radius);
               }
                 console.log("Bar choisi :" + $('select#bar-list.selectpicker').val() + ", un bar magnifique");
-                map.setView(markers[$('select#bar-list.selectpicker').val()].getLatLng(), 18);
+                map.flyTo(markers[$('select#bar-list.selectpicker').val()].getLatLng(), 18);
 
   });
 
