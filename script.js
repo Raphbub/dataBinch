@@ -1,26 +1,6 @@
 /*jshint esnext: true */
 
 
-// interaction entre les sélecteurs -> sinon remise à zéro des autres quand un est sélectionné TODO
-
-// optimisation graphique de l'affichage du recommender system TODO
-
-// affichage du recommender system lors du choix de la biere via le selecteur de biere TODO
-
-// affichage de tous les bars au sein desquels la biere choisie est disponible TODO
-
-// fonction zoom sur le scatterplot ? TODO
-
-// possibilité de cliquer sur les bières proches renvoyées afin de pouvoir trouver les trouver dans les bars TODO
-
-// bouton reset qui remet tout à zéro (actualise) ? TODO
-
-// slider IBU  ? -> filtre bières scatterplot TODO
-
-// peut être afficher le nom des bars au survol sur la carte TODO
-
-
-
 // Définition du sélecteur de bars
 let dropDownBar = d3.select('#filterbar')
                  .append("select")
@@ -357,22 +337,23 @@ var yAxis =   svgScat.append("g")
           .on("click",function(d){
 
             var spanBeer = d3.select("#selectedBeer")
-                .html("La bière sélectionnée est : <b>"+ d.Biere+"</b>,<br>");
+                .html(d.Biere);
 
             var spanABV = d3.select("#ABVselectedBeer")
-                .html("Son taux d'alcool est de " + d.ABV + " %"+" alors que la médiane est à 6.5 %, <br>");
+                .html("Alcool : " + d.ABV + " % | ");
 
             var spanBrass = d3.select("#BrassselectedBeer")
-                    .html(" brassée par " + d.Brasserie + ",<br>");
+                    .html(d.Brasserie + "<br>");
 
             var spanIBU = d3.select("#IBUselectedBeer")
-                    .html("Son amertume est mesurée à " + d.IBU +" IBU"+" alors que la médiane est à 32 IBU,<br>");
+                    .html(d.IBU +" IBU | ");
 
             var spanStyle = d3.select("#SytleselectedBeer")
-                .html("C'est une bière de type "+ d.STYLE4);
+                .html(d.STYLE4 + " | ");
 
             var spanBar = d3.select("#BarselectedBeer")
                     .html("On peut la trouver ici : " + d.Bar+"<br>");
+
 
             document.getElementById('Biereproches').innerHTML="";
 
@@ -394,11 +375,10 @@ var yAxis =   svgScat.append("g")
                           });
                           rankdist.sort(function(a, b) { return a.weight - b.weight;});
 
+                          document.getElementById('distances').innerHTML += "<h2>Bières Similaires à "+d.Biere+" </h2> <br>";
+                          for (var current = 0; current < 5; current++){
 
-                          for (var current = 0; current < 10; current++){
-
-                          document.getElementById('Biereproches').innerHTML += ("Bière proche de <b>"+d.Biere +"</b> #" + current + ": <b>" + rankdist[current].Target +"</b><br>");
-                          console.log("Bière proche de "+d.Biere +" #", current, ": ", rankdist[current].Target);
+                          document.getElementById('Biereproches').innerHTML += ("<b>" + rankdist[current].Target +"</b><br>");
                           }
 
                     });
