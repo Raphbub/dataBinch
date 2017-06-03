@@ -1,56 +1,51 @@
 /*jshint esnext: true */
 
 
-// Définition du sélecteur de bars
-let dropDownBar = d3.select('#filterbar')
-                 .append("select")
-                 .attr("id", "bar-list")
-                 .attr("class","selectpicker")
-                 .attr("title", "Un bar en particulier ?");
+////////////////////////////////
+// DEFINITION VARIABLES GLOBALES ET CONSTANTES
+////////////////////////////////
 
+// Définition des sélecteurs de bars, brasseries et bières
+const dropDownBar = d3.select('#filterbar')
+                    .append("select")
+                    .attr("id", "bar-list")
+                    .attr("class","selectpicker")
+                    .attr("title", "Un bar en particulier ?");
 
-// Définition du sélecteur de bieres
+const dropDownBrass = d3.select('#filterbrass')
+                      .append("select")
+                      .attr("id", "brass-list")
+                      .attr("class","selectpicker")
+                      .attr("data-live-search","true")
+                      .attr("title", "Tapez pour rechercher");
 
-let dropDownBinch = d3.select('#filterbinch')
-                 .append("select")
-                 .attr("id", "binch-list")
-                 .attr("class","selectpicker")
-                 .attr("data-live-search","true")
-                 .attr("title", "Tapez pour rechercher");
-
-let dropDownBrass = d3.select('#filterbrass')
-                 .append("select")
-                 .attr("id", "brass-list")
-                 .attr("class","selectpicker")
-                 .attr("data-live-search","true")
-                 .attr("title", "Tapez pour rechercher");
-
+const dropDownBinch = d3.select('#filterbinch')
+                      .append("select")
+                      .attr("id", "binch-list")
+                      .attr("class","selectpicker")
+                      .attr("data-live-search","true")
+                      .attr("title", "Tapez pour rechercher");
 
 // Définitions des éléments relatifs au scatteplot
-let margins = {
-  "left": 40,
-  "right": 30,
-  "top": 30,
-  "bottom": 30
-};
+const margins = {"left": 40, "right": 30, "top": 30, "bottom": 30};
 
-let width = $('.2r2c').width() - margins.left - margins.right;
-let height = $('.2emeRang').height() - margins.top - margins.bottom;
+const width = $('.2r2c').width() - margins.left - margins.right;
+const height = $('.2emeRang').height() - margins.top - margins.bottom;
 
-let svgScat = d3.select("#scatter-load")
+const svgScat = d3.select("#scatter-load")
                 .append("svg")
                 .attr("width", width + margins.left + margins.right)
                 .attr("height", height + margins.top + margins.bottom)
                 .append("g")
                 .attr("transform", `translate(${margins.left},${margins.top})`);
-let toolTip = d3.select("body").append("div")
+
+const toolTip = d3.select("body").append("div")
                 .attr("class", "tooltip")
                 .style("opacity", 0);
 
-                // Add a place to save markers
+// Add a place to save markers
+let markers = {};
 
-                var markers = {};
-var marker;
 // Définitions des différentes échelles
 let radius = 6.5;
 
@@ -68,19 +63,21 @@ let SrmColorScale = d3.scaleLinear()
                    .domain([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,50])
                    .range(["#FFE699","#FFD878","#FFCA5A","#FFBF42","#FBB123","#F8A600","#F39C00","#EA8F00","#E58500","#DE7C00","#D77200","#CF6900","#CB6200",
                           "#C35900","#BB5100","#B54C00","#B04500","#A63E00","#A13700","#9B3200","#952D00","#8E2900","#882300","#821E00","#7B1A00","#771900",
-                          "#701400","#6A0E00","#660D00","#5E0B00","#5A0A02","#600903","#520907","#4C0505","#470606","#440607","#3F0708","#3B0607","#3A070B", "#36080A","black"]);
+                          "#701400","#6A0E00","#660D00","#5E0B00","#5A0A02","#600903","#520907","#4C0505","#470606","#440607","#3F0708","#3B0607","#3A070B", "#36080A","#000"]);
 
 // Couleurs selon le bar
 let barColorScale = d3.scaleOrdinal(d3.schemeCategory20);
 
 /////////////////////////////////////////////////////////
-// Parties relatives à la carte
+// PARTIES RELATIVES A LA CARTE
+////////////////////////////////////////////////////////
+
 //Définition des couches de base de la carte
-let cartodbLayer =  L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',{
+const cartodbLayer =  L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',{
   attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
 }); // Fond simple clair
 
-let stamenLayer =  L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.{ext}', {
+const stamenLayer =  L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.{ext}', {
   attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
   subdomains: 'abcd',
   minZoom: 0,
@@ -97,103 +94,116 @@ let map = L.map('map', {
 map.addLayer(cartodbLayer, stamenLayer);
 
 // Attribution des couches de bases pour le sélecteur
-var baseMaps = {
-    "Simple": cartodbLayer,
-    "Terrain": stamenLayer
+const baseMaps = {
+  "Simple": cartodbLayer,
+  "Terrain": stamenLayer
 };
-// Ajout des noms au sélecteur
+
+// Ajout des couches au sélecteur
 L.control.layers(baseMaps).addTo(map);
 
-L.control.scale({
-  imperial: false
-}).addTo(map);
+// Ajout de l'échelle graphique, système métrique seulement
+L.control.scale({imperial: false}).addTo(map);
 
 // Ajout du bouton et fonction de localisation
 L.control.locate().addTo(map);
 
-// Définition des marqueurs des brasseries
-let brassMarker = L.AwesomeMarkers.icon({
-    icon: 'industry',
-    prefix: 'fa',
-    markerColor: 'white',
-    iconColor: 'black'
-});
-// Définition des marqueurs des bars
-let barMarker = L.AwesomeMarkers.icon({
-    icon: 'beer',
-    prefix: 'fa',
-    markerColor: 'blue',
-    iconColor: 'white'
+// Définition du style des marqueurs des brasseries
+const brassMarker = L.AwesomeMarkers.icon({
+  icon: 'industry',
+  prefix: 'fa',
+  markerColor: 'white',
+  iconColor: 'black'
 });
 
-// Rassemblement des marqueurs en clusters
+// Définition du style des marqueurs des bars
+const barMarker = L.AwesomeMarkers.icon({
+  icon: 'beer',
+  prefix: 'fa',
+  markerColor: 'blue',
+  iconColor: 'white'
+});
+
+// Rassemblement des marqueurs brasseries en clusters
 let brassMarkers = L.markerClusterGroup({
   showCoverageOnHover: false, //Ne pas montrer les limites
   disableClusteringAtZoom: 12,
   spiderfyOnMaxZoom: false
 });
+
 // A voir si on veut cluster les bars... TODO
 // let barMarkers = L.markerClusterGroup({
 //   showCoverageOnHover: false, //Ne pas montrer les limites
 // });
 
-////////////////////////////////////
-// Import des données et affichage des visus
+////////////////////////////////////////////////
+// IMPORT DONNEES ET AFFICHAGE VISUALISATION
+////////////////////////////////////////////////
+
+// Visualisation des bières
 d3.json('binches.json', function(error, binches) {
   if (error) { // Si le fichier n'est pas chargé, log de l'erreur
     console.log(error);
   }
 
   // Récupération des différents bars
-  let bars = [...new Set(binches.map(item => item.Bar))];
-  let biereUnique = [...new Set(binches.map(item => item.Biere))];
-  let brasserieUnique = [...new Set(binches.map(item => item.Brasserie))];
+  const bars = [...new Set(binches.map(item => item.Bar))];
+  const biereUnique = [...new Set(binches.map(item => item.Biere))];
+  const brasserieUnique = [...new Set(binches.map(item => item.Brasserie))];
 
   // Assignement des bars au sélecteur
   let optDropBar = dropDownBar.selectAll("option")
-                        .data(["TOUS"].concat(bars))
-                        .enter()
-                        .append("option");
+                              .data(["TOUS"].concat(bars))
+                              .enter()
+                              .append("option");
 
-
+  // Ajout du texte
   optDropBar.text(d => d)
-         .attr("value", d => d);
+            .attr("value", d => d);
 
-
-
-  // Si on sélectionne un bar, cache les autres
-
+  // Fonction à la sélection d'un bar
   dropDownBar.on("change", function(binches) {
-              let selectedBar = this.value;
-              $('#brass-list').val("");
-              $('#brass-list').selectpicker("refresh");
+    let selectedBar = this.value;
+    // Réinitialise les options des autres selects (brasserie et bar) pour clarifier
+    $('#brass-list').val("");
+    $('#brass-list').selectpicker("refresh");
 
-              $('#binch-list').val("");
-              $('#binch-list').selectpicker("refresh");
+    $('#binch-list').val("");
+    $('#binch-list').selectpicker("refresh");
 
+    // Si tous les bars sont sélectionnés leur mettre la même taille
+    if (selectedBar == 'TOUS') {
+      svgScat.selectAll("circle")
+             .transition()
+             .duration(800)
+             .attr("r", radius);
 
-              if (selectedBar == 'TOUS') {
-                svgScat.selectAll("circle")
-                        .attr("r", radius);
-              } else {
-                svgScat.selectAll("circle")
-                       .filter(function(d) {return selectedBar !== d.Bar;})
-                       .attr("r", 0);
+      // TODO Ajuster la carte
+    } else {
+      // Faire "disparaître" les bières non correspondantes
+      svgScat.selectAll("circle")
+             .filter(function(d) {return selectedBar !== d.Bar;})
+             .transition()
+             .duration(800)
+             .attr("r", 0);
 
-                svgScat.selectAll("circle")
-                       .filter(function(d) {return selectedBar == d.Bar;})
-                       .attr("r", radius);
-              }
-                console.log("Bar choisi :" + $('select#bar-list.selectpicker').val() + ", un bar magnifique");
-                map.flyTo(markers[$('select#bar-list.selectpicker').val()].getLatLng(), 18);
-
+      // Remettre les bières correspondantes
+      svgScat.selectAll("circle")
+             .filter(function(d) {return selectedBar == d.Bar;})
+             .transition()
+             .duration(800)
+             .attr("r", radius);
+    }
+    console.log("Bar choisi :" + $('select#bar-list.selectpicker').val() + ", un bar magnifique");
+    // Déplace la carte pour centrer sur le bar sélectionné
+    map.flyTo(markers[$('select#bar-list.selectpicker').val()].getLatLng(), 18);
   });
-
+  // TODO reprise du commentaire
 
   let optDropBinch = dropDownBinch.selectAll("option")
-                        .data(["TOUTES"].concat(biereUnique))
-                        .enter()
-                        .append("option");
+                      .data(["TOUTES"].concat(biereUnique))
+                      .enter()
+                      .append("option");
 
   optDropBinch.text(d => d)
          .attr("value", d => d);
