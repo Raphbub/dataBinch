@@ -241,14 +241,49 @@ d3.json('binches.json', function(error, binches) {
       svgScat.selectAll("circle")
              .filter(function(d) {return selectedBinch !== d.Biere;})
              .transition()
-             .duration(800)
+             .duration(3800)
              .attr("r", 0);
       // Remettre les bières correspondantes
       svgScat.selectAll("circle")
              .filter(function(d) {return selectedBinch == d.Biere;})
              .transition()
-             .duration(800)
+             .duration(3800)
              .attr("r", radius);
+
+
+            document.getElementById('Biereproches').innerHTML = '';
+
+
+
+            d3.csv('rowdist.csv', function(error, data) {
+              if (error) {
+                console.log(error);
+              } // Ajout des données
+              data.forEach(function(d) {
+                d.weight = +d.Weight;
+              });
+
+              // retourne les 10 bières les plus proches
+
+              let filtered = data.filter(function (item) {
+                return item.Source === selectedBinch;
+              });
+
+              let rankdist = filtered.filter(function (item){
+                return item.weight < 0.5;
+              });
+
+              rankdist.sort(function(a, b) { return a.weight - b.weight;});
+
+              document.getElementById('Biereproches').innerHTML += "<h3>Bières similaires à "+selectedBinch+" </h3><br>";
+
+              for (let i = 0; i < 5; i++){
+                document.getElementById('Biereproches').innerHTML += ("<img src='"+beericon+"'>"+ "<b>" + rankdist[i].Target +"</b><br>");
+              }
+            });
+
+
+
 
       console.log("Bière choisie :" + selectedBinch + ", très bon choix !");
     }
