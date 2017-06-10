@@ -44,6 +44,8 @@ const toolTip = d3.select("body")
                   .attr("class", "tooltip")
                   .style("opacity", 0);
 
+let beericon = "beericon.png";
+
 // Add a place to save markers
 let markers = {};
 
@@ -367,6 +369,8 @@ d3.json('binches.json', function(error, binches) {
           })
           .on("click",function(d){
 
+
+
             let spanBeer = d3.select("#selectedBeer")
                              .html(d.Biere);
 
@@ -407,15 +411,30 @@ d3.json('binches.json', function(error, binches) {
 
               rankdist.sort(function(a, b) { return a.weight - b.weight;});
 
-              document.getElementById('distances').innerHTML += "<h2>Bières Similaires à "+d.Biere+" </h2> <br>";
+              document.getElementById('Biereproches').innerHTML += "<h3>Bières similaires à "+d.Biere+" </h3><br>";
 
               for (let i = 0; i < 5; i++){
                 if (i == 0) {
                   map.flyTo(new L.LatLng(d.Lat, d.Long), 12);
                 }
-                document.getElementById('Biereproches').innerHTML += ("<b>" + rankdist[i].Target +"</b><br>");
+                document.getElementById('Biereproches').innerHTML += ("<img src='"+beericon+"'>"+ "<b>" + rankdist[i].Target +"</b><br>");
               }
             });
+          
+
+                  // Faire "disparaître" les bières non correspondantes
+            svgScat.selectAll("circle")
+             .filter(function(d) {return biereUnique !== d.Biere;})
+             .transition()
+             .duration(3800)
+             .attr("r", 0);
+            // Remettre les bières correspondantes
+            svgScat.selectAll("circle")
+             .filter(function(d) {return biereUnique == d.Biere;})
+             .transition()
+             .duration(3800)
+             .attr("r", radius);
+
           });
 
   //////////////
