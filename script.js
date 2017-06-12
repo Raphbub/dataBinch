@@ -166,6 +166,15 @@ d3.json('binches.json', function(error, binches) {
   const biereUnique = [...new Set(binches.map(item => item.Biere))];
   const brasserieUnique = [...new Set(binches.map(item => item.Brasserie))];
 
+  const biereBar = $.map(binches, function(n,i){
+        return {
+          biere : n.Biere,
+          bar : n.Bar};
+        });
+
+
+
+
   //////////////
   // SELECTEURS
 
@@ -284,6 +293,14 @@ d3.json('binches.json', function(error, binches) {
 
      let spanBar = d3.select("#BarselectedBeer")
                      .html(`On peut la trouver ici : ${binch.Bar}<br>`);
+
+     for (i=0; i < biereBar.length; i++){
+          if (biereBar[i].biere==selectedBinch) {
+               console.log(biereBar[i].bar);
+          }
+
+      }
+
 
       document.getElementById('Biereproches').innerHTML = '';
 
@@ -436,6 +453,14 @@ d3.json('binches.json', function(error, binches) {
 
             let spanBar = d3.select("#BarselectedBeer")
                             .html(`On peut la trouver ici : ${d.Bar}<br>`);
+
+          for (i=0; i < biereBar.length; i++){
+               if (biereBar[i].biere==d.Biere) {
+                                console.log(biereBar[i].bar);
+                   }
+
+             }
+
 
             document.getElementById('Biereproches').innerHTML = '';
 
