@@ -252,6 +252,7 @@ d3.json('binches.json', function(error, binches) {
       // Déplacer la carte pour voir tous les bars
       map.flyToBounds(barMarkers.getBounds(), {duration: 0.8});
     } else {
+      let binch = binches.find(d => d.Biere === selectedBinch);
       // Faire "disparaître" les bières non correspondantes
       svgScat.selectAll("circle")
              .filter(d => selectedBinch !== d.Biere)
@@ -265,10 +266,27 @@ d3.json('binches.json', function(error, binches) {
              .duration(3800)
              .attr("r", radius);
 
+     let spanBrass = d3.select("#BrassselectedBeer")
+                       .html(`${binch.Brasserie} <br>`);
+
+     let spanBeer = d3.select("#selectedBeer")
+                      .html(binch.Biere);
+
+     let spanABV = d3.select("#ABVselectedBeer")
+                     .html(`Alcool : ${binch.ABV} % | `);
+
+     let spanIBU = d3.select("#IBUselectedBeer")
+                     .html(`${binch.IBU} IBU | `);
+
+     let spanStyle = d3.select("#SytleselectedBeer")
+                       .html(`${binch.STYLE4} | `);
+
+     let spanBar = d3.select("#BarselectedBeer")
+                     .html(`On peut la trouver ici : ${binch.Bar}<br>`);
+
       document.getElementById('Biereproches').innerHTML = '';
 
       // Déplace la carte sur la brasserie
-      let binch = binches.find(d => d.Biere === selectedBinch);
       map.flyTo(new L.LatLng(binch.Lat, binch.Long), 12);
 
       // retourne les 5 bières les plus proches
