@@ -182,6 +182,11 @@ d3.json('binches.json', function(error, binches) {
 
   // Fonction à la sélection d'un bar
   dropDownBar.on("change", function() {
+    // TODO n'agir que sur les bars ferait gagner du temps
+    // Ferme les tooltips encore ouverts
+    map.eachLayer(function(l) {
+      map.closeTooltip(l.getTooltip());
+    })
     let selectedBar = this.value;
     // Réinitialise les options des autres selects (brasserie et bière) pour clarifier
     $('#brass-list').val("");
@@ -211,11 +216,11 @@ d3.json('binches.json', function(error, binches) {
              .transition()
              .duration(800)
              .attr("r", radius);
+      // Déplace la carte pour centrer sur le bar sélectionné et ouvre son popup
+      map.flyTo(markers[$('select#bar-list.selectpicker').val()].getLatLng(), 18/*, {duration: 1} TODO Mettre une durée?*/);
+      markers[$('select#bar-list.selectpicker').val()].openTooltip();
     }
     console.log("Bar choisi :" + $('select#bar-list.selectpicker').val() + ", un bar magnifique");
-    // Déplace la carte pour centrer sur le bar sélectionné et ouvre son popup
-    map.flyTo(markers[$('select#bar-list.selectpicker').val()].getLatLng(), 18/*, {duration: 1} TODO Mettre une durée?*/);
-    markers[$('select#bar-list.selectpicker').val()].openTooltip();
   });
 
   // BINCHES select
