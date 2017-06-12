@@ -53,9 +53,9 @@ d3.csv('rowdist.csv', function(error, data) {
   if (error) {
     console.log(error);
   }
-  data.forEach(d => d.weight = +d.Weight)
+  data.forEach(d => d.weight = +d.Weight);
   rowDist = data;
-})
+});
 // Add a place to save markers
 let markers = {};
 
@@ -195,7 +195,7 @@ d3.json('binches.json', function(error, binches) {
     // Ferme les tooltips encore ouverts
     map.eachLayer(function(l) {
       map.closeTooltip(l.getTooltip());
-    })
+    });
     let selectedBar = this.value;
     // Réinitialise les options des autres selects (brasserie et bière) pour clarifier
     $('#brass-list').val("");
@@ -313,10 +313,10 @@ d3.json('binches.json', function(error, binches) {
 
       rankdist.sort((a, b) => a.weight - b.weight);
 
-      document.getElementById('Biereproches').innerHTML += `<h3>Bières similaires à ${selectedBinch}</h3><br>`  //"<h3>Bières similaires à "+d.Biere+" </h3><br>";
+      document.getElementById('Biereproches').innerHTML += `<h3>Bières similaires à ${selectedBinch}</h3><br>`;  //"<h3>Bières similaires à "+d.Biere+" </h3><br>";
 
       for (let i = 0; i < 5; i++){
-        document.getElementById('Biereproches').innerHTML += `<img src=${beericon}><b>${rankdist[i].Target}</b><br>` //("<img src='"+beericon+"'>"+ "<b>" + rankdist[i].Target +"</b><br>");
+        document.getElementById('Biereproches').innerHTML += `<img src=${beericon}><b>${rankdist[i].Target}</b><br>`; //("<img src='"+beericon+"'>"+ "<b>" + rankdist[i].Target +"</b><br>");
       }
     }
   });
@@ -473,10 +473,10 @@ d3.json('binches.json', function(error, binches) {
 
             rankdist.sort((a, b) => a.weight - b.weight);
 
-            document.getElementById('Biereproches').innerHTML += `<h3>Bières similaires à ${d.Biere}</h3><br>`  //"<h3>Bières similaires à "+d.Biere+" </h3><br>";
+            document.getElementById('Biereproches').innerHTML += `<h3>Bières similaires à ${d.Biere}</h3><br>`;  //"<h3>Bières similaires à "+d.Biere+" </h3><br>";
 
             for (let i = 0; i < 5; i++){
-              document.getElementById('Biereproches').innerHTML += `<img src=${beericon}><b>${rankdist[i].Target}</b><br>` //("<img src='"+beericon+"'>"+ "<b>" + rankdist[i].Target +"</b><br>");
+              document.getElementById('Biereproches').innerHTML += `<img src=${beericon}><b>${rankdist[i].Target}</b><br>`; //("<img src='"+beericon+"'>"+ "<b>" + rankdist[i].Target +"</b><br>");
             }
 
             // Faire "disparaître" les bières non correspondantes
