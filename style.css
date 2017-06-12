@@ -58,7 +58,7 @@ div.tooltip {
   height:600px;
 }
 
-.leaflet-tooltip .barTooltip {
+.barTooltip {
   background: #267fca;
 }
 
@@ -98,4 +98,3 @@ h3.Biereproches{
     font-family: Helvetica;
 
 }
-

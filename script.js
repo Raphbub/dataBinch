@@ -219,6 +219,7 @@ d3.json('binches.json', function(error, binches) {
       // Déplace la carte pour centrer sur le bar sélectionné et ouvre son popup
       map.flyTo(markers[$('select#bar-list.selectpicker').val()].getLatLng(), 18/*, {duration: 1} TODO Mettre une durée?*/);
       markers[$('select#bar-list.selectpicker').val()].openTooltip();
+      markers[$('select#bar-list.selectpicker').val()].setZIndexOffset(1000);
     }
     console.log("Bar choisi :" + $('select#bar-list.selectpicker').val() + ", un bar magnifique");
   });
