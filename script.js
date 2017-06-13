@@ -284,16 +284,13 @@ d3.json('binches.json', function(error, binches) {
      let spanStyle = d3.select("#SytleselectedBeer")
                        .html(`${binch.STYLE4} | `);
 
-     let spanBar = d3.select("#BarselectedBeer")
-                     .html(`On peut la trouver ici : ${binch.Bar}<br>`);
 
-     for (i=0; i < biereBar.length; i++){
-          if (biereBar[i].biere==selectedBinch) {
-               console.log(biereBar[i].bar);
-          }
+                     for (i=0; i < biereBar.length; i++){
+                          if (biereBar[i].biere==d.Biere) {
+                            document.getElementById('BarselectedBeer').innerHTML += biereBar[i].bar + " | ";
+                              }
 
-      }
-
+                        }
 
       document.getElementById('Biereproches').innerHTML = '';
 
@@ -442,18 +439,13 @@ d3.json('binches.json', function(error, binches) {
             let spanStyle = d3.select("#SytleselectedBeer")
                               .html(`${d.STYLE4} | `);
 
-            let spanBar = d3.select("#BarselectedBeer")
-                            .html(`On peut la trouver ici : ${d.Bar}<br>`);
 
           for (i=0; i < biereBar.length; i++){
                if (biereBar[i].biere==d.Biere) {
-                                console.log(biereBar[i].bar);
+                 document.getElementById('BarselectedBeer').innerHTML += biereBar[i].bar + " | ";
                    }
 
              }
-
-
-            document.getElementById('Biereproches').innerHTML = '';
 
             // Déplace la carte sur la brasserie
             map.flyTo(new L.LatLng(d.Lat, d.Long), 12);
