@@ -99,3 +99,8 @@ h3.Biereproches {
   margin-bottom: 0px;
   font-family: Helvetica;
 }
+
+.bProches {
+  cursor: pointer;
+  cursor: hand;
+}
