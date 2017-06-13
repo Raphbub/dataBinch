@@ -60,7 +60,8 @@ div.tooltip {
 }
 
 .barTooltip {
-  background: #267fca;
+  background: #37a9dd;
+  font-weight: bold;
 }
 
 .bootstrap-select li.selected a {
