@@ -246,6 +246,7 @@ d3.json('binches.json', function(error, binches) {
     $('#brass-list').val("");
 
     $('#bar-list').val("");
+    $('#BarselectedBeer').html("");
 
     // Si toutes les bières sont sélectionnées leur mettre la même taille
     if (selectedBinch == 'TOUTES') {
@@ -284,13 +285,12 @@ d3.json('binches.json', function(error, binches) {
      let spanStyle = d3.select("#SytleselectedBeer")
                        .html(`${binch.STYLE4} | `);
 
+     for (i=0; i < biereBar.length; i++){
+           if (biereBar[i].biere==selectedBinch) {
+                 document.getElementById('BarselectedBeer').innerHTML += biereBar[i].bar + " | ";
+                }
 
-                     for (i=0; i < biereBar.length; i++){
-                          if (biereBar[i].biere==selectedBinch) {
-                            document.getElementById('BarselectedBeer').innerHTML += biereBar[i].bar + " | ";
-                              }
-
-                        }
+     }
 
       document.getElementById('Biereproches').innerHTML = '';
 
