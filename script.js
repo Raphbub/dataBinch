@@ -5,7 +5,7 @@
 ////////////////////////////////
 let dropDownBar = d3.select("#filterbar")
                       .append("select")
-                      .attr("id", "barlist")
+                      .attr("id", "bar-list")
                       .attr("class","selectpicker")
                       .attr("title", "Un bar en particulier ?");
 
