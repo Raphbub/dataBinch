@@ -2,36 +2,37 @@ body {
   margin-left: 10px;
 }
 
-
-p.brasselected{
+p.brasselected {
   font-family: Helvetica;
-  color: rgb(204,102,0);
+  color: rgb(204, 102, 0);
   font-size: 20pt;
   margin-bottom: 0;
-
 }
 
-p.binchattributes{
+p.binchattributes {
   font-family: Helvetica;
   font-size: 13pt;
   margin-bottom: 0;
   color: grey;
 }
 
-div.distances{
+div.distances {
   margin: 0;
-  background-color: rgb(0,0,0);
-  border-bottom-color: rgb(229,229,229);
+  background-color: rgb(0, 0, 0);
+  border-bottom-color: rgb(229, 229, 229);
   border-bottom-width: 1px;
 }
-p.binchselected{
+
+p.binchselected {
   font-size: 32pt;
   margin-bottom: 0;
 }
+
 .axis, .axis path {
   fill: none;
   stroke: #ACB849;
 }
+
 text {
   stroke: none;
   fill: #666666;
@@ -39,7 +40,7 @@ text {
 
 div.tooltip {
   position: absolute;
-  background-color:#424242;
+  background-color: #424242;
   color: white;
   text-align: center;
   padding: 8px;
@@ -47,27 +48,28 @@ div.tooltip {
   pointer-events: none;
 }
 
-.dot{
-  stroke:black;
-  stroke-width:0.5;
-  cursor:pointer;
+.dot {
+  stroke: black;
+  stroke-width: 0.5;
+  cursor: pointer;
 }
 
 #map {
-  width:730px;
-  height:380px;
+  width: 730px;
+  height: 380px;
 }
 
 .barTooltip {
   background: #267fca;
 }
 
-.bootstrap-select  li.selected a{
-    background: #3086E4;
-    color: white;
+.bootstrap-select li.selected a {
+  background: #3086E4;
+  color: white;
 }
-.bootstrap-select  li.selected a:hover{
-    background: #256CB8;
+
+.bootstrap-select li.selected a:hover {
+  background: #256CB8;
 }
 
 .box {
@@ -79,22 +81,20 @@ div.tooltip {
   font-size: 12px;
 }
 
-#infos-bieres{
+#infos-bieres {
   position: absolute;
-  background-color:#424242;
+  background-color: #424242;
   color: white;
   text-align: center;
   pointer-events: none;
-
 }
 
-h3.Biereproches{
+h3.Biereproches {
   border-bottom-color: rgb(229, 229, 229);
   border-bottom-style: solid;
   border-bottom-width: 1px;
   font-size: 19.2px;
   font-weight: 600;
   margin-bottom: 0px;
-    font-family: Helvetica;
-
+  font-family: Helvetica;
 }
