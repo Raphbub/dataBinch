@@ -25,7 +25,7 @@ let dropDownBinch = d3.select("#filterbinch")
 const margins = {"left": 40, "right": 30, "top": 30, "bottom": 30};
 
 const width = $('.2r2c').width() - margins.left - margins.right;
-const height = $('.2emeRang').height() - margins.top - margins.bottom;
+const height = window.innerHeight*0.66;
 
 const svgScat = d3.select("#scatter-load")
                 .append("svg")
