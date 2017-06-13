@@ -286,7 +286,7 @@ d3.json('binches.json', function(error, binches) {
 
 
                      for (i=0; i < biereBar.length; i++){
-                          if (biereBar[i].biere==d.Biere) {
+                          if (biereBar[i].biere==selectedBinch) {
                             document.getElementById('BarselectedBeer').innerHTML += biereBar[i].bar + " | ";
                               }
 
