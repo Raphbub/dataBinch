@@ -14,8 +14,7 @@ binches <- do.call("rbind", binches)
 
 binches <- as.data.frame(binches)
 
-binchUnique <- binches[,4:12]
-binchUnique <- binchUnique[,-2]
+binchUnique <- binches[,4:11]
 binchUnique <- unique(binchUnique, incomparables = FALSE)
 
 binchDist <- binchUnique[,-1]
