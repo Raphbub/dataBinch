@@ -168,8 +168,16 @@ d3.json('binches.json', function(error, binches) {
           bar : n.Bar};
         });
 
+  const brasseriesLatLon = $.map(binches, function(n,i){
+        return {
+          brasserie : n.Brasserie,
+          Lat : n.Lat,
+          Long : n.Long
+        };
 
+ });
 
+console.log(brasseriesLatLon[1]);
 
   //////////////
   // SELECTEURS
@@ -335,9 +343,18 @@ d3.json('binches.json', function(error, binches) {
       svgScat.selectAll("circle")
              .attr("r", radius);
 
-      // Déplace la carte pour apercevoir l'ensemble des brasseries
-      map.flyToBounds(barMarkers.getBounds(), {duration: 1}); //TODO Est-ce que ça vaut la peine de zoomer sur l'ensemble des brasseries (monde entier)
     } else {
+
+for (var i = 0; i < brasseriesLatLon.length; i++) {
+  if (selectedBrasserie == brasseriesLatLon[i].brasserie) {
+    var brassLocLat = brasseriesLatLon[i].Lat;
+    var brassLocLong = brasseriesLatLon[i].Long;
+    map.flyTo(new L.LatLng(brassLocLat,brassLocLong),12);
+  }
+
+}
+
+
       // Faire "disparaître" les bières non correspondantes
       svgScat.selectAll("circle")
              .filter(d => selectedBrasserie !== d.Brasserie)
