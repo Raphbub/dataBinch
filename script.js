@@ -170,9 +170,11 @@ d3.json('binches.json', function(error, binches) {
   }
 
   // Récupération des différents bars, bières et brasseries
-  const bars = [...new Set(binches.map(item => item.Bar))];
-  const biereUnique = [...new Set(binches.map(item => item.Biere))];
-  const brasserieUnique = [...new Set(binches.map(item => item.Brasserie))];
+  const bars = [...new Set(binches.map(item => item.Bar).sort())];
+  const biereUnique = [...new Set(binches.map(item => item.Biere).sort())];
+  const brasserieUnique = [...new Set(binches.map(item => item.Brasserie).sort())];
+
+  console.log(biereUnique);
 
   const biereBar = $.map(binches, function(n, i) {
     return {
