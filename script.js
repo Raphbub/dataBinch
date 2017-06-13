@@ -1,29 +1,24 @@
 /*jshint esnext: true */
 
-
 ////////////////////////////////
 // DEFINITION VARIABLES GLOBALES ET CONSTANTES
 ////////////////////////////////
-
-// Définition des sélecteurs de bars, brasseries et bières
-const dropDownBar = d3.select('#filterbar')
+let dropDownBar = d3.select("#filterbar")
                       .append("select")
-                      .attr("id", "bar-list")
+                      .attr("id", "barlist")
                       .attr("class","selectpicker")
                       .attr("title", "Un bar en particulier ?");
 
-const dropDownBrass = d3.select('#filterbrass')
+let dropDownBrass = d3.select("#filterbrass")
                         .append("select")
                         .attr("id", "brass-list")
                         .attr("class","selectpicker")
-                        .attr("data-live-search","true")
                         .attr("title", "Tapez pour rechercher");
 
-const dropDownBinch = d3.select('#filterbinch')
+let dropDownBinch = d3.select("#filterbinch")
                         .append("select")
                         .attr("id", "binch-list")
                         .attr("class","selectpicker")
-                        .attr("data-live-search","true")
                         .attr("title", "Tapez pour rechercher");
 
 // Définitions des éléments relatifs au scatteplot
@@ -155,6 +150,7 @@ let barMarkers = L.featureGroup();
 // IMPORT DONNEES ET AFFICHAGE VISUALISATION
 ////////////////////////////////////////////////
 
+
 // Visualisation des bières
 d3.json('binches.json', function(error, binches) {
   if (error) { // Si le fichier n'est pas chargé, log de l'erreur
@@ -177,6 +173,7 @@ d3.json('binches.json', function(error, binches) {
 
   //////////////
   // SELECTEURS
+  // Définition des sélecteurs de bars, brasseries et bières
 
   // BARS select
   // Assignement des bars au sélecteur
@@ -199,10 +196,8 @@ d3.json('binches.json', function(error, binches) {
     let selectedBar = this.value;
     // Réinitialise les options des autres selects (brasserie et bière) pour clarifier
     $('#brass-list').val("");
-    $('#brass-list').selectpicker("refresh");
 
     $('#binch-list').val("");
-    $('#binch-list').selectpicker("refresh");
 
     // Si tous les bars sont sélectionnés leur mettre la même taille
     if (selectedBar == 'TOUS') {
@@ -249,10 +244,8 @@ d3.json('binches.json', function(error, binches) {
     let selectedBinch = this.value;
     // Réinitialise les options des autres selects (brasserie et bar) pour clarifier
     $('#brass-list').val("");
-    $('#brass-list').selectpicker("refresh");
 
     $('#bar-list').val("");
-    $('#bar-list').selectpicker("refresh");
 
     // Si toutes les bières sont sélectionnées leur mettre la même taille
     if (selectedBinch == 'TOUTES') {
@@ -337,10 +330,8 @@ d3.json('binches.json', function(error, binches) {
     let selectedBrasserie = this.value;
     // Réinitialise les options des autres selects (bar et bière) pour clarifier
     $('#bar-list').val("");
-    $('#bar-list').selectpicker("refresh");
 
     $('#binch-list').val("");
-    $('#binch-list').selectpicker("refresh");
 
     // Si toutes les bières sont sélectionnées leur mettre la même taille
     if (selectedBrasserie == 'TOUTES') {
