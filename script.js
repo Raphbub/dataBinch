@@ -423,6 +423,8 @@ d3.json('binches.json', function(error, binches) {
               .style("opacity", 0.5);
           })
           .on("click",function(d){
+            $('#BarselectedBeer').html("");
+            $('#Biereproches').html("");
 
             let spanBrass = d3.select("#BrassselectedBeer")
                               .html(`${d.Brasserie} <br>`);
