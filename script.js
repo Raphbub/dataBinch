@@ -560,6 +560,7 @@ for (var i = 0; i < barsLsne.length; i++) {
   // Create and save a reference to each marker
   markers[bar.Bar] = L.marker([bar.Lat, bar.Long], {
     riseOnHover: true,
+    icon : barMarker
   })
   .bindTooltip(bar.Bar, {
         className: 'barTooltip'
@@ -573,7 +574,7 @@ for (var i = 0; i < barsLsne.length; i++) {
 //  console.log(markers);
 
 // Add click event to markers
-$('.leaflet-marker-icon').on('click', function(e) {
+$('.awesome-marker-icon-blue.awesome-marker.leaflet-zoom-animated.leaflet-interactive').on('click', function(e) {
    // Use the event to find the clicked element
    var el = $(e.srcElement || e.target),
        id = el.attr('id');
