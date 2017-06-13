@@ -192,7 +192,6 @@ d3.json('binches.json', function(error, binches) {
 
   });
 
-  console.log(brasseriesLatLon[1]);
 
   //////////////
   // SELECTEURS
@@ -551,69 +550,81 @@ d3.json('bars.json', function(error, barsLsne) {
   if (error) { // Si le fichier n'est pas chargé, log de l'erreur
     console.log(error);
   }
-  // Loop through the data
-  for (let i = 0; i < barsLsne.length; i++) {
-    let bar = barsLsne[i];
-    // Create and save a reference to each marker
-    markers[bar.Bar] = L.marker([bar.Lat, bar.Long], {
-        icon: barMarker,
-        riseOnHover: true
-      })
-      .bindTooltip(bar.Bar, {
+
+
+
+// Loop through the data
+for (var i = 0; i < barsLsne.length; i++) {
+  var bar = barsLsne[i];
+//  console.log(person.Lat);
+  // Create and save a reference to each marker
+  markers[bar.Bar] = L.marker([bar.Lat, bar.Long], {
+    riseOnHover: true,
+  })
+  .bindTooltip(bar.Bar, {
         className: 'barTooltip'
       })
-      .addTo(barMarkers)
-      .addTo(map);
+  .addTo(map);
 
-    // Add the ID
-    markers[bar.Bar]._icon.id = bar.Bar;
+  // Add the ID
+  markers[bar.Bar]._icon.id = bar.Bar;
+}
 
-    // Add click event to markers
-    $('.leaflet-marker-icon').on('click', function(e) {
-      // Use the event to find the clicked element
-      let el = $(e.srcElement || e.target),
-        id = el.attr('id');
+//  console.log(markers);
 
-      // One way you could use the id
-      map.flyTo(markers[id].getLatLng());
+// Add click event to markers
+$('.leaflet-marker-icon').on('click', function(e) {
+   // Use the event to find the clicked element
+   var el = $(e.srcElement || e.target),
+       id = el.attr('id');
 
-      let selectedBar = id;
 
-      svgScat.selectAll("circle")
-        .filter(d => selectedBar !== d.Bar)
-        .transition()
-        .duration(800)
-        .attr("r", 0);
+    // One way you could use the id
+map.flyTo(markers[id].getLatLng());
 
-      svgScat.selectAll("circle")
-        .filter(d => selectedBar == d.Bar)
-        .transition()
-        .duration(800)
-        .attr("r", radius);
-    });
-  }
-  // for (let i = 0 ; i < barsLsne.length; i++) {
-  //   let marker = new L.marker([barsLsne[i].Lat, barsLsne[i].Long], {icon: barMarker})
-  //       .bindTooltip(barsLsne[i].Bar)
-  //       .addTo(map); //.addTo(barMarkers); si cluster
-  // }
-  // map.addLayer(barMarkers); si cluster
+let selectedBar = id;
+
+svgScat.selectAll("circle")
+  .filter(d => selectedBar !== d.Bar)
+  .transition()
+  .duration(800)
+  .attr("r", 0);
+
+svgScat.selectAll("circle")
+  .filter(d => selectedBar == d.Bar)
+  .transition()
+  .duration(800)
+  .attr("r", radius);
+
 });
 
-//////////////////////
-// AJOUTS LEGENDE AXES GRAPHIQUE : BARS
+
+  // for (let i = 0 ; i < barsLsne.length; i++) {
+  //   let marker = new L.marker([barsLsne[i].Lat, barsLsne[i].Long], {icon: barMarker})
+  //       .bindPopup(barsLsne[i].Bar)
+  //       .addTo(map); //.addTo(barMarkers); si cluster
+  // }
+
+
+
+
+// map.addLayer(barMarkers); si cluster
+
+});
+
+// Légendes des axes
 svgScat.append("text")
-  .attr("class", "x label")
-  .attr("text-anchor", "end")
-  .attr("x", width - 5)
-  .attr("y", height - 7)
-  .text("Alcool par volume (%)");
+     .attr("class", "x label")
+     .attr("text-anchor", "end")
+     .attr("x", width-5)
+     .attr("y", height-7)
+     .text("Alcool par volume (%)");
 
 svgScat.append("text")
-  .attr("class", "y label")
-  .attr("text-anchor", "end")
-  .attr("x", -7)
-  .attr("y", 5)
-  .attr("dy", ".75em")
-  .attr("transform", "rotate(-90)")
-  .text("Amertume (IBU)");
+     .attr("class", "y label")
+     .attr("text-anchor", "end")
+     .attr("x", -7)
+     .attr("y", 5)
+     .attr("dy", ".75em")
+     .attr("transform", "rotate(-90)")
+     .text("Amertume (IBU)");
