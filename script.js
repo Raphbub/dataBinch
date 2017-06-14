@@ -1,5 +1,8 @@
 /*jshint esnext: true */
 
+
+
+
 ////////////////////////////////
 // DEFINITION VARIABLES GLOBALES ET CONSTANTES
 ////////////////////////////////
@@ -29,8 +32,8 @@ const margins = {
   "bottom": 30
 };
 
-const width = $('.2r2c').width() - margins.left - margins.right;
-const height = window.innerHeight * 0.66;
+const width = window.innerWidth * 0.35;
+const height = window.innerHeight * 0.5;
 
 const svgScat = d3.select("#scatter-load")
   .append("svg")
@@ -174,7 +177,6 @@ d3.json('binches.json', function(error, binches) {
   const biereUnique = [...new Set(binches.map(item => item.Biere).sort())];
   const brasserieUnique = [...new Set(binches.map(item => item.Brasserie).sort())];
 
-  console.log(biereUnique);
 
   const biereBar = $.map(binches, function(n, i) {
     return {
@@ -614,7 +616,7 @@ d3.json('binches.json', function(error, binches) {
           // Déplace la carte sur la brasserie
           map.flyTo(new L.LatLng(binch.Lat, binch.Long), 12);
         }
-      })
+      });
 
       // Faire "disparaître" les bières non correspondantes
       svgScat.selectAll("circle")

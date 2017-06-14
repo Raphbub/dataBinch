@@ -1,20 +1,25 @@
 body {
-  margin-left: 10px;
-}
+	font-family:'Source Sans Pro',sans-serif;
+	font-size: 11pt;
+	}
 
+h3{
+  margin-top: 0px;
+}
 p.brasselected {
-  font-family: Helvetica;
+  font-family:'Source Sans Pro',sans-serif;
   color: rgb(204, 102, 0);
-  font-size: 20pt;
+  font-size: 16pt;
   margin-bottom: 0;
 }
 
 p.binchattributes {
-  font-family: Helvetica;
+  font-family:'Source Sans Pro',sans-serif;
   font-size: 13pt;
   margin-bottom: 0;
   color: grey;
 }
+
 
 div.distances {
   margin: 0;
@@ -24,8 +29,10 @@ div.distances {
 }
 
 p.binchselected {
-  font-size: 32pt;
+  font-size: 28pt;
   margin-bottom: 0;
+  font-family:'Source Sans Pro',sans-serif;
+
 }
 
 .axis, .axis path {
@@ -54,10 +61,6 @@ div.tooltip {
   cursor: pointer;
 }
 
-#map {
-  width: 730px;
-  height: 380px;
-}
 
 .barTooltip {
   background: #37a9dd;
@@ -78,7 +81,7 @@ div.tooltip {
   margin: 3px;
   padding: 5px;
   background-color: white;
-  font-family: sans-serif;
+  font-family:'Source Sans Pro',sans-serif;
   font-size: 12px;
 }
 
@@ -91,16 +94,18 @@ div.tooltip {
 }
 
 h3.Biereproches {
-  border-bottom-color: rgb(229, 229, 229);
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
-  font-size: 19.2px;
   font-weight: 600;
-  margin-bottom: 0px;
-  font-family: Helvetica;
+  font-family:'Source Sans Pro',sans-serif;
 }
 
 .bProches {
   cursor: pointer;
   cursor: hand;
+  font-family:'Source Sans Pro',sans-serif;
+
+}
+
+#warningbox {
+
+	display: none;
 }
