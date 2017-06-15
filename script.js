@@ -318,10 +318,10 @@ function drawSvg() {
       .attr("r", radius);
 
       let spanBrass = d3.select("#BrassselectedBeer")
-      .html(`${binch.Brasserie} <br>`);
+        .html(" " + `${binch.Brasserie} <br>`);
 
       let spanBeer = d3.select("#selectedBeer")
-      .html(binch.Biere);
+        .html(binch.Biere + " " + "<i id ='brasspar'> brassée par  </i>" + " ");
 
       let spanABV = d3.select("#ABVselectedBeer")
       .html(`Alcool : ${binch.ABV} % | `);
@@ -363,14 +363,14 @@ function drawSvg() {
         if (!isNaN(event.target.id)) {
           let biereProcheSelect = rankdist[event.target.id].Target;
           svgScat.selectAll("circle")
-          .filter(x => biereProcheSelect !== x.Biere)
-          .transition()
-          .duration(800)
-          .attr("r", 0);
+            .filter(x => biereProcheSelect !== x.Biere)
+            .transition()
+            .duration(800)
+            .attr("r", 0);
           // Remettre les bières correspondantes
           svgScat.selectAll("circle")
-          .filter(x => biereProcheSelect == x.Biere)
-          .attr("r", radius);
+            .filter(x => biereProcheSelect == x.Biere)
+            .attr("r", radius);
 
           let filtered = rowDist.filter(item => item.Source === biereProcheSelect);
           rankdist = filtered.filter(item => item.weight < 0.5);
@@ -386,10 +386,10 @@ function drawSvg() {
           let binch = binches.find(d => d.Biere === biereProcheSelect);
 
           spanBrass = d3.select("#BrassselectedBeer")
-          .html(`${binch.Brasserie} <br>`);
+            .html(" " + `${binch.Brasserie} <br>`);
 
           spanBeer = d3.select("#selectedBeer")
-          .html(binch.Biere);
+            .html(binch.Biere + " " + "<i id ='brasspar'> brassée par  </i>" + " ");
 
           spanABV = d3.select("#ABVselectedBeer")
           .html(`Alcool : ${binch.ABV} % | `);
@@ -403,7 +403,9 @@ function drawSvg() {
           for (i = 0; i < biereBar.length; i++) {
             if (biereBar[i].biere == biereProcheSelect) {
               document.getElementById('BarselectedBeer').innerHTML += biereBar[i].bar + " | ";
-            }}
+
+            }
+          }
 
             // Déplace la carte sur la brasserie
             map.flyTo(new L.LatLng(binch.Lat, binch.Long), 12);
@@ -540,11 +542,12 @@ function drawSvg() {
         $('#BarselectedBeer').html("");
         $('#Biereproches').html("");
 
-        let spanBrass = d3.select("#BrassselectedBeer")
-        .html(`${d.Brasserie} <br>`);
 
-        let spanBeer = d3.select("#selectedBeer")
-        .html(d.Biere);
+      let spanBrass = d3.select("#BrassselectedBeer")
+        .html(" " + `${d.Brasserie} <br>`);
+
+      let spanBeer = d3.select("#selectedBeer")
+        .html(d.Biere + " " + "<i id ='brasspar'> brassée par  </i>" + " ");
 
         let spanABV = d3.select("#ABVselectedBeer")
         .html(`Alcool : ${d.ABV} % | `);
@@ -582,16 +585,18 @@ function drawSvg() {
 
           $('#BarselectedBeer').html("");
 
-          if (!isNaN(event.target.id)) {
-            let biereProcheSelect = rankdist[event.target.id].Target;
-            console.log(biereProcheSelect);
-            svgScat.selectAll("circle")
+
+        if (!isNaN(event.target.id)) {
+          let biereProcheSelect = rankdist[event.target.id].Target;
+          console.log(biereProcheSelect);
+          svgScat.selectAll("circle")
             .filter(d => biereProcheSelect !== d.Biere)
             .transition()
             .duration(800)
             .attr("r", 0);
-            // Remettre les bières correspondantes
-            svgScat.selectAll("circle")
+
+          // Remettre les bières correspondantes
+          svgScat.selectAll("circle")
             .filter(d => biereProcheSelect == d.Biere)
             .attr("r", radius);
 
@@ -608,11 +613,12 @@ function drawSvg() {
 
             let binch = binches.find(d => d.Biere === biereProcheSelect);
 
-            spanBrass = d3.select("#BrassselectedBeer")
-            .html(`${binch.Brasserie} <br>`);
 
-            spanBeer = d3.select("#selectedBeer")
-            .html(binch.Biere);
+          spanBrass = d3.select("#BrassselectedBeer")
+            .html(" " + `${binch.Brasserie} <br>`);
+
+          spanBeer = d3.select("#selectedBeer")
+            .html(binch.Biere + " " + "<i id ='brasspar'> brassée par  </i>" + " ");
 
             spanABV = d3.select("#ABVselectedBeer")
             .html(`Alcool : ${binch.ABV} % | `);
@@ -624,10 +630,11 @@ function drawSvg() {
             .html(`${binch.STYLE4} | `);
 
 
-            for (i = 0; i < biereBar.length; i++) {
-              if (biereBar[i].biere == biereProcheSelect) {
-                document.getElementById('BarselectedBeer').innerHTML += biereBar[i].bar + " | ";
-              }}
+          for (i = 0; i < biereBar.length; i++) {
+            if (biereBar[i].biere == biereProcheSelect) {
+              document.getElementById('BarselectedBeer').innerHTML += biereBar[i].bar + " | ";
+            }
+          }
 
 
               // Déplace la carte sur la brasserie
@@ -712,51 +719,51 @@ d3.json('bars.json', function(error, barsLsne) {
 
 
 
-// Loop through the data
-for (var i = 0; i < barsLsne.length; i++) {
-  var bar = barsLsne[i];
-//  console.log(person.Lat);
-  // Create and save a reference to each marker
-  markers[bar.Bar] = L.marker([bar.Lat, bar.Long], {
-    riseOnHover: true,
-    icon : barMarker
-  })
-  .bindTooltip(bar.Bar, {
+  // Loop through the data
+  for (var i = 0; i < barsLsne.length; i++) {
+    var bar = barsLsne[i];
+    //  console.log(person.Lat);
+    // Create and save a reference to each marker
+    markers[bar.Bar] = L.marker([bar.Lat, bar.Long], {
+        riseOnHover: true,
+        icon: barMarker
+      })
+      .bindTooltip(bar.Bar, {
         className: 'barTooltip'
       })
-  .addTo(map);
+      .addTo(map);
 
-  // Add the ID
-  markers[bar.Bar]._icon.id = bar.Bar;
-}
+    // Add the ID
+    markers[bar.Bar]._icon.id = bar.Bar;
+  }
 
-//  console.log(markers);
+  //  console.log(markers);
 
-// Add click event to markers
-$('.awesome-marker-icon-blue.awesome-marker.leaflet-zoom-animated.leaflet-interactive').on('click', function(e) {
-   // Use the event to find the clicked element
-   var el = $(e.srcElement || e.target),
-       id = el.attr('id');
+  // Add click event to markers
+  $('.awesome-marker-icon-blue.awesome-marker.leaflet-zoom-animated.leaflet-interactive').on('click', function(e) {
+    // Use the event to find the clicked element
+    var el = $(e.srcElement || e.target),
+      id = el.attr('id');
 
 
     // One way you could use the id
-map.flyTo(markers[id].getLatLng());
+    map.flyTo(markers[id].getLatLng());
 
-let selectedBar = id;
+    let selectedBar = id;
 
-svgScat.selectAll("circle")
-  .filter(d => selectedBar !== d.Bar)
-  .transition()
-  .duration(800)
-  .attr("r", 0);
+    svgScat.selectAll("circle")
+      .filter(d => selectedBar !== d.Bar)
+      .transition()
+      .duration(800)
+      .attr("r", 0);
 
-svgScat.selectAll("circle")
-  .filter(d => selectedBar == d.Bar)
-  .transition()
-  .duration(800)
-  .attr("r", radius);
+    svgScat.selectAll("circle")
+      .filter(d => selectedBar == d.Bar)
+      .transition()
+      .duration(800)
+      .attr("r", radius);
 
-});
+  });
 
 
   // for (let i = 0 ; i < barsLsne.length; i++) {
@@ -768,7 +775,7 @@ svgScat.selectAll("circle")
 
 
 
-// map.addLayer(barMarkers); si cluster
+  // map.addLayer(barMarkers); si cluster
 
 });
 
