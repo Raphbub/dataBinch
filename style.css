@@ -1,31 +1,43 @@
 body {
   margin-left: 10px;
+  font-family: Lato;
 }
 
-p.brasselected {
-  font-family: Helvetica;
-  color: rgb(204, 102, 0);
-  font-size: 20pt;
+#BrassselectedBeer {
+  font-family: Lato;
+  color: #036;
+  font-size: 16pt;
   margin-bottom: 0;
 }
 
-p.binchattributes {
-  font-family: Helvetica;
-  font-size: 13pt;
+.binchattributes {
+  font-family: Lato;
+  font-size: 14pt;
   margin-bottom: 0;
-  color: grey;
+  color: #D77200;
 }
 
-div.distances {
+.distances {
   margin: 0;
   background-color: rgb(0, 0, 0);
   border-bottom-color: rgb(229, 229, 229);
   border-bottom-width: 1px;
 }
 
-p.binchselected {
-  font-size: 32pt;
+#selectedBeer {
+  font-family: Lato;
+  font-size: 22pt;
+  color: #036;
+  font-weight: bold;
   margin-bottom: 0;
+}
+
+#brasspar {
+  font-family: Lato;
+  color: darkgrey;
+  font-size: 12pt;
+  margin-bottom: 0;
+  font-weight: 100;
 }
 
 .axis, .axis path {
@@ -38,7 +50,7 @@ text {
   fill: #666666;
 }
 
-div.tooltip {
+.tooltip {
   position: absolute;
   background-color: #424242;
   color: white;
@@ -54,7 +66,8 @@ div.tooltip {
   cursor: pointer;
 }
 
-#map { /*A modifier dynamiquement dans le js*/
+#map {
+  /*A modifier dynamiquement dans le js*/
   width: 500px;
   height: 300px;
 }
@@ -88,16 +101,16 @@ div.tooltip {
   color: white;
   text-align: center;
   pointer-events: none;
+  font-family: Lato;
 }
 
-h3.Biereproches {
+.Biereproches {
   border-bottom-color: rgb(229, 229, 229);
   border-bottom-style: solid;
   border-bottom-width: 1px;
   font-size: 19.2px;
   font-weight: 600;
-  margin-bottom: 0px;
-  font-family: Helvetica;
+  font-family: Lato;
 }
 
 .bProches {

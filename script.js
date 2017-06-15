@@ -30,11 +30,11 @@ const margins = {
 };
 
 let graphWidth = $('.2r2c').width() - margins.left - margins.right;
-let graphHeight = ($('.2emeRang').height() - margins.top - margins.bottom)*2; //window.innerHeight * 0.66;
+let graphHeight = ($('.2emeRang').height() - margins.top - margins.bottom) * 2; //window.innerHeight * 0.66;
 
 console.log(graphWidth);
 // Si la fenêtre est plus large que haute, alors diminuer la taille du graphique
-if (window.innerHeight < window.innerWidth && window.innerWidth < 1040 ) {
+if (window.innerHeight < window.innerWidth && window.innerWidth < 1040) {
   graphHeight *= 0.85
   // Si la hauteur est faible, diminuer la taille du graphique
 } else if (window.innerHeight < 850) {
@@ -311,10 +311,10 @@ d3.json('binches.json', function(error, binches) {
         .attr("r", radius);
 
       let spanBrass = d3.select("#BrassselectedBeer")
-        .html(`${binch.Brasserie} <br>`);
+        .html(" " + `${binch.Brasserie} <br>`);
 
       let spanBeer = d3.select("#selectedBeer")
-        .html(binch.Biere);
+        .html(binch.Biere + " " + "<i id ='brasspar'> brassée par  </i>" + " ");
 
       let spanABV = d3.select("#ABVselectedBeer")
         .html(`Alcool : ${binch.ABV} % | `);
@@ -356,14 +356,14 @@ d3.json('binches.json', function(error, binches) {
         if (!isNaN(event.target.id)) {
           let biereProcheSelect = rankdist[event.target.id].Target;
           svgScat.selectAll("circle")
-          .filter(x => biereProcheSelect !== x.Biere)
-          .transition()
-          .duration(800)
-          .attr("r", 0);
+            .filter(x => biereProcheSelect !== x.Biere)
+            .transition()
+            .duration(800)
+            .attr("r", 0);
           // Remettre les bières correspondantes
           svgScat.selectAll("circle")
-          .filter(x => biereProcheSelect == x.Biere)
-          .attr("r", radius);
+            .filter(x => biereProcheSelect == x.Biere)
+            .attr("r", radius);
 
           let filtered = rowDist.filter(item => item.Source === biereProcheSelect);
           rankdist = filtered.filter(item => item.weight < 0.5);
@@ -379,10 +379,10 @@ d3.json('binches.json', function(error, binches) {
           let binch = binches.find(d => d.Biere === biereProcheSelect);
 
           spanBrass = d3.select("#BrassselectedBeer")
-            .html(`${binch.Brasserie} <br>`);
+            .html(" " + `${binch.Brasserie} <br>`);
 
           spanBeer = d3.select("#selectedBeer")
-            .html(binch.Biere);
+            .html(binch.Biere + " " + "<i id ='brasspar'> brassée par  </i>" + " ");
 
           spanABV = d3.select("#ABVselectedBeer")
             .html(`Alcool : ${binch.ABV} % | `);
@@ -393,10 +393,11 @@ d3.json('binches.json', function(error, binches) {
           spanStyle = d3.select("#SytleselectedBeer")
             .html(`${binch.STYLE4} | `);
 
-            for (i = 0; i < biereBar.length; i++) {
-              if (biereBar[i].biere == biereProcheSelect) {
-                document.getElementById('BarselectedBeer').innerHTML += biereBar[i].bar + " | ";
-              }}
+          for (i = 0; i < biereBar.length; i++) {
+            if (biereBar[i].biere == biereProcheSelect) {
+              document.getElementById('BarselectedBeer').innerHTML += biereBar[i].bar + " | ";
+            }
+          }
 
           // Déplace la carte sur la brasserie
           map.flyTo(new L.LatLng(binch.Lat, binch.Long), 12);
@@ -534,10 +535,10 @@ d3.json('binches.json', function(error, binches) {
       $('#Biereproches').html("");
 
       let spanBrass = d3.select("#BrassselectedBeer")
-        .html(`${d.Brasserie} <br>`);
+        .html(" " + `${d.Brasserie} <br>`);
 
       let spanBeer = d3.select("#selectedBeer")
-        .html(d.Biere);
+        .html(d.Biere + " " + "<i id ='brasspar'> brassée par  </i>" + " ");
 
       let spanABV = d3.select("#ABVselectedBeer")
         .html(`Alcool : ${d.ABV} % | `);
@@ -579,14 +580,14 @@ d3.json('binches.json', function(error, binches) {
           let biereProcheSelect = rankdist[event.target.id].Target;
           console.log(biereProcheSelect);
           svgScat.selectAll("circle")
-          .filter(d => biereProcheSelect !== d.Biere)
-          .transition()
-          .duration(800)
-          .attr("r", 0);
+            .filter(d => biereProcheSelect !== d.Biere)
+            .transition()
+            .duration(800)
+            .attr("r", 0);
           // Remettre les bières correspondantes
           svgScat.selectAll("circle")
-          .filter(d => biereProcheSelect == d.Biere)
-          .attr("r", radius);
+            .filter(d => biereProcheSelect == d.Biere)
+            .attr("r", radius);
 
           let filtered = rowDist.filter(item => item.Source === biereProcheSelect);
           rankdist = filtered.filter(item => item.weight < 0.5);
@@ -602,10 +603,10 @@ d3.json('binches.json', function(error, binches) {
           let binch = binches.find(d => d.Biere === biereProcheSelect);
 
           spanBrass = d3.select("#BrassselectedBeer")
-            .html(`${binch.Brasserie} <br>`);
+            .html(" " + `${binch.Brasserie} <br>`);
 
           spanBeer = d3.select("#selectedBeer")
-            .html(binch.Biere);
+            .html(binch.Biere + " " + "<i id ='brasspar'> brassée par  </i>" + " ");
 
           spanABV = d3.select("#ABVselectedBeer")
             .html(`Alcool : ${binch.ABV} % | `);
@@ -617,10 +618,11 @@ d3.json('binches.json', function(error, binches) {
             .html(`${binch.STYLE4} | `);
 
 
-            for (i = 0; i < biereBar.length; i++) {
-              if (biereBar[i].biere == biereProcheSelect) {
-                document.getElementById('BarselectedBeer').innerHTML += biereBar[i].bar + " | ";
-              }}
+          for (i = 0; i < biereBar.length; i++) {
+            if (biereBar[i].biere == biereProcheSelect) {
+              document.getElementById('BarselectedBeer').innerHTML += biereBar[i].bar + " | ";
+            }
+          }
 
 
           // Déplace la carte sur la brasserie
@@ -683,51 +685,51 @@ d3.json('bars.json', function(error, barsLsne) {
 
 
 
-// Loop through the data
-for (var i = 0; i < barsLsne.length; i++) {
-  var bar = barsLsne[i];
-//  console.log(person.Lat);
-  // Create and save a reference to each marker
-  markers[bar.Bar] = L.marker([bar.Lat, bar.Long], {
-    riseOnHover: true,
-    icon : barMarker
-  })
-  .bindTooltip(bar.Bar, {
+  // Loop through the data
+  for (var i = 0; i < barsLsne.length; i++) {
+    var bar = barsLsne[i];
+    //  console.log(person.Lat);
+    // Create and save a reference to each marker
+    markers[bar.Bar] = L.marker([bar.Lat, bar.Long], {
+        riseOnHover: true,
+        icon: barMarker
+      })
+      .bindTooltip(bar.Bar, {
         className: 'barTooltip'
       })
-  .addTo(map);
+      .addTo(map);
 
-  // Add the ID
-  markers[bar.Bar]._icon.id = bar.Bar;
-}
+    // Add the ID
+    markers[bar.Bar]._icon.id = bar.Bar;
+  }
 
-//  console.log(markers);
+  //  console.log(markers);
 
-// Add click event to markers
-$('.awesome-marker-icon-blue.awesome-marker.leaflet-zoom-animated.leaflet-interactive').on('click', function(e) {
-   // Use the event to find the clicked element
-   var el = $(e.srcElement || e.target),
-       id = el.attr('id');
+  // Add click event to markers
+  $('.awesome-marker-icon-blue.awesome-marker.leaflet-zoom-animated.leaflet-interactive').on('click', function(e) {
+    // Use the event to find the clicked element
+    var el = $(e.srcElement || e.target),
+      id = el.attr('id');
 
 
     // One way you could use the id
-map.flyTo(markers[id].getLatLng());
+    map.flyTo(markers[id].getLatLng());
 
-let selectedBar = id;
+    let selectedBar = id;
 
-svgScat.selectAll("circle")
-  .filter(d => selectedBar !== d.Bar)
-  .transition()
-  .duration(800)
-  .attr("r", 0);
+    svgScat.selectAll("circle")
+      .filter(d => selectedBar !== d.Bar)
+      .transition()
+      .duration(800)
+      .attr("r", 0);
 
-svgScat.selectAll("circle")
-  .filter(d => selectedBar == d.Bar)
-  .transition()
-  .duration(800)
-  .attr("r", radius);
+    svgScat.selectAll("circle")
+      .filter(d => selectedBar == d.Bar)
+      .transition()
+      .duration(800)
+      .attr("r", radius);
 
-});
+  });
 
 
   // for (let i = 0 ; i < barsLsne.length; i++) {
@@ -739,23 +741,23 @@ svgScat.selectAll("circle")
 
 
 
-// map.addLayer(barMarkers); si cluster
+  // map.addLayer(barMarkers); si cluster
 
 });
 
 // Légendes des axes
 svgScat.append("text")
-     .attr("class", "x label")
-     .attr("text-anchor", "end")
-     .attr("x", graphWidth-5)
-     .attr("y", graphHeight-7)
-     .text("Alcool par volume (%)");
+  .attr("class", "x label")
+  .attr("text-anchor", "end")
+  .attr("x", graphWidth - 5)
+  .attr("y", graphHeight - 7)
+  .text("Alcool par volume (%)");
 
 svgScat.append("text")
-     .attr("class", "y label")
-     .attr("text-anchor", "end")
-     .attr("x", -7)
-     .attr("y", 5)
-     .attr("dy", ".75em")
-     .attr("transform", "rotate(-90)")
-     .text("Amertume (IBU)");
+  .attr("class", "y label")
+  .attr("text-anchor", "end")
+  .attr("x", -7)
+  .attr("y", 5)
+  .attr("dy", ".75em")
+  .attr("transform", "rotate(-90)")
+  .text("Amertume (IBU)");
