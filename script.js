@@ -29,21 +29,26 @@ const margins = {
   "bottom": 30
 };
 
-const width = $('.2r2c').width() - margins.left - margins.right;
-let height = ($('.2emeRang').height() - margins.top - margins.bottom)*2; //window.innerHeight * 0.66;
-console.log("h1",height);
+let graphWidth = $('.2r2c').width() - margins.left - margins.right;
+let graphHeight = ($('.2emeRang').height() - margins.top - margins.bottom)*2; //window.innerHeight * 0.66;
 
-if (window.innerHeight < 768) {
-  height = ($('.2emeRang').height() - margins.top - margins.bottom)*1.2;
-  console.log("h2", height);
+console.log(graphWidth);
+// Si la fenêtre est plus large que haute, alors diminuer la taille du graphique
+if (window.innerHeight < window.innerWidth && window.innerWidth < 1040 ) {
+  graphHeight *= 0.85
+  // Si la hauteur est faible, diminuer la taille du graphique
+} else if (window.innerHeight < 850) {
+  graphHeight *= 0.75;
+} else if (window.innerWidth > 1040) {
+  graphHeight *= 1.4;
 }
 
 // document.getElementById('map').style.width = "400px"
 
-const svgScat = d3.select("#scatter-load")
+let svgScat = d3.select("#scatter-load")
   .append("svg")
-  .attr("width", width + margins.left + margins.right)
-  .attr("height", height + margins.top + margins.bottom)
+  .attr("width", graphWidth + margins.left + margins.right)
+  .attr("height", graphHeight + margins.top + margins.bottom)
   .append("g")
   .attr("transform", `translate(${margins.left},${margins.top})`);
 
@@ -71,11 +76,11 @@ let radius = 4.5;
 
 // Axiales
 let xScale = d3.scaleLinear()
-  .range([0, width])
+  .range([0, graphWidth])
   .nice();
 
 let yScale = d3.scaleLinear()
-  .range([height, 0])
+  .range([graphHeight, 0])
   .nice();
 
 // Couleurs selon le ,SRM/EBC
@@ -466,7 +471,7 @@ d3.json('binches.json', function(error, binches) {
   // Ajout des axes du graphique
   let xAxis = svgScat.append("g")
     .attr("class", "x axis")
-    .attr("transform", `translate(0, ${height})`)
+    .attr("transform", `translate(0, ${graphHeight})`)
     .call(d3.axisBottom(xScale).tickPadding(5));
 
   let yAxis = svgScat.append("g")
@@ -742,8 +747,8 @@ svgScat.selectAll("circle")
 svgScat.append("text")
      .attr("class", "x label")
      .attr("text-anchor", "end")
-     .attr("x", width-5)
-     .attr("y", height-7)
+     .attr("x", graphWidth-5)
+     .attr("y", graphHeight-7)
      .text("Alcool par volume (%)");
 
 svgScat.append("text")
