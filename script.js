@@ -318,16 +318,16 @@ function drawSvg() {
       .attr("r", radius);
 
       let spanBrass = d3.select("#BrassselectedBeer")
-        .html(" " + `${binch.Brasserie} <br>`);
+        .html(`${binch.Brasserie} <br>`);
 
       let spanBeer = d3.select("#selectedBeer")
-        .html(binch.Biere + " " + "<i id ='brasspar'> brassée par  </i>" + " ");
+        .html(binch.Biere + "&ensp;" + "<i id ='brasspar'> brassée par  </i>" + "&ensp;");
 
       let spanABV = d3.select("#ABVselectedBeer")
       .html(`Alcool : ${binch.ABV} % | `);
 
       let spanIBU = d3.select("#IBUselectedBeer")
-      .html(`${binch.IBU} IBU | `);
+      .html(`${binch.IBU} IBU `+ "&ensp;" + "<i id ='brasspar'> disponible chez : </i>" + "&ensp;");
 
       let spanStyle = d3.select("#SytleselectedBeer")
       .html(`${binch.STYLE4} | `);
@@ -386,16 +386,16 @@ function drawSvg() {
           let binch = binches.find(d => d.Biere === biereProcheSelect);
 
           spanBrass = d3.select("#BrassselectedBeer")
-            .html(" " + `${binch.Brasserie} <br>`);
+            .html(`${binch.Brasserie} <br>`);
 
           spanBeer = d3.select("#selectedBeer")
-            .html(binch.Biere + " " + "<i id ='brasspar'> brassée par  </i>" + " ");
+            .html(binch.Biere + "&ensp;" + "<i id ='brasspar'> brassée par  </i>" + "&ensp;");
 
           spanABV = d3.select("#ABVselectedBeer")
           .html(`Alcool : ${binch.ABV} % | `);
 
           spanIBU = d3.select("#IBUselectedBeer")
-          .html(`${binch.IBU} IBU | `);
+          .html(`${binch.IBU} IBU `+ "&ensp;" +"<i id ='brasspar'> disponible chez  </i>" + "&ensp;");
 
           spanStyle = d3.select("#SytleselectedBeer")
           .html(`${binch.STYLE4} | `);
@@ -544,16 +544,16 @@ function drawSvg() {
 
 
       let spanBrass = d3.select("#BrassselectedBeer")
-        .html(" " + `${d.Brasserie} <br>`);
+        .html(`${d.Brasserie} <br>`);
 
       let spanBeer = d3.select("#selectedBeer")
-        .html(d.Biere + " " + "<i id ='brasspar'> brassée par  </i>" + " ");
+        .html(d.Biere + "&ensp;" + "<i id ='brasspar'> brassée par  </i>" + "&ensp;");
 
         let spanABV = d3.select("#ABVselectedBeer")
         .html(`Alcool : ${d.ABV} % | `);
 
         let spanIBU = d3.select("#IBUselectedBeer")
-        .html(`${d.IBU} IBU | `);
+        .html(`${d.IBU} IBU `+ "&ensp;" + "<i id ='brasspar'> disponible chez :</i>" + "&ensp;");
 
         let spanStyle = d3.select("#SytleselectedBeer")
         .html(`${d.STYLE4} | `);
@@ -615,16 +615,16 @@ function drawSvg() {
 
 
           spanBrass = d3.select("#BrassselectedBeer")
-            .html(" " + `${binch.Brasserie} <br>`);
+            .html(`${binch.Brasserie} <br>`);
 
           spanBeer = d3.select("#selectedBeer")
-            .html(binch.Biere + " " + "<i id ='brasspar'> brassée par  </i>" + " ");
+            .html(binch.Biere + "&ensp;" + "<i id ='brasspar'> brassée par  </i>" + "&ensp;");
 
             spanABV = d3.select("#ABVselectedBeer")
             .html(`Alcool : ${binch.ABV} % | `);
 
             spanIBU = d3.select("#IBUselectedBeer")
-            .html(`${binch.IBU} IBU | `);
+            .html(`${binch.IBU} IBU ` + "&ensp;"+"<i id ='brasspar'> disponible chez :</i>" + "&ensp;");
 
             spanStyle = d3.select("#SytleselectedBeer")
             .html(`${binch.STYLE4} | `);
