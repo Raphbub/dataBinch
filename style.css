@@ -54,9 +54,9 @@ div.tooltip {
   cursor: pointer;
 }
 
-#map {
-  width: 730px;
-  height: 380px;
+#map { /*A modifier dynamiquement dans le js*/
+  width: 500px;
+  height: 300px;
 }
 
 .barTooltip {

@@ -30,7 +30,15 @@ const margins = {
 };
 
 const width = $('.2r2c').width() - margins.left - margins.right;
-const height = window.innerHeight * 0.66;
+let height = ($('.2emeRang').height() - margins.top - margins.bottom)*2; //window.innerHeight * 0.66;
+console.log("h1",height);
+
+if (window.innerHeight < 768) {
+  height = ($('.2emeRang').height() - margins.top - margins.bottom)*1.2;
+  console.log("h2", height);
+}
+
+// document.getElementById('map').style.width = "400px"
 
 const svgScat = d3.select("#scatter-load")
   .append("svg")
@@ -45,7 +53,6 @@ const toolTip = d3.select("body")
   .style("opacity", 0);
 
 const beericon = "beericon.png";
-
 
 let rowDist;
 
@@ -174,7 +181,7 @@ d3.json('binches.json', function(error, binches) {
   const biereUnique = [...new Set(binches.map(item => item.Biere).sort())];
   const brasserieUnique = [...new Set(binches.map(item => item.Brasserie).sort())];
 
-  console.log(biereUnique);
+  // console.log(biereUnique);
 
   const biereBar = $.map(binches, function(n, i) {
     return {
@@ -331,7 +338,7 @@ d3.json('binches.json', function(error, binches) {
 
       rankdist.sort((a, b) => a.weight - b.weight);
 
-      document.getElementById('Biereproches').innerHTML += `<h3>Bières similaires à ${selectedBinch}</h3><br>`; //"<h3>Bières similaires à "+d.Biere+" </h3><br>";
+      document.getElementById('Biereproches').innerHTML += `<h3>Similaires à ${selectedBinch}</h3><br>`; //"<h3>Similaires à "+d.Biere+" </h3><br>";
 
       for (let i = 0; i < 5; i++) {
         document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beericon}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`; //("<img src='"+beericon+"'>"+ "<b>" + rankdist[i].Target +"</b><br>");
@@ -358,7 +365,7 @@ d3.json('binches.json', function(error, binches) {
 
           rankdist.sort((a, b) => a.weight - b.weight);
 
-          document.getElementById('Biereproches').innerHTML = `<h3>Bières similaires à ${biereProcheSelect}</h3><br>`; //"<h3>Bières similaires à "+d.Biere+" </h3><br>";
+          document.getElementById('Biereproches').innerHTML = `<h3>Similaires à ${biereProcheSelect}</h3><br>`; //"<h3>Similaires à "+d.Biere+" </h3><br>";
 
           for (let i = 0; i < 5; i++) {
             document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beericon}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`; //("<img src='"+beericon+"'>"+ "<b>" + rankdist[i].Target +"</b><br>");
@@ -553,7 +560,7 @@ d3.json('binches.json', function(error, binches) {
 
       rankdist.sort((a, b) => a.weight - b.weight);
 
-      document.getElementById('Biereproches').innerHTML += `<h3>Bières similaires à ${d.Biere}</h3><br>`; //"<h3>Bières similaires à "+d.Biere+" </h3><br>";
+      document.getElementById('Biereproches').innerHTML += `<h3>Similaires à ${d.Biere}</h3><br>`; //"<h3>Similaires à "+d.Biere+" </h3><br>";
 
       for (let i = 0; i < 5; i++) {
         document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beericon}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`; //("<img src='"+beericon+"'>"+ "<b>" + rankdist[i].Target +"</b><br>");
@@ -581,7 +588,7 @@ d3.json('binches.json', function(error, binches) {
 
           rankdist.sort((a, b) => a.weight - b.weight);
 
-          document.getElementById('Biereproches').innerHTML = `<h3>Bières similaires à ${biereProcheSelect}</h3><br>`; //"<h3>Bières similaires à "+d.Biere+" </h3><br>";
+          document.getElementById('Biereproches').innerHTML = `<h3>Similaires à ${biereProcheSelect}</h3><br>`; //"<h3>Similaires à "+d.Biere+" </h3><br>";
 
           for (let i = 0; i < 5; i++) {
             document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beericon}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`; //("<img src='"+beericon+"'>"+ "<b>" + rankdist[i].Target +"</b><br>");

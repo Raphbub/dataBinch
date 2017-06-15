@@ -1,89 +1,77 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Statistiques et origines sur une sélection de bières disponibles dans les bars lausannois">
+    <meta name="keywords" content="beer, beer-statistics, beer-,bière, ">
+    <meta name="author" content="John Doe">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="-1">
+    <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="-1">
-  <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
+    <title>DataBinch</title>
 
-  <title>DataBinch</title>
+    <!-- Imports des librairies jQuery, D3, bootstrap, leaflet et autres packages-->
+    <script src="lib/jquery-3.2.1.min.js" charset="utf-8"></script>
+    <script src="lib/d3.min.js"></script>
+    <script src="lib/bootstrap.min.js"></script>
+    <script src="https://use.fontawesome.com/87f532b576.js"></script>
+    <script src="lib/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.0.5/dist/leaflet.markercluster.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.min.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.60.0/L.Control.Locate.min.js" charset="utf-8"></script>
 
-  <!-- Imports des librairies jQuery, D3, bootstrap-->
-  <script src="lib/jquery-3.2.1.min.js" charset="utf-8"></script>
-  <script src="lib/d3.min.js"></script>
-  <script src="lib/bootstrap.min.js"></script>
-  <script src="https://use.fontawesome.com/87f532b576.js"></script>
-  <script src="lib/leaflet.js"></script>
-  <script src="https://unpkg.com/leaflet.markercluster@1.0.5/dist/leaflet.markercluster.js" charset="utf-8"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.min.js" charset="utf-8"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.60.0/L.Control.Locate.min.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="lib/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.0.5/dist/MarkerCluster.Default.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.0.5/dist/MarkerCluster.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.60.0/L.Control.Locate.min.css" />
 
-  <link rel="stylesheet" href="lib/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.0.5/dist/MarkerCluster.Default.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.0.5/dist/MarkerCluster.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.60.0/L.Control.Locate.min.css" />
+    <link rel="stylesheet" href="style.css">
+  </head>
 
-
-  <link rel="stylesheet" href="style.css">
-
-
-</head>
-
-<body>
-
-  <div class="row enTete">
-    <div class="col-xs-6">
-      <div class="col-xs-4">
-        <div id="filterbar">
+  <body>
+    <div class="row enTete 1ereColonne">
+      <div class="colonneAvecSelect col-sm-12 col-md-9 col-lg-7">
+        <div id="filterbar" class="select1 col-sm-4 col-md-4 col-lg-4">
           <b>Bar</b><br>
         </div>
-      </div>
-      <div class="col-xs-4">
-        <div id="filterbrass">
+        <div id="filterbrass" class="select2 col-sm-4 col-md-4 col-lg-4">
           <b>Brasserie</b><br>
         </div>
-      </div>
-      <div class="col-xs-4">
-        <div id="filterbinch">
+        <div id="filterbinch" class="select3 col-sm-4 col-md-4 col-lg-4">
           <b>Bière</b><br>
         </div>
       </div>
-    </div>
-    <div class="col-xs-6">
-    </div>
-  </div>
-
-  <div class="row 2emeRang">
-    <div class="col-xs-6 2r2c">
-      <div id="scatter-load">
-        <p class="binchselected"><span id="selectedBeer"></span></p>
-        <p class="brasselected"><span id="BrassselectedBeer"></span></p>
-        <p class="binchattributes">
-          <span id="SytleselectedBeer"></span>
-          <span id="ABVselectedBeer"></span>
-          <span id="IBUselectedBeer"></span>
-          <span id="BarselectedBeer"></span>
-
-        </p>
-
-
+      <div class="colonneSansSelect col-sm-0 col-md-3 col-lg-3">
       </div>
     </div>
-    <div class="col-xs-6">
-      <div id="map"></div>
-      <div id="distances">
-        <div id="Biereproches"></div>
-
+    <div class="row 2emeRang">
+      <div class="col-sm-12 col-md-12 col-lg-6 2r2c">
+        <div id="scatter-load">
+          <p class="binchselected"><span id="selectedBeer"></span></p>
+          <p class="brasselected"><span id="BrassselectedBeer"></span></p>
+          <p class="binchattributes">
+            <span id="SytleselectedBeer"></span>
+            <span id="ABVselectedBeer"></span>
+            <span id="IBUselectedBeer"></span>
+            <span id="BarselectedBeer"></span>
+          </p>
+        </div>
       </div>
-
+      <div class="col-sm-0 col-md-0 col-lg-6">
+        <div class="carte col-sm-6 col-md-6 col-lg-12">
+          <div id="map" class="">  </div>
+        </div>
+        <div id="distances" class="similaires col-sm-6 col-md-6">
+          <div id="Biereproches"></div>
+        </div>
+      </div>
     </div>
-  </div>
 
 
-  <script src="script.js" charset="utf-8"></script>
+    <script src="script.js" charset="utf-8"></script>
 
 
 </body>
