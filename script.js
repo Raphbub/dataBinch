@@ -41,13 +41,13 @@ const toolTip = d3.select("body")
   .attr("class", "tooltip")
   .style("opacity", 0);
 
-const beericon = "beericon.png";
+const beericon = "data/beericon.png";
 
 const limiteSimi = 5;
 
 let rowDist;
 
-d3.csv('rowdist.csv', function(error, data) {
+d3.csv('data/rowdist.csv', function(error, data) {
   if (error) {
     console.log(error);
   }
@@ -163,7 +163,7 @@ function drawSvg() {
   graphHeight = ($('.2emeRang').height() - margins.top - margins.bottom) * 2.1; //window.innerHeight * 0.66;
 
   // Ajuster la taille du graphique à la fenêtre
- if (window.innerHeight < window.innerWidth && window.innerWidth < 810) {
+  if (window.innerHeight < window.innerWidth && window.innerWidth < 810) {
     graphHeight *= 0.3;
   } else if (window.innerHeight < window.innerWidth && window.innerWidth < 1100) {
     graphHeight *= 0.5;
@@ -198,7 +198,7 @@ function drawSvg() {
 
   //Import
   // Visualisation des bières
-  d3.json('binches.json', function(error, binches) {
+  d3.json('data/binches.json', function(error, binches) {
     if (error) { // Si le fichier n'est pas chargé, log de l'erreur
       console.log(error);
     }
@@ -385,7 +385,7 @@ function drawSvg() {
             .filter(d => rankdist[i].Target == d.Biere)
             .transition()
             .duration(100)
-            .attr("r", radius*0.5);
+            .attr("r", radius * 0.5);
         }
 
         document.getElementById('Biereproches').addEventListener("click", function(event) {
@@ -423,7 +423,7 @@ function drawSvg() {
                 .filter(d => rankdist[i].Target == d.Biere)
                 .transition()
                 .duration(100)
-                .attr("r", radius*0.5);
+                .attr("r", radius * 0.5);
             }
 
             let binch = binches.find(d => d.Biere === biereProcheSelect);
@@ -579,7 +579,7 @@ function drawSvg() {
           .style("opacity", 0.9)
           .transition()
           .duration(4500)
-          .style("opacity",0);
+          .style("opacity", 0);
         // Mise en évidence de la bière
         d3.select(this)
           .transition()
@@ -663,7 +663,7 @@ function drawSvg() {
             .filter(d => rankdist[i].Target == d.Biere)
             .transition()
             .duration(100)
-            .attr("r", radius*0.5);
+            .attr("r", radius * 0.5);
         }
 
         document.getElementById('Biereproches').addEventListener("click", function(event) {
@@ -701,7 +701,7 @@ function drawSvg() {
                 .filter(d => rankdist[i].Target == d.Biere)
                 .transition()
                 .duration(100)
-                .attr("r", radius*0.5);
+                .attr("r", radius * 0.5);
             }
 
             let binch = binches.find(d => d.Biere === biereProcheSelect);
@@ -811,7 +811,7 @@ function drawSvg() {
 // VISUS CARTES : BARS
 
 // Import du fichier des bars et ajout à la carte
-d3.json('bars.json', function(error, barsLsne) {
+d3.json('data/bars.json', function(error, barsLsne) {
   if (error) { // Si le fichier n'est pas chargé, log de l'erreur
     console.log(error);
   }
