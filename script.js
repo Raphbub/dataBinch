@@ -230,6 +230,17 @@ function drawSvg() {
 
   // Fonction à la sélection d'un bar
   dropDownBar.on("change", function() {
+
+
+    $('#selectedBeer').html("");
+    $('#BrassselectedBeer').html("");
+    $('#SytleselectedBeer').html("");
+    $('#ABVselectedBeer').html("");
+    $('#IBUselectedBeer').html("");
+    $('#BarselectedBeer').html("");
+    $('#Biereproches').html("");
+
+
     // TODO n'agir que sur les bars ferait gagner du temps
     // Ferme les tooltips encore ouverts
     map.eachLayer(function(l) {
@@ -431,6 +442,16 @@ function drawSvg() {
 
     // Fonction à la sélection d'une brasserie
     dropDownBrass.on("change", function() {
+
+      $('#selectedBeer').html("");
+      $('#BrassselectedBeer').html("");
+      $('#SytleselectedBeer').html("");
+      $('#ABVselectedBeer').html("");
+      $('#IBUselectedBeer').html("");
+      $('#BarselectedBeer').html("");
+      $('#Biereproches').html("");
+
+
       let selectedBrasserie = this.value;
       // Réinitialise les options des autres selects (bar et bière) pour clarifier
       $('#bar-list').val("");
