@@ -113,6 +113,11 @@ text {
   font-family: Lato;
 }
 
+#bootstrap-override #titreSimi {
+  -webkit-margin-before: 0px;
+  margin-top : 0px;
+}
+
 .bProches {
   cursor: pointer;
   cursor: hand;

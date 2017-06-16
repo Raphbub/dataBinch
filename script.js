@@ -30,7 +30,8 @@ const margins = {
 };
 
 let svgScat = d3.select("#scatter-load").append("svg").attr("id", "SCATTERPLOT")
-// document.getElementById('map').style.width = "400px"
+
+document.getElementById('map').style.width = `${$('#conteneurCarte').width()}px`
 
 let graphWidth = $('.2r2c').width() - margins.left - margins.right;
 let graphHeight = ($('.2emeRang').height() - margins.top - margins.bottom)*2;
@@ -350,7 +351,7 @@ function drawSvg() {
 
       rankdist.sort((a, b) => a.weight - b.weight);
 
-      document.getElementById('Biereproches').innerHTML += `<h3>Similaires à ${selectedBinch}</h3><br>`; //"<h3>Similaires à "+d.Biere+" </h3><br>";
+      document.getElementById('Biereproches').innerHTML += `<h3 id="titreSimi">Similaires à ${selectedBinch}</h3><br>`; //"<h3>Similaires à "+d.Biere+" </h3><br>";
 
       for (let i = 0; i < 5; i++) {
         document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beericon}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`; //("<img src='"+beericon+"'>"+ "<b>" + rankdist[i].Target +"</b><br>");
@@ -377,7 +378,7 @@ function drawSvg() {
 
           rankdist.sort((a, b) => a.weight - b.weight);
 
-          document.getElementById('Biereproches').innerHTML = `<h3>Similaires à ${biereProcheSelect}</h3><br>`; //"<h3>Similaires à "+d.Biere+" </h3><br>";
+          document.getElementById('Biereproches').innerHTML = `<h3 id="titreSimi">Similaires à ${biereProcheSelect}</h3><br>`; //"<h3>Similaires à "+d.Biere+" </h3><br>";
 
           for (let i = 0; i < 5; i++) {
             document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beericon}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`; //("<img src='"+beericon+"'>"+ "<b>" + rankdist[i].Target +"</b><br>");
@@ -575,7 +576,7 @@ function drawSvg() {
 
         rankdist.sort((a, b) => a.weight - b.weight);
 
-        document.getElementById('Biereproches').innerHTML += `<h3>Similaires à ${d.Biere}</h3><br>`; //"<h3>Similaires à "+d.Biere+" </h3><br>";
+        document.getElementById('Biereproches').innerHTML += `<h3 id="titreSimi">Similaires à ${d.Biere}</h3><br>`; //"<h3>Similaires à "+d.Biere+" </h3><br>";
 
         for (let i = 0; i < 5; i++) {
           document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beericon}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`; //("<img src='"+beericon+"'>"+ "<b>" + rankdist[i].Target +"</b><br>");
@@ -605,7 +606,7 @@ function drawSvg() {
 
             rankdist.sort((a, b) => a.weight - b.weight);
 
-            document.getElementById('Biereproches').innerHTML = `<h3>Similaires à ${biereProcheSelect}</h3><br>`; //"<h3>Similaires à "+d.Biere+" </h3><br>";
+            document.getElementById('Biereproches').innerHTML = `<h3 id="titreSimi">Similaires à ${biereProcheSelect}</h3><br>`; //"<h3>Similaires à "+d.Biere+" </h3><br>";
 
             for (let i = 0; i < 5; i++) {
               document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beericon}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`; //("<img src='"+beericon+"'>"+ "<b>" + rankdist[i].Target +"</b><br>");
