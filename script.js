@@ -115,6 +115,8 @@ L.control.locate({
   }
 }).addTo(map);
 
+$('#conteneurCarte').css("margin-top","10px")
+
 // Définition du style des marqueurs des brasseries
 const brassMarker = L.AwesomeMarkers.icon({
   icon: 'industry',
@@ -139,6 +141,8 @@ let brassMarkers = L.markerClusterGroup({
 });
 
 let barMarkers = L.featureGroup();
+
+
 
 // A voir si on veut cluster les bars... TODO
 // let barMarkers = L.markerClusterGroup({
