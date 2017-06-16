@@ -29,12 +29,29 @@ const margins = {
   "bottom": 30
 };
 
-let svgScat = d3.select("#scatter-load").append("svg").attr("id", "SCATTERPLOT")
+let svgScat = d3.select("#scatter-load").append("svg").attr("id", "SCATTERPLOT");
 
-document.getElementById('map').style.width = `${$('#conteneurCarte').width()}px`
+document.getElementById('map').style.width = `${$('#conteneurCarte').width()}px`;
 
 let graphWidth = $('.2r2c').width() - margins.left - margins.right;
 let graphHeight = ($('.2emeRang').height() - margins.top - margins.bottom) * 2;
+
+if (window.innerHeight < window.innerWidth && window.innerWidth < 810) {
+   graphHeight *= 0.3;
+   console.log("condition 0");
+ } else if (window.innerHeight < window.innerWidth && window.innerWidth < 1100) {
+   graphHeight *= 0.5;
+   console.log("condition 1");
+   // Si la hauteur est faible, diminuer la taille du graphique
+ } else if (window.innerHeight < 850) {
+   graphHeight *= 0.75;
+   console.log("condition 2");
+
+ } else if (window.innerWidth > 1040 && window.innerWidth < 1200) {
+   graphHeight *= 1.4;
+   console.log("condition 3");
+ }
+
 
 const toolTip = d3.select("body")
   .append("div")
@@ -115,7 +132,7 @@ L.control.locate({
   }
 }).addTo(map);
 
-$('#conteneurCarte').css("margin-top", "10px")
+$('#conteneurCarte').css("margin-top", "10px");
 
 // Définition du style des marqueurs des brasseries
 const brassMarker = L.AwesomeMarkers.icon({
@@ -162,14 +179,22 @@ function drawSvg() {
 
   console.log(graphWidth);
   // Si la fenêtre est plus large que haute, alors diminuer la taille du graphique
-  if (window.innerHeight < window.innerWidth && window.innerWidth < 1040) {
-    graphHeight *= 0.85
+ if (window.innerHeight < window.innerWidth && window.innerWidth < 810) {
+    graphHeight *= 0.3;
+    console.log("condition 0");
+  } else if (window.innerHeight < window.innerWidth && window.innerWidth < 1100) {
+    graphHeight *= 0.5;
+    console.log("condition 1");
     // Si la hauteur est faible, diminuer la taille du graphique
   } else if (window.innerHeight < 850) {
     graphHeight *= 0.75;
+    console.log("condition 2");
+
   } else if (window.innerWidth > 1040 && window.innerWidth < 1200) {
     graphHeight *= 1.4;
+    console.log("condition 3");
   }
+
 
   // Ajustement du svg
   svgScat = d3.select("#scatter-load")
@@ -447,7 +472,11 @@ function drawSvg() {
     // Fonction à la sélection d'une brasserie
     dropDownBrass.on("change", function() {
 
-      $('#selectedBeer').html("");
+
+
+      let selectedBrasserie = this.value;
+
+      $('#selectedBeer').html(selectedBrasserie);
       $('#BrassselectedBeer').html("");
       $('#SytleselectedBeer').html("");
       $('#ABVselectedBeer').html("");
@@ -456,7 +485,6 @@ function drawSvg() {
       $('#Biereproches').html("");
 
 
-      let selectedBrasserie = this.value;
       // Réinitialise les options des autres selects (bar et bière) pour clarifier
       $('#bar-list').val("");
 
@@ -535,22 +563,28 @@ function drawSvg() {
     svgScat.selectAll(".dot")
       .data(binches)
       .on("mouseover", function(d) {
-        // Affichage du tooltip
-        toolTip.transition()
-          .duration(200)
-          .style("opacity", 0.9);
+
         // Remplissage du tooltip
         toolTip.html(`<b>${d.Biere}</b><br><i>Style : ${d.STYLE4}\
         <br>Amertume : ${d.IBU} IBU<br>Alcool : ${d.ABV} %\
         <br>Brasserie : ${d.Brasserie} <br> Bar : ${d.Bar}</i>`)
           .style("left", `${d3.event.pageX+20}px`)
           .style("top", `${d3.event.pageY+20}px`);
+
+        // Affichage du tooltip
+        toolTip.transition()
+          .duration(200)
+          .style("opacity", 0.9)
+                .transition()
+          .duration(4500)
+          .style("opacity",0);
         // Mise en évidence de la bière
         d3.select(this)
           .transition()
           .duration(200)
           .attr("r", radius * 2)
           .style("opacity", 1);
+
       })
       .on("mouseout", function(d) {
         // Disparition du toolTtp
@@ -666,7 +700,7 @@ function drawSvg() {
             // Déplace la carte sur la brasserie
             map.flyTo(new L.LatLng(binch.Lat, binch.Long), 12);
           }
-        })
+        });
 
         // Faire "disparaître" les bières non correspondantes
         svgScat.selectAll("circle")
@@ -679,6 +713,7 @@ function drawSvg() {
           .filter(d => biereUnique == d.Biere)
           .attr("r", radius);
       });
+
 
     //////////////
     // AJOUTS VISUS CARTES
