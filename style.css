@@ -113,7 +113,7 @@ text {
   font-family: Lato;
 }
 
-#bootstrap-override #titreSimi {
+h3 {
   -webkit-margin-before: 0px;
   margin-top : 0px;
 }
