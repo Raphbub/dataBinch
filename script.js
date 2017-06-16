@@ -705,6 +705,9 @@ function drawSvg() {
           $('#BarselectedBeer').html("");
           $('#Biereproches').html("");
 
+          $('#bar-list').val("");
+          $('#brass-list').val("");
+          $('#binch-list').val("");
 
           svgScat.selectAll("circle")
             .data(binches)
@@ -798,6 +801,10 @@ d3.json('bars.json', function(error, barsLsne) {
     $('#IBUselectedBeer').html("");
     $('#BarselectedBeer').html("");
     $('#Biereproches').html("");
+
+    $('#bar-list').val("");
+    $('#brass-list').val("");
+    $('#binch-list').val("");
 
 
     svgScat.selectAll("circle")
