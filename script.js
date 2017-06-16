@@ -168,11 +168,11 @@ function drawSvg() {
   } else if (window.innerHeight < window.innerWidth && window.innerWidth < 1100) {
     graphHeight *= 0.5;
   } else if (window.innerHeight < 650) {
-    graphHeight *= 0.2;
+    graphHeight *= 0.8;
   } else if (window.innerHeight < 750) {
-    graphHeight *= 0.3;
+    graphHeight *= 0.85;
   } else if (window.innerHeight < 850) {
-    graphHeight *= 0.37;
+    graphHeight *= 0.9;
   } else if (window.innerWidth > 1100 && window.innerWidth < 1200 && window.innerHeight > 850) {
     graphHeight *= 0.8;
   }
