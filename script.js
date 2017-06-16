@@ -36,29 +36,14 @@ document.getElementById('map').style.width = `${$('#conteneurCarte').width()}px`
 let graphWidth = $('.2r2c').width() - margins.left - margins.right;
 let graphHeight = ($('.2emeRang').height() - margins.top - margins.bottom) * 2;
 
-if (window.innerHeight < window.innerWidth && window.innerWidth < 810) {
-   graphHeight *= 0.3;
-   console.log("condition 0");
- } else if (window.innerHeight < window.innerWidth && window.innerWidth < 1100) {
-   graphHeight *= 0.5;
-   console.log("condition 1");
-   // Si la hauteur est faible, diminuer la taille du graphique
- } else if (window.innerHeight < 850) {
-   graphHeight *= 0.75;
-   console.log("condition 2");
-
- } else if (window.innerWidth > 1040 && window.innerWidth < 1200) {
-   graphHeight *= 1.4;
-   console.log("condition 3");
- }
-
-
 const toolTip = d3.select("body")
   .append("div")
   .attr("class", "tooltip")
   .style("opacity", 0);
 
 const beericon = "beericon.png";
+
+const limiteSimi = 5;
 
 let rowDist;
 
@@ -175,24 +160,21 @@ function drawSvg() {
   $("#SCATTERPLOT").remove();
 
   graphWidth = $('.2r2c').width() - margins.left - margins.right;
-  graphHeight = ($('.2emeRang').height() - margins.top - margins.bottom) * 2; //window.innerHeight * 0.66;
+  graphHeight = ($('.2emeRang').height() - margins.top - margins.bottom) * 2.1; //window.innerHeight * 0.66;
 
-  console.log(graphWidth);
-  // Si la fenêtre est plus large que haute, alors diminuer la taille du graphique
+  // Ajuster la taille du graphique à la fenêtre
  if (window.innerHeight < window.innerWidth && window.innerWidth < 810) {
     graphHeight *= 0.3;
-    console.log("condition 0");
   } else if (window.innerHeight < window.innerWidth && window.innerWidth < 1100) {
     graphHeight *= 0.5;
-    console.log("condition 1");
-    // Si la hauteur est faible, diminuer la taille du graphique
+  } else if (window.innerHeight < 650) {
+    graphHeight *= 0.2;
+  } else if (window.innerHeight < 750) {
+    graphHeight *= 0.3;
   } else if (window.innerHeight < 850) {
-    graphHeight *= 0.75;
-    console.log("condition 2");
-
-  } else if (window.innerWidth > 1040 && window.innerWidth < 1200) {
-    graphHeight *= 1.4;
-    console.log("condition 3");
+    graphHeight *= 0.37;
+  } else if (window.innerWidth > 1100 && window.innerWidth < 1200 && window.innerHeight > 850) {
+    graphHeight *= 0.8;
   }
 
 
@@ -347,15 +329,12 @@ function drawSvg() {
         let binch = binches.find(d => d.Biere === selectedBinch);
         // Faire "disparaître" les bières non correspondantes
         svgScat.selectAll("circle")
-          .filter(d => selectedBinch !== d.Biere)
           .transition()
-          .duration(3800)
-          .attr("r", 0);
-        // Remettre les bières correspondantes
-        svgScat.selectAll("circle")
+          .duration(200)
+          .attr("r", 0)
           .filter(d => selectedBinch == d.Biere)
           .transition()
-          .duration(3800)
+          .duration(200)
           .attr("r", radius);
 
         let spanBrass = d3.select("#BrassselectedBeer")
@@ -393,8 +372,20 @@ function drawSvg() {
 
         document.getElementById('Biereproches').innerHTML += `<h3 id="titreSimi">Similaires à ${selectedBinch}</h3><br>`; //"<h3>Similaires à "+d.Biere+" </h3><br>";
 
-        for (let i = 0; i < 5; i++) {
-          document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beericon}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`; //("<img src='"+beericon+"'>"+ "<b>" + rankdist[i].Target +"</b><br>");
+        let limite;
+        if (limiteSimi > rankdist.length) {
+          limite = rankdist.length;
+        } else {
+          limite = limiteSimi;
+        }
+
+        for (let i = 0; i < limite; i++) {
+          document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beericon}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`;
+          d3.selectAll('circle')
+            .filter(d => rankdist[i].Target == d.Biere)
+            .transition()
+            .duration(100)
+            .attr("r", radius*0.5);
         }
 
         document.getElementById('Biereproches').addEventListener("click", function(event) {
@@ -404,13 +395,12 @@ function drawSvg() {
           if (!isNaN(event.target.id)) {
             let biereProcheSelect = rankdist[event.target.id].Target;
             svgScat.selectAll("circle")
-              .filter(x => biereProcheSelect !== x.Biere)
               .transition()
-              .duration(800)
-              .attr("r", 0);
-            // Remettre les bières correspondantes
-            svgScat.selectAll("circle")
-              .filter(x => biereProcheSelect == x.Biere)
+              .duration(200)
+              .attr("r", 0)
+              .filter(d => biereProcheSelect == d.Biere)
+              .transition()
+              .duration(200)
               .attr("r", radius);
 
             let filtered = rowDist.filter(item => item.Source === biereProcheSelect);
@@ -420,8 +410,20 @@ function drawSvg() {
 
             document.getElementById('Biereproches').innerHTML = `<h3 id="titreSimi">Similaires à ${biereProcheSelect}</h3><br>`; //"<h3>Similaires à "+d.Biere+" </h3><br>";
 
-            for (let i = 0; i < 5; i++) {
+            let limite;
+            if (limiteSimi > rankdist.length) {
+              limite = rankdist.length;
+            } else {
+              limite = limiteSimi;
+            }
+
+            for (let i = 0; i < limite; i++) {
               document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beericon}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`; //("<img src='"+beericon+"'>"+ "<b>" + rankdist[i].Target +"</b><br>");
+              d3.selectAll('circle')
+                .filter(d => rankdist[i].Target == d.Biere)
+                .transition()
+                .duration(100)
+                .attr("r", radius*0.5);
             }
 
             let binch = binches.find(d => d.Biere === biereProcheSelect);
@@ -575,7 +577,7 @@ function drawSvg() {
         toolTip.transition()
           .duration(200)
           .style("opacity", 0.9)
-                .transition()
+          .transition()
           .duration(4500)
           .style("opacity",0);
         // Mise en évidence de la bière
@@ -584,7 +586,6 @@ function drawSvg() {
           .duration(200)
           .attr("r", radius * 2)
           .style("opacity", 1);
-
       })
       .on("mouseout", function(d) {
         // Disparition du toolTtp
@@ -599,6 +600,18 @@ function drawSvg() {
           .style("opacity", 0.5);
       })
       .on("click", function(d) {
+        let clickedBeer = this.id;
+
+        // Faire "disparaître" les bières non correspondantes
+        svgScat.selectAll("circle")
+          .transition()
+          .duration(200)
+          .attr("r", 0)
+          .filter(d => clickedBeer == d.Biere)
+          .transition()
+          .duration(200)
+          .attr("r", radius);
+
         $('#BarselectedBeer').html("");
         $('#Biereproches').html("");
 
@@ -637,27 +650,35 @@ function drawSvg() {
 
         document.getElementById('Biereproches').innerHTML += `<h3 id="titreSimi">Similaires à ${d.Biere}</h3><br>`; //"<h3>Similaires à "+d.Biere+" </h3><br>";
 
-        for (let i = 0; i < 5; i++) {
+        let limite;
+        if (limiteSimi > rankdist.length) {
+          limite = rankdist.length;
+        } else {
+          limite = limiteSimi;
+        }
+
+        for (let i = 0; i < limite; i++) {
           document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beericon}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`; //("<img src='"+beericon+"'>"+ "<b>" + rankdist[i].Target +"</b><br>");
+          d3.selectAll('circle')
+            .filter(d => rankdist[i].Target == d.Biere)
+            .transition()
+            .duration(100)
+            .attr("r", radius*0.5);
         }
 
         document.getElementById('Biereproches').addEventListener("click", function(event) {
 
           $('#BarselectedBeer').html("");
 
-
           if (!isNaN(event.target.id)) {
             let biereProcheSelect = rankdist[event.target.id].Target;
-            console.log(biereProcheSelect);
             svgScat.selectAll("circle")
-              .filter(d => biereProcheSelect !== d.Biere)
               .transition()
-              .duration(800)
-              .attr("r", 0);
-
-            // Remettre les bières correspondantes
-            svgScat.selectAll("circle")
+              .duration(200)
+              .attr("r", 0)
               .filter(d => biereProcheSelect == d.Biere)
+              .transition()
+              .duration(200)
               .attr("r", radius);
 
             let filtered = rowDist.filter(item => item.Source === biereProcheSelect);
@@ -667,8 +688,20 @@ function drawSvg() {
 
             document.getElementById('Biereproches').innerHTML = `<h3 id="titreSimi">Similaires à ${biereProcheSelect}</h3><br>`; //"<h3>Similaires à "+d.Biere+" </h3><br>";
 
-            for (let i = 0; i < 5; i++) {
+            let limite;
+            if (limiteSimi > rankdist.length) {
+              limite = rankdist.length;
+            } else {
+              limite = limiteSimi;
+            }
+
+            for (let i = 0; i < limite; i++) {
               document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beericon}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`; //("<img src='"+beericon+"'>"+ "<b>" + rankdist[i].Target +"</b><br>");
+              d3.selectAll('circle')
+                .filter(d => rankdist[i].Target == d.Biere)
+                .transition()
+                .duration(100)
+                .attr("r", radius*0.5);
             }
 
             let binch = binches.find(d => d.Biere === biereProcheSelect);
@@ -701,17 +734,6 @@ function drawSvg() {
             map.flyTo(new L.LatLng(binch.Lat, binch.Long), 12);
           }
         });
-
-        // Faire "disparaître" les bières non correspondantes
-        svgScat.selectAll("circle")
-          .filter(d => biereUnique !== d.Biere)
-          .transition()
-          .duration(800)
-          .attr("r", 0);
-        // Remettre les bières correspondantes
-        svgScat.selectAll("circle")
-          .filter(d => biereUnique == d.Biere)
-          .attr("r", radius);
       });
 
 
