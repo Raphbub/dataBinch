@@ -165,16 +165,22 @@ function drawSvg() {
   // Ajuster la taille du graphique à la fenêtre
  if (window.innerHeight < window.innerWidth && window.innerWidth < 810) {
     graphHeight *= 0.3;
+    console.log("condition 1");
   } else if (window.innerHeight < window.innerWidth && window.innerWidth < 1100) {
     graphHeight *= 0.5;
+    console.log("condition 2");
   } else if (window.innerHeight < 650) {
-    graphHeight *= 0.2;
+    graphHeight *= 0.8;
+    console.log("condition 3");
   } else if (window.innerHeight < 750) {
-    graphHeight *= 0.3;
+    graphHeight *= 0.85;
+    console.log("condition 4");
   } else if (window.innerHeight < 850) {
-    graphHeight *= 0.37;
+    graphHeight *= 0.9;
+    console.log("condition 5");
   } else if (window.innerWidth > 1100 && window.innerWidth < 1200 && window.innerHeight > 850) {
     graphHeight *= 0.8;
+    console.log("condition 6");
   }
 
 
