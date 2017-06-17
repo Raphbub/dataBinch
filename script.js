@@ -7,18 +7,21 @@ let dropDownBar = d3.select("#filterbar")
   .append("select")
   .attr("id", "bar-list")
   .attr("class", "selectpicker")
+  .attr("class", "selecteur")
   .attr("title", "Un bar en particulier ?");
 
 let dropDownBrass = d3.select("#filterbrass")
   .append("select")
   .attr("id", "brass-list")
   .attr("class", "selectpicker")
+  .attr("class", "selecteur")
   .attr("title", "Tapez pour rechercher");
 
 let dropDownBinch = d3.select("#filterbinch")
   .append("select")
   .attr("id", "binch-list")
   .attr("class", "selectpicker")
+  .attr("class", "selecteur")
   .attr("title", "Tapez pour rechercher");
 
 // Définitions des éléments relatifs au scatteplot
@@ -243,17 +246,15 @@ function drawSvg() {
     dropDownBar.on("change", function() {
 
       let selectedBar = this.value;
+      updateSelects(selectedBar);
 
       $('#selectedBeer').html(selectedBar);
-      $('#BrassselectedBeer').html("");
-      $('#SytleselectedBeer').html("");
+      $('#BrassSelectedBeer').html("");
+      $('#StyleselectedBeer').html("");
       $('#ABVselectedBeer').html("");
       $('#IBUselectedBeer').html("");
-      $('#BarselectedBeer').html("");
+      $('#BarSelectedBeer').html("");
       $('#Biereproches').html("");
-
-      $('#brass-list').val("");
-      $('#binch-list').val("");
 
 
       // TODO n'agir que sur les bars ferait gagner du temps
@@ -284,11 +285,11 @@ function drawSvg() {
           .duration(800)
           .attr("r", radius);
         // Déplace la carte pour centrer sur le bar sélectionné et ouvre son popup
-        map.flyTo(markers[$('select#bar-list.selectpicker').val()].getLatLng(), 18 /*, {duration: 1} TODO Mettre une durée?*/ );
-        markers[$('select#bar-list.selectpicker').val()].openTooltip();
-        markers[$('select#bar-list.selectpicker').val()].setZIndexOffset(1000);
+        map.flyTo(markers[$('select#bar-list.selecteur').val()].getLatLng(), 18 /*, {duration: 1} TODO Mettre une durée?*/ );
+        markers[$('select#bar-list.selecteur').val()].openTooltip();
+        markers[$('select#bar-list.selecteur').val()].setZIndexOffset(1000);
       }
-      console.log("Bar choisi :" + $('select#bar-list.selectpicker').val() + ", un bar magnifique");
+      console.log("Bar choisi :" + $('select#bar-list.selecteur').val() + ", un bar magnifique");
     });
 
     // BINCHES select
@@ -307,10 +308,9 @@ function drawSvg() {
     dropDownBinch.on("change", function() {
       let selectedBinch = this.value;
       // Réinitialise les options des autres selects (brasserie et bar) pour clarifier
-      $('#brass-list').val("");
+      updateSelects(selectedBinch);
 
-      $('#bar-list').val("");
-      $('#BarselectedBeer').html("");
+      $('#BarSelectedBeer').html("");
 
       // Si toutes les bières sont sélectionnées leur mettre la même taille
       if (selectedBinch == 'TOUTES') {
@@ -323,7 +323,7 @@ function drawSvg() {
         });
       } else {
 
-        $('#BarselectedBeer').html("");
+        $('#BarSelectedBeer').html("");
 
         let binch = binches.find(d => d.Biere === selectedBinch);
         // Faire "disparaître" les bières non correspondantes
@@ -336,7 +336,7 @@ function drawSvg() {
           .duration(200)
           .attr("r", radius);
 
-        let spanBrass = d3.select("#BrassselectedBeer")
+        let spanBrass = d3.select("#BrassSelectedBeer")
           .html(`${binch.Brasserie} <br>`);
 
         let spanBeer = d3.select("#selectedBeer")
@@ -353,7 +353,7 @@ function drawSvg() {
 
         for (i = 0; i < biereBar.length; i++) {
           if (biereBar[i].biere == selectedBinch) {
-            document.getElementById('BarselectedBeer').innerHTML += biereBar[i].bar + " | ";
+            document.getElementById('BarSelectedBeer').innerHTML += biereBar[i].bar + " | ";
           }
 
         }
@@ -389,7 +389,7 @@ function drawSvg() {
 
         document.getElementById('Biereproches').addEventListener("click", function(event) {
 
-          $('#BarselectedBeer').html("");
+          $('#BarSelectedBeer').html("");
 
           if (!isNaN(event.target.id)) {
             let biereProcheSelect = rankdist[event.target.id].Target;
@@ -427,7 +427,7 @@ function drawSvg() {
 
             let binch = binches.find(d => d.Biere === biereProcheSelect);
 
-            spanBrass = d3.select("#BrassselectedBeer")
+            spanBrass = d3.select("#BrassSelectedBeer")
               .html(`${binch.Brasserie} <br>`);
 
             spanBeer = d3.select("#selectedBeer")
@@ -444,7 +444,7 @@ function drawSvg() {
 
             for (i = 0; i < biereBar.length; i++) {
               if (biereBar[i].biere == biereProcheSelect) {
-                document.getElementById('BarselectedBeer').innerHTML += biereBar[i].bar + " | ";
+                document.getElementById('BarSelectedBeer').innerHTML += biereBar[i].bar + " | ";
 
               }
             }
@@ -473,23 +473,19 @@ function drawSvg() {
     // Fonction à la sélection d'une brasserie
     dropDownBrass.on("change", function() {
 
-
-
       let selectedBrasserie = this.value;
 
+      updateSelects(selectedBrasserie);
+
       $('#selectedBeer').html(selectedBrasserie);
-      $('#BrassselectedBeer').html("");
-      $('#SytleselectedBeer').html("");
-      $('#ABVselectedBeer').html("");
-      $('#IBUselectedBeer').html("");
-      $('#BarselectedBeer').html("");
+      $('.infoSelected').html("");
+      // $('#BrassSelectedBeer').html("");
+      // $('#StyleSelectedBeer').html("");
+      // $('#ABVselectedBeer').html("");
+      // $('#IBUselectedBeer').html("");
+      // $('#BarSelectedBeer').html("");
       $('#Biereproches').html("");
 
-
-      // Réinitialise les options des autres selects (bar et bière) pour clarifier
-      $('#bar-list').val("");
-
-      $('#binch-list').val("");
 
       // Si toutes les bières sont sélectionnées leur mettre la même taille
       if (selectedBrasserie == 'TOUTES') {
@@ -615,7 +611,7 @@ function drawSvg() {
         $('#Biereproches').html("");
 
 
-        let spanBrass = d3.select("#BrassselectedBeer")
+        let spanBrass = d3.select("#BrassSelectedBeer")
           .html(`${d.Brasserie} <br>`);
 
         let spanBeer = d3.select("#selectedBeer")
@@ -633,7 +629,7 @@ function drawSvg() {
 
         for (i = 0; i < biereBar.length; i++) {
           if (biereBar[i].biere == d.Biere) {
-            document.getElementById('BarselectedBeer').innerHTML += biereBar[i].bar + " | ";
+            document.getElementById('BarSelectedBeer').innerHTML += biereBar[i].bar + " | ";
           }
 
         }
@@ -667,7 +663,7 @@ function drawSvg() {
 
         document.getElementById('Biereproches').addEventListener("click", function(event) {
 
-          $('#BarselectedBeer').html("");
+          $('#BarSelectedBeer').html("");
 
           if (!isNaN(event.target.id)) {
             let biereProcheSelect = rankdist[event.target.id].Target;
@@ -706,7 +702,7 @@ function drawSvg() {
             let binch = binches.find(d => d.Biere === biereProcheSelect);
 
 
-            spanBrass = d3.select("#BrassselectedBeer")
+            spanBrass = d3.select("#BrassSelectedBeer")
               .html(`${binch.Brasserie} <br>`);
 
             spanBeer = d3.select("#selectedBeer")
@@ -724,7 +720,7 @@ function drawSvg() {
 
             for (i = 0; i < biereBar.length; i++) {
               if (biereBar[i].biere == biereProcheSelect) {
-                document.getElementById('BarselectedBeer').innerHTML += biereBar[i].bar + " | ";
+                document.getElementById('BarSelectedBeer').innerHTML += biereBar[i].bar + " | ";
               }
             }
 
@@ -754,11 +750,11 @@ function drawSvg() {
           let selectedBrass = brasserie.Brasserie;
 
           $('#selectedBeer').html(selectedBrass);
-          $('#BrassselectedBeer').html("");
-          $('#SytleselectedBeer').html("");
+          $('#BrassSelectedBeer').html("");
+          $('#StyleselectedBeer').html("");
           $('#ABVselectedBeer').html("");
           $('#IBUselectedBeer').html("");
-          $('#BarselectedBeer').html("");
+          $('#BarSelectedBeer').html("");
           $('#Biereproches').html("");
 
           $('#bar-list').val("");
@@ -851,11 +847,11 @@ d3.json('data/bars.json', function(error, barsLsne) {
     let selectedBar = id;
 
     $('#selectedBeer').html(selectedBar);
-    $('#BrassselectedBeer').html("");
-    $('#SytleselectedBeer').html("");
+    $('#BrassSelectedBeer').html("");
+    $('#StyleselectedBeer').html("");
     $('#ABVselectedBeer').html("");
     $('#IBUselectedBeer').html("");
-    $('#BarselectedBeer').html("");
+    $('#BarSelectedBeer').html("");
     $('#Biereproches').html("");
 
     $('#bar-list').val("");
@@ -890,7 +886,20 @@ d3.json('data/bars.json', function(error, barsLsne) {
   // map.addLayer(barMarkers); si cluster
 
 });
-
+// MàJ des sélecteurs en fonction des autres sélecteurs en fonction du choix
+function updateSelects(selected) {
+  if (selected == 'TOUTES' || selected == 'TOUS') {
+    $('.selecteur').each(function() {
+      this.selectedIndex = 0;
+    });
+  } else {
+    $('.selecteur').each(function() {
+      if (this.value != selected) {
+        this.value = "";
+      }
+    });
+  }
+}
 
 
 drawSvg();
