@@ -324,7 +324,25 @@ function drawSvg() {
             .attr("r", radius);
 
           updateInfos(biereProcheSelect, binches, biereBar);
-          similarBeers(biereProcheSelect);
+
+          rankdist = computeRankDist(biereProcheSelect);
+          document.getElementById('Biereproches').innerHTML += `<h3 id="titreSimi">Similaires à ${biereProcheSelect}</h3><br>`;
+
+          let limite;
+          if (limiteSimi > rankdist.length) {
+            limite = rankdist.length;
+          } else {
+            limite = limiteSimi;
+          }
+
+          for (let i = 0; i < limite; i++) {
+            document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beericon}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`;
+            d3.selectAll('circle')
+              .filter(d => d.Biere == rankdist[i].Target)
+              .transition()
+              .duration(100)
+              .attr("r", radius * 0.5);
+          }
 
           // Déplace la carte sur la brasserie
           map.flyTo(new L.LatLng(binch.Lat, binch.Long), 12);
@@ -473,7 +491,7 @@ function drawSvg() {
 
         document.getElementById('Biereproches').addEventListener("click", function(event) {
           if (!isNaN(event.target.id)) {
-            let rankdist = computeRankDist(clickedBeer);
+            let rankdist = computeRankDist(selectedBinch);
             let biereProcheSelect = rankdist[event.target.id].Target;
             svgScat.selectAll("circle")
               .transition()
@@ -485,8 +503,25 @@ function drawSvg() {
               .attr("r", radius);
 
             updateInfos(biereProcheSelect, binches, biereBar);
-            similarBeers(biereProcheSelect);
 
+            rankdist = computeRankDist(biereProcheSelect);
+            document.getElementById('Biereproches').innerHTML += `<h3 id="titreSimi">Similaires à ${biereProcheSelect}</h3><br>`;
+
+            let limite;
+            if (limiteSimi > rankdist.length) {
+              limite = rankdist.length;
+            } else {
+              limite = limiteSimi;
+            }
+
+            for (let i = 0; i < limite; i++) {
+              document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beericon}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`;
+              d3.selectAll('circle')
+                .filter(d => d.Biere == rankdist[i].Target)
+                .transition()
+                .duration(100)
+                .attr("r", radius * 0.5);
+            }
             // Déplace la carte sur la brasserie
             let binch = binches.find(d => d.Biere === biereProcheSelect);
             map.flyTo(new L.LatLng(binch.Lat, binch.Long), 12);
@@ -693,7 +728,6 @@ function updateInfos(selected, listeBiere, listeBar) {
 
 function similarBeers(selected) {
   let rankdist = computeRankDist(selected);
-  rankdist.sort((a,b) => a.weight - b.weight);
   document.getElementById('Biereproches').innerHTML += `<h3 id="titreSimi">Similaires à ${selected}</h3><br>`;
 
   let limite;
@@ -716,6 +750,7 @@ function similarBeers(selected) {
 function computeRankDist(selected) {
   let filtered = rowDist.filter(item => item.Source === selected);
   let rankdist = filtered.filter(item => item.weight < 0.5);
+  rankdist.sort((a,b) => a.weight - b.weight);
   return rankdist;
 }
 
