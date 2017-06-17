@@ -293,7 +293,6 @@ function drawSvg() {
       // Réinitialise les options des autres selects (brasserie et bar) pour clarifier
       updateInfos(selectedBinch, binches, biereBar);
       updateAllSelects(selectedBinch);
-
       // Faire "disparaître" les bières non correspondantes
       svgScat.selectAll("circle")
         .transition()
@@ -309,32 +308,11 @@ function drawSvg() {
       let binch = binches.find(d => d.Biere === selectedBinch);
       map.flyTo(new L.LatLng(binch.Lat, binch.Long), 12);
 
-      // retourne les 5 bières les plus proches
-      let filtered = rowDist.filter(item => item.Source === selectedBinch);
-      let rankdist = filtered.filter(item => item.weight < 0.5);
-
-      rankdist.sort((a, b) => a.weight - b.weight);
-
-      document.getElementById('Biereproches').innerHTML += `<h3 id="titreSimi">Similaires à ${selectedBinch}</h3><br>`; //"<h3>Similaires à "+d.Biere+" </h3><br>";
-
-      let limite;
-      if (limiteSimi > rankdist.length) {
-        limite = rankdist.length;
-      } else {
-        limite = limiteSimi;
-      }
-
-      for (let i = 0; i < limite; i++) {
-        document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beericon}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`;
-        d3.selectAll('circle')
-          .filter(d => rankdist[i].Target == d.Biere)
-          .transition()
-          .duration(100)
-          .attr("r", radius * 0.5);
-      }
+      similarBeers(selectedBinch);
 
       document.getElementById('Biereproches').addEventListener("click", function(event) {
         if (!isNaN(event.target.id)) {
+          let rankdist = computeRankDist(selectedBinch);
           let biereProcheSelect = rankdist[event.target.id].Target;
           svgScat.selectAll("circle")
             .transition()
@@ -345,37 +323,13 @@ function drawSvg() {
             .duration(200)
             .attr("r", radius);
 
-          let filtered = rowDist.filter(item => item.Source === biereProcheSelect);
-          rankdist = filtered.filter(item => item.weight < 0.5);
-
-          rankdist.sort((a, b) => a.weight - b.weight);
-
           updateInfos(biereProcheSelect, binches, biereBar);
-          document.getElementById('Biereproches').innerHTML = `<h3 id="titreSimi">Similaires à ${biereProcheSelect}</h3><br>`; //"<h3>Similaires à "+d.Biere+" </h3><br>";
-
-          let limite;
-          if (limiteSimi > rankdist.length) {
-            limite = rankdist.length;
-          } else {
-            limite = limiteSimi;
-          }
-
-          for (let i = 0; i < limite; i++) {
-            document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beericon}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`; //("<img src='"+beericon+"'>"+ "<b>" + rankdist[i].Target +"</b><br>");
-            d3.selectAll('circle')
-              .filter(d => rankdist[i].Target == d.Biere)
-              .transition()
-              .duration(100)
-              .attr("r", radius * 0.5);
-          }
+          similarBeers(biereProcheSelect);
 
           // Déplace la carte sur la brasserie
           map.flyTo(new L.LatLng(binch.Lat, binch.Long), 12);
         }
       });
-
-
-
 
     });
 
@@ -515,34 +469,11 @@ function drawSvg() {
         map.flyTo(new L.LatLng(d.Lat, d.Long), 12);
 
         // retourne les 5 bières les plus proches
-        let filtered = rowDist.filter(item => item.Source === d.Biere);
-        let rankdist = filtered.filter(item => item.weight < 0.5);
-
-        rankdist.sort((a, b) => a.weight - b.weight);
-
-        document.getElementById('Biereproches').innerHTML += `<h3 id="titreSimi">Similaires à ${d.Biere}</h3><br>`; //"<h3>Similaires à "+d.Biere+" </h3><br>";
-
-        let limite;
-        if (limiteSimi > rankdist.length) {
-          limite = rankdist.length;
-        } else {
-          limite = limiteSimi;
-        }
-
-        for (let i = 0; i < limite; i++) {
-          document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beericon}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`; //("<img src='"+beericon+"'>"+ "<b>" + rankdist[i].Target +"</b><br>");
-          d3.selectAll('circle')
-            .filter(d => rankdist[i].Target == d.Biere)
-            .transition()
-            .duration(100)
-            .attr("r", radius * 0.5);
-        }
+        similarBeers(d.Biere);
 
         document.getElementById('Biereproches').addEventListener("click", function(event) {
-
-          $('#BarSelectedBeer').html("");
-
           if (!isNaN(event.target.id)) {
+            let rankdist = computeRankDist(clickedBeer);
             let biereProcheSelect = rankdist[event.target.id].Target;
             svgScat.selectAll("circle")
               .transition()
@@ -554,29 +485,8 @@ function drawSvg() {
               .attr("r", radius);
 
             updateInfos(biereProcheSelect, binches, biereBar);
+            similarBeers(biereProcheSelect);
 
-            let filtered = rowDist.filter(item => item.Source === biereProcheSelect);
-            rankdist = filtered.filter(item => item.weight < 0.5);
-
-            rankdist.sort((a, b) => a.weight - b.weight);
-
-            document.getElementById('Biereproches').innerHTML = `<h3 id="titreSimi">Similaires à ${biereProcheSelect}</h3><br>`; //"<h3>Similaires à "+d.Biere+" </h3><br>";
-
-            let limite;
-            if (limiteSimi > rankdist.length) {
-              limite = rankdist.length;
-            } else {
-              limite = limiteSimi;
-            }
-
-            for (let i = 0; i < limite; i++) {
-              document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beericon}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`; //("<img src='"+beericon+"'>"+ "<b>" + rankdist[i].Target +"</b><br>");
-              d3.selectAll('circle')
-                .filter(d => rankdist[i].Target == d.Biere)
-                .transition()
-                .duration(100)
-                .attr("r", radius * 0.5);
-            }
             // Déplace la carte sur la brasserie
             let binch = binches.find(d => d.Biere === biereProcheSelect);
             map.flyTo(new L.LatLng(binch.Lat, binch.Long), 12);
@@ -597,8 +507,6 @@ function drawSvg() {
         .bindTooltip(brasserie.Brasserie)
         .addTo(brassMarkers)
         .on("click", function(d) {
-
-
 
           let selectedBrass = brasserie.Brasserie;
 
@@ -781,6 +689,34 @@ function updateInfos(selected, listeBiere, listeBar) {
   } else {
     $('#selectedBeer').html(selected);
   }
+}
+
+function similarBeers(selected) {
+  let rankdist = computeRankDist(selected);
+  rankdist.sort((a,b) => a.weight - b.weight);
+  document.getElementById('Biereproches').innerHTML += `<h3 id="titreSimi">Similaires à ${selected}</h3><br>`;
+
+  let limite;
+  if (limiteSimi > rankdist.length) {
+    limite = rankdist.length;
+  } else {
+    limite = limiteSimi;
+  }
+
+  for (let i = 0; i < limite; i++) {
+    document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beericon}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`;
+    d3.selectAll('circle')
+      .filter(d => d.Biere == rankdist[i].Target)
+      .transition()
+      .duration(100)
+      .attr("r", radius * 0.5);
+  }
+}
+
+function computeRankDist(selected) {
+  let filtered = rowDist.filter(item => item.Source === selected);
+  let rankdist = filtered.filter(item => item.weight < 0.5);
+  return rankdist;
 }
 
 drawSvg();
