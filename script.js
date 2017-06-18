@@ -602,30 +602,16 @@ function drawSvg(redraw) {
     // AJOUTS VISUS CARTES
     // Pour chaque brasserie, récupèrer les coordonnées et les assigner à un marqueur
     brasserieUnique.forEach(function(brass) {
-      let brasserie = binches.find(x => x.Brasserie === brass);
+      let brasserie = binches.find(d => d.Brasserie === brass);
 
       let marker = new L.marker([brasserie.Lat, brasserie.Long], {
           icon: brassMarker
-        })
-        .bindTooltip(brasserie.Brasserie)
+        }).bindTooltip(brasserie.Brasserie)
         .addTo(brassMarkers)
         .on("click", function(d) {
-
-
-
           let selectedBrass = brasserie.Brasserie;
-
-          $('#selectedBeer').html(selectedBrass);
-          $('#BrassSelectedBeer').html("");
-          $('#StyleselectedBeer').html("");
-          $('#ABVselectedBeer').html("");
-          $('#IBUselectedBeer').html("");
-          $('#BarSelectedBeer').html("");
-          $('#Biereproches').html("");
-
-          $('#bar-list').val("");
-          $('#brass-list').val("");
-          $('#binch-list').val("");
+          updateInfos(selectedBrass);
+          updateAllSelects(selectedBrass);
 
           svgScat.selectAll("circle")
             .data(binches)
@@ -686,8 +672,6 @@ function drawSvg(redraw) {
   console.log("DRAWN");
 } //Fin draw
 
-// drawSvg();
-
 //////////////////////
 // VISUS CARTES : BARS
 
@@ -696,13 +680,9 @@ d3.json('data/bars.json', function(error, barsLsne) {
   if (error) { // Si le fichier n'est pas chargé, log de l'erreur
     console.log(error);
   }
-
-
-
   // Loop through the data
-  for (var i = 0; i < barsLsne.length; i++) {
-    var bar = barsLsne[i];
-    //  console.log(person.Lat);
+  for (let i = 0; i < barsLsne.length; i++) {
+    let bar = barsLsne[i];
     // Create and save a reference to each marker
     markers[bar.Bar] = L.marker([bar.Lat, bar.Long], {
         riseOnHover: true,
@@ -717,33 +697,19 @@ d3.json('data/bars.json', function(error, barsLsne) {
     markers[bar.Bar]._icon.id = bar.Bar;
   }
 
-  //  console.log(markers);
-
   // Add click event to markers
   $('.awesome-marker-icon-blue.awesome-marker.leaflet-zoom-animated.leaflet-interactive').on('click', function(e) {
     // Use the event to find the clicked element
-    var el = $(e.srcElement || e.target),
+    let el = $(e.srcElement || e.target),
       id = el.attr('id');
-
 
     // One way you could use the id
     carte.flyTo(markers[id].getLatLng());
 
-
     let selectedBar = id;
 
-    $('#selectedBeer').html(selectedBar);
-    $('#BrassSelectedBeer').html("");
-    $('#StyleselectedBeer').html("");
-    $('#ABVselectedBeer').html("");
-    $('#IBUselectedBeer').html("");
-    $('#BarSelectedBeer').html("");
-    $('#Biereproches').html("");
-
-    $('#bar-list').val("");
-    $('#brass-list').val("");
-    $('#binch-list').val("");
-
+    updateInfos(selectedBar);
+    updateAllSelects(selectedBar);
 
     svgScat.selectAll("circle")
       .filter(d => selectedBar !== d.Bar)
@@ -756,21 +722,13 @@ d3.json('data/bars.json', function(error, barsLsne) {
       .transition()
       .duration(800)
       .attr("r", radius);
-
   });
-
-
   // for (let i = 0 ; i < barsLsne.length; i++) {
   //   let marker = new L.marker([barsLsne[i].Lat, barsLsne[i].Long], {icon: barMarker})
   //       .bindPopup(barsLsne[i].Bar)
   //       .addTo(carte); //.addTo(barMarkers); si cluster
   // }
-
-
-
-
   // carte.addLayer(barMarkers); si cluster
-
 });
 // MàJ des sélecteurs et "réinitialisation" si tout est sélectionné
 function updateAllSelects(selected) {
