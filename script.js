@@ -250,6 +250,11 @@ function drawSvg(redraw) {
     // Ajout des options et interactions aux sélecteurs de bars, brasseries et bières
 
     // BARS select
+    $("#bar-list")
+       .append("html",'<option>TOUS</option>')
+       .selectpicker('refresh');
+
+
     // Assignement des bars au sélecteur
     let optDropBar = dropDownBar.selectAll("option")
       .data(["TOUS"].concat(bars))
@@ -284,6 +289,11 @@ function drawSvg(redraw) {
 
     // BINCHES select
     // Assignement des bières au sélecteur
+
+    $("#binch-list")
+       .append("html",'<option>TOUTES</option>')
+       .selectpicker('refresh');
+
     let optDropBinch = dropDownBinch.selectAll("option")
       .data(["TOUTES"].concat(biereUnique))
       .enter()
@@ -296,6 +306,7 @@ function drawSvg(redraw) {
 
     // Actualisation pour affichage
     $('#binch-list').selectpicker('refresh');
+
 
 
     // Fonction à la sélection d'une bière
@@ -388,6 +399,12 @@ function drawSvg(redraw) {
     });
 
     // BRASSERIES select
+
+    $("#brass-list")
+       .append("html",'<option>TOUTES</option>')
+       .selectpicker('refresh');
+
+
     // Assignement des brasseries au sélecteur
     let optDropBrass = dropDownBrass.selectAll("option")
       .data(["TOUTES"].concat(brasserieUnique))
@@ -400,8 +417,8 @@ function drawSvg(redraw) {
       .attr("value", d => d);
 
     // Actualisation pour affichage
+     $('#brass-list').selectpicker('refresh');
 
-    $('#brass-list').selectpicker('refresh');
 
 
     // Fonction à la sélection d'une brasserie
