@@ -279,7 +279,12 @@ function drawSvg(redraw) {
 
       // Màj des informations et sélecteurs
       updateInfos(selectedBar);
-      updateAllSelects(selectedBar);
+
+
+      $('#filterbrass span.filter-option.pull-left').html("");
+
+
+      $('#filterbinch span.filter-option.pull-left').html("");
 
       // Déplace la carte pour centrer sur le bar sélectionné, ouvre le tooltip et le met au premier plan
       goToMarker(selectedBar, markers);
@@ -328,7 +333,13 @@ function drawSvg(redraw) {
 
       // Màj des informations et sélecteurs
       updateInfos(selectedBinch, binches, biereBar);
-      updateAllSelects(selectedBinch);
+
+      $('#filterbrass span.filter-option.pull-left').html("");
+
+      $('#filterbar span.filter-option.pull-left').html("");
+
+
+
 
       if (selectedBinch != 'TOUTES') {
         // Ajustement du titre
@@ -368,7 +379,14 @@ function drawSvg(redraw) {
 
           // Màj des informations et sélecteurs
           updateInfos(biereProcheSelect, binches, biereBar);
-          updateAllSelects(biereProcheSelect, "binch-list");
+
+
+
+          $('#filterbrass span.filter-option.pull-left').html("");
+
+          $('#filterbar span.filter-option.pull-left').html("");
+
+          $('#filterbinch span.filter-option.pull-left').html("");
 
             // Màj des informations relatives à la bière sur la page
             document.getElementById('Biereproches').innerHTML = `<h3 id="titreSimi">Similaires à ${biereProcheSelect}</h3><br>`;
@@ -431,7 +449,12 @@ function drawSvg(redraw) {
 
       // Màj des informations et sélecteurs
       updateInfos(selectedBrasserie);
-      updateAllSelects(selectedBrasserie);
+
+
+
+      $('#filterbar span.filter-option.pull-left').html("");
+
+      $('#filterbinch span.filter-option.pull-left').html("");
 
       // Déplace la carte pour centrer sur le bar sélectionné, ouvre le tooltip et le met au premier plan
       goToMarker(selectedBrasserie, brassMarkersObj);
@@ -527,7 +550,13 @@ function drawSvg(redraw) {
 
         // Màj des informations et sélecteurs
         updateInfos(clickedBeer, binches, biereBar);
-        updateAllSelects(clickedBeer, "binch-list");
+
+        $('#filterbrass span.filter-option.pull-left').html("");
+
+        $('#filterbar span.filter-option.pull-left').html("");
+
+
+
         // Déplace la carte sur la brasserie
         goToMarker(clickedBeer, brassMarkersObj, binches);
 
@@ -572,7 +601,14 @@ function drawSvg(redraw) {
 
             // Màj des informations relatives à la bière sur la page
             updateInfos(biereProcheSelect, binches, biereBar);
-            updateAllSelects(biereProcheSelect, "binch-list");
+
+            $('#filterbrass span.filter-option.pull-left').html("");
+
+            $('#filterbar span.filter-option.pull-left').html("");
+
+            $('#filterbinch span.filter-option.pull-left').html("");
+
+
             document.getElementById('Biereproches').innerHTML = `<h3 id="titreSimi">Similaires à ${biereProcheSelect}</h3><br>`; //"<h3>Similaires à "+d.Biere+" </h3><br>";
 
             // Màj des informations relatives à la bière sur la page
@@ -616,7 +652,13 @@ function drawSvg(redraw) {
           let selectedBrass = id;
 
           updateInfos(selectedBrass);
-          updateAllSelects(selectedBrass, "brass-list");
+
+
+          $('#filterbar span.filter-option.pull-left').html("");
+
+          $('#filterbinch span.filter-option.pull-left').html("");
+
+
           goToMarker(selectedBrass, brassMarkersObj);
 
         pickCircles(selectedBrass, "d.Brasserie");
@@ -693,7 +735,11 @@ d3.json('data/bars.json', function(error, barsLsne) {
 
       // Ajustement de la page en fonction du bar sélectionné
       updateInfos(selectedBar);
-      updateAllSelects(selectedBar, "bar-list");
+
+      $('#filterbrass span.filter-option.pull-left').html("");
+
+      $('#filterbinch span.filter-option.pull-left').html("");
+
 
       goToMarker(selectedBar, markers);
 
@@ -722,7 +768,12 @@ document.getElementById('BrassSelectedBeer').addEventListener("click", function(
 
   // Màj des informations et sélecteurs
   updateInfos(selectedBrass);
-  updateAllSelects(selectedBrass, "brass-list");
+
+  $('#filterbar span.filter-option.pull-left').html("");
+
+  $('#filterbinch span.filter-option.pull-left').html("");
+
+
 });
 
 // Rend les bars où la bière est disponible interactifs
@@ -736,37 +787,13 @@ document.getElementById('BarSelectedBeer').addEventListener("click", function(e)
 
     // Màj des informations et sélecteurs
     updateInfos(selectedBar);
-    updateAllSelects(selectedBar, "bar-list");
+    $('#filterbrass span.filter-option.pull-left').html("");
+    $('#filterbinch span.filter-option.pull-left').html("");
+
   }
   e.stopPropagation();
 });
 
-// MàJ des sélecteurs et "réinitialisation" si tout est sélectionné
-function updateAllSelects(selected, selectId) {
-  if (selected == 'TOUTES' || selected == 'TOUS') {
-    $('.selecteur').each(function() {
-      this.selectedIndex = 0;
-    });
-
-    svgScat.selectAll("circle")
-      .transition()
-      .duration(500)
-      .attr("r", radius);
-
-  } else {
-    $('.selecteur').each(function() {
-      // Vérifie si le sélecteur n'est pas déjà à jour
-      if (this.value != selected) {
-        // Sinon attribue au bon sélecteur la valeur en cours
-        if (this.id == selectId) {
-          this.value = selected;
-        } else {
-          this.value = "";
-        }
-      }
-    });
-  }
-}
 
 // Actualisation des informations relatives à la brasserie, au bar et/ou aux bières
 function updateInfos(selected, listeBiere, listeBar) {
