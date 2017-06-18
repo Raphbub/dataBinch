@@ -808,5 +808,27 @@ function updateInfos(selected, listeBiere, listeBar) {
     $('#selectedBeer').html(selected);
   }
 }
+
+// Rend les brasseries dans la description interactives
+document.getElementById('BrassSelectedBeer').addEventListener("click", function(){
+  let selectedBrass = $('#BrassSelectedBeer').html().slice(0, -5);
+  // Faire "disparaître" les bières non correspondantes
+  svgScat.selectAll("circle")
+    .filter(d => selectedBrass !== d.Brasserie)
+    .transition()
+    .duration(800)
+    .attr("r", 0);
+  // Remettre les bières correspondantes
+  svgScat.selectAll("circle")
+    .filter(d => selectedBrass == d.Brasserie)
+    .transition()
+    .duration(800)
+    .attr("r", radius);
+
+  // Màj des informations et sélecteurs
+  updateInfos(selectedBrass);
+  updateAllSelects(selectedBrass);
+});
+
 // Dessin initial du graphique
 drawSvg(false);

@@ -8,6 +8,7 @@ body {
   color: #036;
   font-size: 16pt;
   margin-bottom: 0;
+  cursor: pointer;
 }
 
 .binchattributes {
@@ -121,5 +122,4 @@ h3 {
 
 .bProches {
   cursor: pointer;
-  cursor: hand;
 }
