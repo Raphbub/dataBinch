@@ -397,7 +397,7 @@ function drawSvg(redraw) {
 
           // Màj des informations et sélecteurs
           updateInfos(selectedBinch, binches, biereBar);
-          updateAllSelects(selectedBinch);
+          updateAllSelects(selectedBinch, "binch-list");
 
           // Déplace la carte sur la brasserie d'où vient la bière
           let binch = binches.find(d => d.Biere === biereProcheSelect);
@@ -547,7 +547,7 @@ function drawSvg(redraw) {
 
         // Màj des informations et sélecteurs
         updateInfos(clickedBeer, binches, biereBar);
-        updateAllSelects(clickedBeer);
+        updateAllSelects(clickedBeer, "binch-list");
         // Déplace la carte sur la brasserie
         carte.flyTo(new L.LatLng(d.Lat, d.Long), 12);
 
@@ -599,6 +599,7 @@ function drawSvg(redraw) {
 
             // Màj des informations relatives à la bière sur la page
             updateInfos(biereProcheSelect, binches, biereBar);
+            updateAllSelects(biereProcheSelect, "binch-list")
             document.getElementById('Biereproches').innerHTML = `<h3 id="titreSimi">Similaires à ${biereProcheSelect}</h3><br>`; //"<h3>Similaires à "+d.Biere+" </h3><br>";
 
             // Màj des informations relatives à la bière sur la page
@@ -638,7 +639,7 @@ function drawSvg(redraw) {
         .on("click", function(d) {
           let selectedBrass = brasserie.Brasserie;
           updateInfos(selectedBrass);
-          updateAllSelects(selectedBrass);
+          updateAllSelects(selectedBrass, "brass-list");
 
           svgScat.selectAll("circle")
             .data(binches)
@@ -724,7 +725,7 @@ d3.json('data/bars.json', function(error, barsLsne) {
 
       // Ajustement de la page en fonction du bar sélectionné
       updateInfos(selectedBar);
-      updateAllSelects(selectedBar);
+      updateAllSelects(selectedBar, "bar-list");
 
       if (selectedBar != 'TOUS') {
         carte.flyTo(markers[id].getLatLng())
@@ -758,26 +759,29 @@ d3.json('data/bars.json', function(error, barsLsne) {
 });
 
 // MàJ des sélecteurs et "réinitialisation" si tout est sélectionné
-function updateAllSelects(selected) {
+function updateAllSelects(selected, selectId) {
   if (selected == 'TOUTES' || selected == 'TOUS') {
     $('.selecteur').each(function() {
       this.selectedIndex = 0;
     });
-    console.log(barMarkers);
+
     carte.flyToBounds(barMarkers.getBounds());
+
     svgScat.selectAll("circle")
       .transition()
       .duration(500)
       .attr("r", radius);
 
   } else {
-    console.log("heho");
     $('.selecteur').each(function() {
-      console.log(this);
+      // Vérifie si le sélecteur n'est pas déjà à jour
       if (this.value != selected) {
-        this.value = "";
-      } else {
-        this.value = selected;
+        // Sinon attribue au bon sélecteur la valeur en cours
+        if (this.id == selectId) {
+          this.value = selected;
+        } else {
+          this.value = "";
+        }
       }
     });
   }
