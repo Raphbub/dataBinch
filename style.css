@@ -73,24 +73,11 @@ text {
   height: 300px;
 }
 
-#conteneurCarte {
-  margin-top: 10px;
-}
-
 .barTooltip {
   background: #37a9dd;
-  color: white;
   font-weight: bold;
 }
 
-.bootstrap-select li.selected a {
-  background: #3086E4;
-  color: white;
-}
-
-.bootstrap-select li.selected a:hover {
-  background: #256CB8;
-}
 
 .box {
   border: 1px solid #EEE;
@@ -126,9 +113,5 @@ h3 {
 }
 
 .bProches {
-  cursor: pointer;
-}
-
-.barDispo {
   cursor: pointer;
 }
