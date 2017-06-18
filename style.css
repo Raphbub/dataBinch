@@ -73,11 +73,15 @@ text {
   height: 300px;
 }
 
-.barTooltip {
-  background: #37a9dd;
-  font-weight: bold;
+#conteneurCarte {
+  margin-top: 10px;
 }
 
+.barTooltip {
+  background: #37a9dd;
+  color: white;
+  font-weight: bold;
+}
 
 .box {
   border: 1px solid #EEE;
@@ -113,5 +117,9 @@ h3 {
 }
 
 .bProches {
+  cursor: pointer;
+}
+
+.barDispo {
   cursor: pointer;
 }

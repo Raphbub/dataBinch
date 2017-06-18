@@ -37,6 +37,7 @@ const margins = {
 
 let svgScat = d3.select("#scatter-load").append("svg").attr("id", "scatterplot");
 
+// Ajuste la taille de la carte à la page (seulement initiale)
 document.getElementById('map').style.width = `${$('#conteneurCarte').width()}px`;
 
 let graphWidth = $('.2r2c').width() - margins.left - margins.right;
@@ -47,12 +48,14 @@ const toolTip = d3.select("body")
   .attr("class", "tooltip")
   .style("opacity", 0);
 
+// Icône accompagnant les bières
 const beericon = "data/beericon.png";
 
+// Nombre de bières similaires à retourner
 const limiteSimi = 5;
 
+// Import de la "matrice" des distances
 let rowDist;
-
 d3.csv('data/rowdist.csv', function(error, data) {
   if (error) {
     console.log(error);
@@ -60,14 +63,15 @@ d3.csv('data/rowdist.csv', function(error, data) {
   data.forEach(d => d.weight = +d.Weight);
   rowDist = data;
 });
-// Add a place to save markers
+
+// Place où sauver les marqueurs
 let markers = {};
 let brassMarkersObj = {};
 
 // Définitions des différentes échelles
 let radius = 4.5;
 
-// Couleurs selon le ,SRM/EBC
+// Couleurs selon le SRM/EBC
 let SrmColorScale = d3.scaleLinear()
   .domain([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 50])
   .range(["#FFE699", "#FFD878", "#FFCA5A", "#FFBF42", "#FBB123", "#F8A600", "#F39C00", "#EA8F00", "#E58500", "#DE7C00", "#D77200", "#CF6900", "#CB6200",
@@ -75,14 +79,14 @@ let SrmColorScale = d3.scaleLinear()
     "#701400", "#6A0E00", "#660D00", "#5E0B00", "#5A0A02", "#600903", "#520907", "#4C0505", "#470606", "#440607", "#3F0708", "#3B0607", "#3A070B", "#36080A", "#000"
   ]);
 
-// Couleurs selon le bar
+// Couleurs selon le bar (evtl)
 let barColorScale = d3.scaleOrdinal(d3.schemeCategory20);
 
 /////////////////////////////////////////////////////////
 // PARTIES RELATIVES A LA CARTE
 ////////////////////////////////////////////////////////
 
-//Définition des couches de base de la carte
+// Définition des couches de base de la carte
 const cartodbLayer = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
   attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
 }); // Fond simple clair
@@ -109,7 +113,7 @@ const baseMaps = {
   "Terrain": stamenLayer
 };
 
-// Ajout des couches au sélecteur
+// Ajout des couches au sélecteur et de ce dernier à la carte
 L.control.layers(baseMaps).addTo(carte);
 
 // Ajout de l'échelle graphique, système métrique seulement
@@ -123,8 +127,6 @@ L.control.locate({
     title: "Localisation de l'appareil"
   }
 }).addTo(carte);
-
-$('#conteneurCarte').css("margin-top", "10px");
 
 // Définition du style des marqueurs des brasseries
 const brassMarker = L.AwesomeMarkers.icon({
@@ -142,25 +144,27 @@ const barMarker = L.AwesomeMarkers.icon({
   iconColor: 'white'
 });
 
-// Rassemblement des marqueurs brasseries en clusters
+// Rassemblement des marqueurs brasseries en clusters,finalement non-utilisé, mais laissé pour exemple
 let brassMarkers = L.markerClusterGroup({
   showCoverageOnHover: false, //Ne pas montrer les limites
   disableClusteringAtZoom: 12,
   spiderfyOnMaxZoom: false
 });
 
-let barMarkers = L.featureGroup();
-
-
-
-// A voir si on veut cluster les bars... TODO
+// Pareil pour les bars
 // let barMarkers = L.markerClusterGroup({
 //   showCoverageOnHover: false, //Ne pas montrer les limites
 // });
 
+// Assembler les marqueurs en groupe
+let barMarkers = L.featureGroup();
+
+
 ////////////////////////////////////////////////
-// IMPORT DONNEES ET AFFICHAGE VISUALISATION
+// AFFICHAGE VISUALISATION ET IMPORT DONNEES
 ////////////////////////////////////////////////
+
+// Si la fenêtre est changée de taille alors le graphique est ajusté
 window.addEventListener("resize", function() {
   drawSvg(true);
 });
@@ -243,7 +247,7 @@ function drawSvg(redraw) {
 
     //////////////
     // SELECTEURS
-    // Définition des sélecteurs de bars, brasseries et bières
+    // Ajout des options et interactions aux sélecteurs de bars, brasseries et bières
 
     // BARS select
     // Assignement des bars au sélecteur
@@ -255,41 +259,25 @@ function drawSvg(redraw) {
     // Ajout du texte
     optDropBar.text(d => d)
       .attr("value", d => d);
+
+    // Actualisation pour affichage
     $('#bar-list').selectpicker('refresh');
+
 
     // Fonction à la sélection d'un bar
     dropDownBar.on("change", function() {
 
       let selectedBar = this.value;
 
-      // Ferme les tooltips encore ouverts  // TODO n'agir que sur les bars ferait gagner du temps
-      carte.eachLayer(function(l) {
-        carte.closeTooltip(l.getTooltip());
-      });
-
       // Faire "disparaître" les bières des bars non correspondants
-      svgScat.selectAll("circle")
-        .filter(d => selectedBar !== d.Bar)
-        .transition()
-        .duration(800)
-        .attr("r", 0);
-      // Remettre les bières correspondantes
-      svgScat.selectAll("circle")
-        .filter(d => selectedBar == d.Bar)
-        .transition()
-        .duration(800)
-        .attr("r", radius);
+      pickCircles(selectedBar, "d.Bar");
 
       // Màj des informations et sélecteurs
       updateInfos(selectedBar);
       updateAllSelects(selectedBar);
 
       // Déplace la carte pour centrer sur le bar sélectionné, ouvre le tooltip et le met au premier plan
-      if (selectedBar != 'TOUS') {
-        carte.flyTo(markers[selectedBar].getLatLng(), 18);
-        markers[selectedBar].openTooltip();
-        markers[selectedBar].setZIndexOffset(1000);
-      }
+      goToMarker(selectedBar, markers);
 
       console.log("Bar choisi :" + $('select#bar-list.selecteur').val() + ", un bar magnifique");
     });
@@ -306,6 +294,7 @@ function drawSvg(redraw) {
     optDropBinch.text(d => d)
       .attr("value", d => d);
 
+    // Actualisation pour affichage
     $('#binch-list').selectpicker('refresh');
 
 
@@ -314,23 +303,10 @@ function drawSvg(redraw) {
       let selectedBinch = this.value;
 
       // Faire "disparaître" les bières non correspondantes
-      svgScat.selectAll("circle")
-        .transition()
-        .duration(200)
-        .attr("r", 0)
-        .filter(d => selectedBinch == d.Biere)
-        .transition()
-        .duration(200)
-        .attr("r", radius)
-        .style("opacity", 1);
+      pickCircles(selectedBinch, "d.Biere", 300);
 
       // Déplace la carte sur la brasserie d'où vient la bière
-      if (selectedBinch != 'TOUTES') {
-        let brassBinch = binches.find(d => d.Biere == selectedBinch).Brasserie;
-        carte.flyTo(brassMarkersObj[brassBinch].getLatLng(), 15);
-        brassMarkersObj[brassBinch].openTooltip();
-        brassMarkersObj[brassBinch].setZIndexOffset(1000);
-      }
+      goToMarker(selectedBinch, brassMarkersObj, binches);
 
       /////// RETOUR DES BIERES SIMILAIRES
 
@@ -343,23 +319,26 @@ function drawSvg(redraw) {
       updateInfos(selectedBinch, binches, biereBar);
       updateAllSelects(selectedBinch);
 
-      // Ajustement du titre
-      document.getElementById('Biereproches').innerHTML += `<h3 id="titreSimi">Similaires à ${selectedBinch}</h3><br>`;
-      // Vérifier que la limite du nombre de bière n'est pas inférieur à celle définie
-      let limite;
-      if (limiteSimi > rankdist.length) {
-        limite = rankdist.length;
-      } else {
-        limite = limiteSimi;
-      }
-      // Pour les x (limite) bières les plus proches, afficher leur nom avec un logo et les mettres sur le graphe en petit
-      for (let i = 0; i < limite; i++) {
-        document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beericon}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`;
-        d3.selectAll('circle')
+      if (selectedBinch != 'TOUTES') {
+        // Ajustement du titre
+        document.getElementById('Biereproches').innerHTML += `<h3 id="titreSimi">Similaires à ${selectedBinch}</h3><br>`;
+        // Vérifier que la limite du nombre de bière n'est pas inférieur à celle définie
+        let limite;
+        if (limiteSimi > rankdist.length) {
+          limite = rankdist.length;
+        } else {
+          limite = limiteSimi;
+        }
+        // Pour les x (limite) bières les plus proches, afficher leur nom avec un logo et les mettres sur le graphe en petit
+        for (let i = 0; i < limite; i++) {
+          document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beericon}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`;
+
+          d3.selectAll('circle')
           .filter(d => rankdist[i].Target == d.Biere)
           .transition()
           .duration(200)
           .attr("r", radius * 0.5);
+        }
       }
 
       // Ajout d'un evtLis qui rend les bières similaires interactives
@@ -369,14 +348,7 @@ function drawSvg(redraw) {
           // Récupération de la bière sélectionnée
           let biereProcheSelect = rankdist[event.target.id].Target;
           // Ajustement du graphique
-          svgScat.selectAll("circle")
-            .transition()
-            .duration(200)
-            .attr("r", 0)
-            .filter(d => biereProcheSelect == d.Biere)
-            .transition()
-            .duration(200)
-            .attr("r", radius);
+          pickCircles(biereProcheSelect, "d.Biere", 300);
 
           // Tri de la distance selon la bière
           let filtered = rowDist.filter(item => item.Source === biereProcheSelect);
@@ -384,11 +356,11 @@ function drawSvg(redraw) {
           rankdist.sort((a, b) => a.weight - b.weight);
 
           // Màj des informations et sélecteurs
-          updateInfos(selectedBinch, binches, biereBar);
-          updateAllSelects(selectedBinch, "binch-list");
+          updateInfos(biereProcheSelect, binches, biereBar);
+          updateAllSelects(biereProcheSelect, "binch-list");
 
-          // Màj des informations relatives à la bière sur la page
-          document.getElementById('Biereproches').innerHTML = `<h3 id="titreSimi">Similaires à ${biereProcheSelect}</h3><br>`; //"<h3>Similaires à "+d.Biere+" </h3><br>";
+            // Màj des informations relatives à la bière sur la page
+            document.getElementById('Biereproches').innerHTML = `<h3 id="titreSimi">Similaires à ${biereProcheSelect}</h3><br>`;
 
           // Vérifier que la limite du nombre de bière n'est pas inférieur à celle définie
           let limite;
@@ -400,17 +372,17 @@ function drawSvg(redraw) {
 
           // Pour les x (limite) bières les plus proches, afficher leur nom avec un logo et les mettres sur le graphe en petit
           for (let i = 0; i < limite; i++) {
-            document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beericon}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`; //("<img src='"+beericon+"'>"+ "<b>" + rankdist[i].Target +"</b><br>");
+            document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beericon}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`;
+
             d3.selectAll('circle')
               .filter(d => rankdist[i].Target == d.Biere)
               .transition()
-              .duration(100)
+              .duration(200)
               .attr("r", radius * 0.5);
           }
 
           // Déplace la carte sur la brasserie d'où vient la bière
-          let binch = binches.find(d => d.Biere === biereProcheSelect);
-          carte.flyTo(new L.LatLng(binch.Lat, binch.Long), 12);
+          goToMarker(biereProcheSelect, brassMarkersObj, binches);
         }
       });
     });
@@ -426,41 +398,26 @@ function drawSvg(redraw) {
     // Ajout du texte
     optDropBrass.text(d => d)
       .attr("value", d => d);
+
+    // Actualisation pour affichage
+
     $('#brass-list').selectpicker('refresh');
+
 
     // Fonction à la sélection d'une brasserie
     dropDownBrass.on("change", function() {
 
       let selectedBrasserie = this.value;
 
-      // Ferme les tooltips encore ouverts  // TODO n'agir que sur les bars ferait gagner du temps
-      carte.eachLayer(function(l) {
-        carte.closeTooltip(l.getTooltip());
-      });
-
       // Faire "disparaître" les bières non correspondantes
-      svgScat.selectAll("circle")
-        .filter(d => selectedBrasserie !== d.Brasserie)
-        .transition()
-        .duration(800)
-        .attr("r", 0);
-      // Remettre les bières correspondantes
-      svgScat.selectAll("circle")
-        .filter(d => selectedBrasserie == d.Brasserie)
-        .transition()
-        .duration(800)
-        .attr("r", radius);
+      pickCircles(selectedBrasserie, "d.Brasserie");
 
       // Màj des informations et sélecteurs
       updateInfos(selectedBrasserie);
       updateAllSelects(selectedBrasserie);
 
       // Déplace la carte pour centrer sur le bar sélectionné, ouvre le tooltip et le met au premier plan
-      if (selectedBrasserie != 'TOUS') {
-        carte.flyTo(brassMarkersObj[selectedBrasserie].getLatLng(), 18);
-        brassMarkersObj[selectedBrasserie].openTooltip();
-        brassMarkersObj[selectedBrasserie].setZIndexOffset(1000);
-      }
+      goToMarker(selectedBrasserie, brassMarkersObj);
     });
 
     ////////////////////
@@ -493,19 +450,19 @@ function drawSvg(redraw) {
     }
     // Ajout des cercles
     svgScat.append("g")
-      .attr("class", "ensembleBinch")
-      .selectAll("circle")
-      .data(binches)
-      .enter()
-      .append("circle")
-      .attr("id", d => d.Biere)
-      .attr("class", "dot")
-      .attr("r", initRadius)
-      .attr("cx", d => xScale(d.ABV))
-      .attr("cy", d => yScale(d.IBU))
-      .style("fill", d => SrmColorScale(d.SRM))
-      .style("stroke", "none")
-      .style("opacity", 0.5);
+    .attr("class", "ensembleBinch")
+    .selectAll("circle")
+    .data(binches)
+    .enter()
+    .append("circle")
+    .attr("id", d => d.Biere)
+    .attr("class", "dot")
+    .attr("r", initRadius)
+    .attr("cx", d => xScale(d.ABV))
+    .attr("cy", d => yScale(d.IBU))
+    .style("fill", d => SrmColorScale(d.SRM))
+    .style("stroke", "none")
+    .style("opacity", 0.5);
 
     // Définition des interactions sur les cercles
     svgScat.selectAll(".dot")
@@ -549,23 +506,13 @@ function drawSvg(redraw) {
         let clickedBeer = this.id;
 
         // Faire "disparaître" les bières non correspondantes
-        svgScat.selectAll("circle")
-          .transition()
-          .duration(200)
-          .attr("r", 0)
-          .filter(d => clickedBeer == d.Biere)
-          .transition()
-          .duration(200)
-          .attr("r", radius);
+        pickCircles(clickedBeer, "d.Biere", 300);
 
         // Màj des informations et sélecteurs
         updateInfos(clickedBeer, binches, biereBar);
         updateAllSelects(clickedBeer, "binch-list");
         // Déplace la carte sur la brasserie
-        let brassBinch = binches.find(d => d.Biere == clickedBeer).Brasserie;
-        carte.flyTo(brassMarkersObj[brassBinch].getLatLng(), 15);
-        brassMarkersObj[brassBinch].openTooltip();
-        brassMarkersObj[brassBinch].setZIndexOffset(1000);
+        goToMarker(clickedBeer, brassMarkersObj, binches);
 
         /////// RETOUR DES BIERES SIMILAIRES
 
@@ -589,7 +536,7 @@ function drawSvg(redraw) {
           d3.selectAll('circle')
             .filter(d => rankdist[i].Target == d.Biere)
             .transition()
-            .duration(100)
+            .duration(200)
             .attr("r", radius * 0.5);
         }
         // Ajout d'un evtLis qui rend les bières similaires interactives
@@ -599,14 +546,7 @@ function drawSvg(redraw) {
             // Récupération de la bière sélectionnée
             let biereProcheSelect = rankdist[event.target.id].Target;
             // Ajustement du graphique
-            svgScat.selectAll("circle")
-              .transition()
-              .duration(200)
-              .attr("r", 0)
-              .filter(d => biereProcheSelect == d.Biere)
-              .transition()
-              .duration(200)
-              .attr("r", radius);
+            pickCircles(biereProcheSelect, "d.Biere", 300);
 
             // Tri de la distance selon la bière
             let filtered = rowDist.filter(item => item.Source === biereProcheSelect);
@@ -631,12 +571,11 @@ function drawSvg(redraw) {
               d3.selectAll('circle')
                 .filter(d => rankdist[i].Target == d.Biere)
                 .transition()
-                .duration(100)
+                .duration(200)
                 .attr("r", radius * 0.5);
             }
             // Déplace la carte sur la brasserie d'où vient la bière
-            let binch = binches.find(d => d.Biere === biereProcheSelect);
-            carte.flyTo(new L.LatLng(binch.Lat, binch.Long), 12);
+            goToMarker(biereProcheSelect, brassMarkersObj, binches);
           }
         });
       });
@@ -654,31 +593,20 @@ function drawSvg(redraw) {
         })
         .bindTooltip(brasserie.Brasserie)
         .on("click", function(e) {
-          // Retrouver quel bar a été cliqué
+          // Retrouver quelle brasserie a été cliquée et modifier la page en conséquence
           let el = $(e.srcElement || e.target);
           let id = el[0]._icon.id;
           let selectedBrass = id;
 
           updateInfos(selectedBrass);
           updateAllSelects(selectedBrass, "brass-list");
+          goToMarker(selectedBrass, brassMarkersObj);
 
-          svgScat.selectAll("circle")
-            .data(binches)
-            .filter(d => selectedBrass !== d.Brasserie)
-            .transition()
-            .duration(800)
-            .attr("r", 0);
-
-          svgScat.selectAll("circle")
-            .data(binches)
-            .filter(d => selectedBrass == d.Brasserie)
-            .transition()
-            .duration(800)
-            .attr("r", radius);
+        pickCircles(selectedBrass, "d.Brasserie");
         })
         .addTo(brassMarkers)
         .addTo(carte);
-
+      // Ajout d'un ID pour le référencement du tooltip
       brassMarkersObj[brasserie.Brasserie]._icon.id = brasserie.Brasserie;
     }
   });
@@ -700,7 +628,7 @@ function drawSvg(redraw) {
     .attr("transform", "rotate(-90)")
     .text("Amertume (IBU)");
 
-  // Si il y a un sélecteur avec une valeur, alors redessiner le graphique avec les éléments idoines
+  // S'il y a un sélecteur avec une valeur, alors redessiner le graphique avec les éléments idoines
   if ((valBar || valBrass || valBinch) && !(valBar && valBrass && valBinch)) {
     // Permet de s'assurer qu'il sera fait quand les cercles seront ajoutés
     setTimeout(function() {
@@ -734,40 +662,28 @@ d3.json('data/bars.json', function(error, barsLsne) {
     let bar = barsLsne[i];
     // Enregistrement dans un objet pour référencement futur
     markers[bar.Bar] = L.marker([bar.Lat, bar.Long], {
-        riseOnHover: true,
-        icon: barMarker
-      })
-      .bindTooltip(bar.Bar, {
-        className: 'barTooltip'
-      })
-      .on("click", function(e) {
-        // Retrouver quel bar a été cliqué
-        let el = $(e.srcElement || e.target);
-        let id = el[0]._icon.id;
-        let selectedBar = id;
+      riseOnHover: true,
+      icon: barMarker
+    })
+    .bindTooltip(bar.Bar, {
+      className: 'barTooltip'
+    })
+    .on("click", function(e) {
+      // Retrouver quel bar a été cliqué
+      let el = $(e.srcElement || e.target);
+      let id = el[0]._icon.id;
+      let selectedBar = id;
 
-        // Ajustement de la page en fonction du bar sélectionné
-        updateInfos(selectedBar);
-        updateAllSelects(selectedBar, "bar-list");
+      // Ajustement de la page en fonction du bar sélectionné
+      updateInfos(selectedBar);
+      updateAllSelects(selectedBar, "bar-list");
 
-        if (selectedBar != 'TOUS') {
-          carte.flyTo(markers[id].getLatLng());
+      goToMarker(selectedBar, markers);
 
-          svgScat.selectAll("circle")
-            .filter(d => selectedBar !== d.Bar)
-            .transition()
-            .duration(300)
-            .attr("r", 0);
-
-          svgScat.selectAll("circle")
-            .filter(d => selectedBar == d.Bar)
-            .transition()
-            .duration(300)
-            .attr("r", radius);
-        }
-      })
-      .addTo(barMarkers)
-      .addTo(carte);
+      pickCircles(selectedBar, "d.Bar");
+    })
+    .addTo(barMarkers)
+    .addTo(carte);
     // Ajout d'un ID
     markers[bar.Bar]._icon.id = bar.Bar;
 
@@ -779,6 +695,34 @@ d3.json('data/bars.json', function(error, barsLsne) {
     // carte.addLayer(barMarkers); si cluster
   }
 });
+// Rend les brasseries dans la description interactives
+document.getElementById('BrassSelectedBeer').addEventListener("click", function(){
+  let selectedBrass = $('#BrassSelectedBeer').html().slice(0, -5);
+  // Faire "disparaître" les bières non correspondantes
+  pickCircles(selectedBrass, "d.Brasserie");
+
+  goToMarker(selectedBrass, brassMarkersObj);
+
+  // Màj des informations et sélecteurs
+  updateInfos(selectedBrass);
+  updateAllSelects(selectedBrass, "brass-list");
+});
+
+// Rend les bars où la bière est disponible interactifs
+document.getElementById('BarSelectedBeer').addEventListener("click", function(e){
+  if (e.target !== e.currentTarget) {
+    let selectedBar = e.target.innerHTML.slice(0, -3);
+
+    pickCircles(selectedBar, "d.Bar");
+
+    goToMarker(selectedBar, markers);
+
+    // Màj des informations et sélecteurs
+    updateInfos(selectedBar);
+    updateAllSelects(selectedBar, "bar-list");
+  }
+  e.stopPropagation();
+});
 
 // MàJ des sélecteurs et "réinitialisation" si tout est sélectionné
 function updateAllSelects(selected, selectId) {
@@ -786,8 +730,6 @@ function updateAllSelects(selected, selectId) {
     $('.selecteur').each(function() {
       this.selectedIndex = 0;
     });
-
-    carte.flyToBounds(barMarkers.getBounds());
 
     svgScat.selectAll("circle")
       .transition()
@@ -808,6 +750,7 @@ function updateAllSelects(selected, selectId) {
     });
   }
 }
+
 // Actualisation des informations relatives à la brasserie, au bar et/ou aux bières
 function updateInfos(selected, listeBiere, listeBar) {
   $('.infoSelected').html("");
@@ -823,7 +766,7 @@ function updateInfos(selected, listeBiere, listeBar) {
     $('#StyleSelectedBeer').html(`${binch.STYLE4} | `);
     for (let i = 0; i < listeBar.length; i++) {
       if (listeBar[i].biere == selected) {
-        document.getElementById('BarSelectedBeer').innerHTML += listeBar[i].bar + " | ";
+        document.getElementById('BarSelectedBeer').innerHTML += `<span class="barDispo">${listeBar[i].bar} | </span>`;
       }
     }
   } else {
@@ -831,26 +774,40 @@ function updateInfos(selected, listeBiere, listeBar) {
   }
 }
 
-// Rend les brasseries dans la description interactives
-document.getElementById('BrassSelectedBeer').addEventListener("click", function() {
-  let selectedBrass = $('#BrassSelectedBeer').html().slice(0, -5);
-  // Faire "disparaître" les bières non correspondantes
-  svgScat.selectAll("circle")
-    .filter(d => selectedBrass !== d.Brasserie)
-    .transition()
-    .duration(800)
-    .attr("r", 0);
-  // Remettre les bières correspondantes
-  svgScat.selectAll("circle")
-    .filter(d => selectedBrass == d.Brasserie)
-    .transition()
-    .duration(800)
-    .attr("r", radius);
+// Déplace la carte sur le marker, ouvre son tooltip et le met en avant
+function goToMarker(selected, couche, listeBiere) {
+  // Ferme les tooltips encore ouverts
+  carte.eachLayer(function(l) {
+    carte.closeTooltip(l.getTooltip());
+  });
+  // Si tout est sélectionné, alors retour sur l'ensemble des bars
+  if (selected == 'TOUS' || selected == 'TOUTES') {
+    carte.flyToBounds(barMarkers.getBounds());
+  } else {
+    if (listeBiere) {
+      let brass = listeBiere.find(d => d.Biere == selected).Brasserie;
+      selected = brass;
+    }
+    carte.flyTo(couche[selected].getLatLng(), 15);
+    couche[selected].openTooltip();
+    couche[selected].setZIndexOffset(1000);
+  }
+}
 
-  // Màj des informations et sélecteurs
-  updateInfos(selectedBrass);
-  updateAllSelects(selectedBrass);
-});
+// Détermine quels cercles sont à conserver sur le graphique
+function pickCircles(selected, cible, t) {
+  if (!t) {
+    t = 400;
+  }
+  svgScat.selectAll('circle')
+    .transition()
+    .duration(t)
+    .attr("r", 0)
+    .filter(d => selected == eval(cible))
+    .transition()
+    .duration(t)
+    .attr("r", radius);
+}
 
 // Dessin initial du graphique
 drawSvg(false);
