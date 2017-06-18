@@ -157,10 +157,17 @@ let barMarkers = L.featureGroup();
 ////////////////////////////////////////////////
 // IMPORT DONNEES ET AFFICHAGE VISUALISATION
 ////////////////////////////////////////////////
-window.addEventListener("resize", drawSvg);
+window.addEventListener("resize", function() {
+  drawSvg(true);
+});
 
-function drawSvg() {
+function drawSvg(redraw) {
+  //Enlever le scatterplot
   $("#SCATTERPLOT").remove();
+
+  let valBar = $('#bar-list').val();
+  let valBrass = $('#brass-list').val();
+  let valBinch = $('#binch-list').val();
 
   graphWidth = $('.2r2c').width() - margins.left - margins.right;
   graphHeight = ($('.2emeRang').height() - margins.top - margins.bottom) * 2.1; //window.innerHeight * 0.66;
@@ -443,20 +450,26 @@ function drawSvg() {
     ////////////////////
     // AJOUT CERCLES
     // Définition des attributs
+    let initRadius = radius;
+
+    if (redraw && ((valBar || valBrass || valBinch) && !(valBar && valBrass && valBinch))) {
+      initRadius = 0;
+    }
+
     svgScat.append("g")
-      .attr("class", "ensembleBinch")
-      .selectAll("circle")
-      .data(binches)
-      .enter()
-      .append("circle")
-      .attr("id", d => d.Biere)
-      .attr("class", "dot")
-      .attr("r", radius)
-      .attr("cx", d => xScale(d.ABV))
-      .attr("cy", d => yScale(d.IBU))
-      .style("fill", d => SrmColorScale(d.SRM))
-      .style("stroke", "none")
-      .style("opacity", 0.5);
+    .attr("class", "ensembleBinch")
+    .selectAll("circle")
+    .data(binches)
+    .enter()
+    .append("circle")
+    .attr("id", d => d.Biere)
+    .attr("class", "dot")
+    .attr("r", initRadius)
+    .attr("cx", d => xScale(d.ABV))
+    .attr("cy", d => yScale(d.IBU))
+    .style("fill", d => SrmColorScale(d.SRM))
+    .style("stroke", "none")
+    .style("opacity", 0.5);
 
     // Définition des interactions
     svgScat.selectAll(".dot")
@@ -650,6 +663,26 @@ function drawSvg() {
     .attr("transform", "rotate(-90)")
     .text("Amertume (IBU)");
 
+    if ((valBar || valBrass || valBinch) && !(valBar && valBrass && valBinch)) {
+      setTimeout(function() {
+        svgScat.selectAll("circle")
+        .attr("r", 0);
+        if (valBar) {
+            svgScat.selectAll("circle")
+              .filter(d => valBar == d.Bar)
+              .attr("r", radius);
+        } else if (valBrass) {
+          svgScat.selectAll("circle")
+            .filter(d => valBrass == d.Brasserie)
+            .attr("r", radius);
+        } else {
+          svgScat.selectAll("circle")
+            .filter(d => valBinch == d.Biere)
+            .attr("r", radius);
+        }
+      }, 50);
+    }
+
   console.log("DRAWN");
 } //Fin draw
 
@@ -783,4 +816,4 @@ function updateInfos(selected, listeBiere, listeBar) {
   }
 }
 
-drawSvg();
+drawSvg(false);
