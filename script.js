@@ -91,13 +91,13 @@ const stamenLayer = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terra
 }); // Fond terrain
 
 // Définition de la carte
-const map = L.map('map', {
+const carte = L.map('map', {
   center: [46.52243400482112, 6.632995605468751],
   zoom: 15
 });
 
 // Ajout des couches à la carte
-map.addLayer(cartodbLayer, stamenLayer);
+carte.addLayer(cartodbLayer, stamenLayer);
 
 // Attribution des couches de bases pour le sélecteur
 const baseMaps = {
@@ -106,19 +106,19 @@ const baseMaps = {
 };
 
 // Ajout des couches au sélecteur
-L.control.layers(baseMaps).addTo(map);
+L.control.layers(baseMaps).addTo(carte);
 
 // Ajout de l'échelle graphique, système métrique seulement
 L.control.scale({
   imperial: false
-}).addTo(map);
+}).addTo(carte);
 
 // Ajout du bouton et fonction de localisation
 L.control.locate({
   strings: {
     title: "Localisation de l'appareil"
   }
-}).addTo(map);
+}).addTo(carte);
 
 $('#conteneurCarte').css("margin-top", "10px");
 
@@ -250,8 +250,8 @@ function drawSvg() {
       updateAllSelects(selectedBar);
 
       // Ferme les tooltips encore ouverts  // TODO n'agir que sur les bars ferait gagner du temps
-      map.eachLayer(function(l) {
-        map.closeTooltip(l.getTooltip());
+      carte.eachLayer(function(l) {
+        carte.closeTooltip(l.getTooltip());
       });
 
       // Faire "disparaître" les bières des bars non correspondants
@@ -267,7 +267,7 @@ function drawSvg() {
         .duration(800)
         .attr("r", radius);
       // Déplace la carte pour centrer sur le bar sélectionné et ouvre son popup
-      map.flyTo(markers[$('select#bar-list.selecteur').val()].getLatLng(), 18);
+      carte.flyTo(markers[$('select#bar-list.selecteur').val()].getLatLng(), 18);
       markers[$('select#bar-list.selecteur').val()].openTooltip();
       markers[$('select#bar-list.selecteur').val()].setZIndexOffset(1000);
 
@@ -307,7 +307,7 @@ function drawSvg() {
 
       // Déplace la carte sur la brasserie
       let binch = binches.find(d => d.Biere === selectedBinch);
-      map.flyTo(new L.LatLng(binch.Lat, binch.Long), 12);
+      carte.flyTo(new L.LatLng(binch.Lat, binch.Long), 12);
 
       // retourne les 5 bières les plus proches
       let filtered = rowDist.filter(item => item.Source === selectedBinch);
@@ -370,7 +370,7 @@ function drawSvg() {
           }
 
           // Déplace la carte sur la brasserie
-          map.flyTo(new L.LatLng(binch.Lat, binch.Long), 12);
+          carte.flyTo(new L.LatLng(binch.Lat, binch.Long), 12);
         }
       });
 
@@ -402,7 +402,7 @@ function drawSvg() {
         if (selectedBrasserie == brasseriesLatLon[i].brasserie) {
           var brassLocLat = brasseriesLatLon[i].Lat;
           var brassLocLong = brasseriesLatLon[i].Long;
-          map.flyTo(new L.LatLng(brassLocLat, brassLocLong), 12);
+          carte.flyTo(new L.LatLng(brassLocLat, brassLocLong), 12);
         }
       }
 
@@ -512,7 +512,7 @@ function drawSvg() {
         updateInfos(clickedBeer, binches, biereBar);
         updateAllSelects(clickedBeer);
         // Déplace la carte sur la brasserie
-        map.flyTo(new L.LatLng(d.Lat, d.Long), 12);
+        carte.flyTo(new L.LatLng(d.Lat, d.Long), 12);
 
         // retourne les 5 bières les plus proches
         let filtered = rowDist.filter(item => item.Source === d.Biere);
@@ -579,7 +579,7 @@ function drawSvg() {
             }
             // Déplace la carte sur la brasserie
             let binch = binches.find(d => d.Biere === biereProcheSelect);
-            map.flyTo(new L.LatLng(binch.Lat, binch.Long), 12);
+            carte.flyTo(new L.LatLng(binch.Lat, binch.Long), 12);
           }
         });
       });
@@ -630,7 +630,7 @@ function drawSvg() {
         });
     });
     // Ajout de la couche des marqueurs de brasserie à la carte
-    map.addLayer(brassMarkers);
+    carte.addLayer(brassMarkers);
   });
 
   // Légendes des axes
@@ -678,7 +678,7 @@ d3.json('data/bars.json', function(error, barsLsne) {
       .bindTooltip(bar.Bar, {
         className: 'barTooltip'
       })
-      .addTo(map);
+      .addTo(carte);
 
     // Add the ID
     markers[bar.Bar]._icon.id = bar.Bar;
@@ -694,7 +694,7 @@ d3.json('data/bars.json', function(error, barsLsne) {
 
 
     // One way you could use the id
-    map.flyTo(markers[id].getLatLng());
+    carte.flyTo(markers[id].getLatLng());
 
 
     let selectedBar = id;
@@ -730,13 +730,13 @@ d3.json('data/bars.json', function(error, barsLsne) {
   // for (let i = 0 ; i < barsLsne.length; i++) {
   //   let marker = new L.marker([barsLsne[i].Lat, barsLsne[i].Long], {icon: barMarker})
   //       .bindPopup(barsLsne[i].Bar)
-  //       .addTo(map); //.addTo(barMarkers); si cluster
+  //       .addTo(carte); //.addTo(barMarkers); si cluster
   // }
 
 
 
 
-  // map.addLayer(barMarkers); si cluster
+  // carte.addLayer(barMarkers); si cluster
 
 });
 // MàJ des sélecteurs et "réinitialisation" si tout est sélectionné
@@ -749,7 +749,7 @@ function updateAllSelects(selected) {
       .transition()
       .duration(500)
       .attr("r", radius);
-    map.flyToBounds(barMarkers.getBounds());
+    carte.flyToBounds(barMarkers.getBounds());
   } else {
     $('.selecteur').each(function() {
       if (this.value != selected) {
