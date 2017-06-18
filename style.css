@@ -73,8 +73,13 @@ text {
   height: 300px;
 }
 
+#conteneurCarte {
+  margin-top: 10px;
+}
+
 .barTooltip {
   background: #37a9dd;
+  color: white;
   font-weight: bold;
 }
 
