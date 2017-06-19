@@ -744,9 +744,7 @@ document.getElementById('BarSelectedBeer').addEventListener("click", function(e)
 // MàJ des sélecteurs et "réinitialisation" si tout est sélectionné
 function updateAllSelects(selected, selectId) {
   if (selected == 'TOUTES' || selected == 'TOUS') {
-    $('.selecteur').each(function() {
-      this.selectedIndex = 0;
-    });
+    $('.selectpicker').selectpicker('val', 'default');
 
     svgScat.selectAll("circle")
       .transition()
@@ -754,17 +752,17 @@ function updateAllSelects(selected, selectId) {
       .attr("r", radius);
 
   } else {
-    $('.selecteur').each(function() {
+    $('.selectpicker').each(function(){
       // Vérifie si le sélecteur n'est pas déjà à jour
-      if (this.value != selected) {
+      if ($(this).val() != selected) {
         // Sinon attribue au bon sélecteur la valeur en cours
         if (this.id == selectId) {
-          this.value = selected;
+          $(`#${selectId}.selectpicker`).selectpicker('val', selected);
         } else {
-          this.value = "";
+          $(this).selectpicker('val', 'default');
         }
       }
-    });
+    })
   }
 }
 
