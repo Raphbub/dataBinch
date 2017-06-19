@@ -16,7 +16,7 @@ Amertume, couleur, taux d'alcool, style ou brasserie, bientôt les bières n'aur
 
 Découverte aisée, car, pour chaque bière, vous pouvez savoir quels sont les bars où celle-ci est disponible. A l'aide de la carte et de sa fonction de localisation (_précision indépendante de notre volonté_), trouver les bars devient facile. La carte permet également de voir où se situent les plus de 200 brasseries inventoriées.
 
-Il est possible de faire tout ceci depuis son ordinateur en attendant l'happy hour, sa tablette en sirotant une cervoise fraîche à la maison ou encore son _smartphone_ pour connaître sa commande avant-même d'arriver dans le bar.
+Il est possible de faire tout ceci depuis son ordinateur en attendant l'_happy hour_, sa tablette en sirotant une cervoise fraîche à la maison ou encore son _smartphone_ pour connaître sa commande avant même d'arriver dans le bar.
 
 ## Utilisation
 Il suffit d'avoir accès à internet et de se rendre [ici](https://databinch.github.io)
@@ -60,7 +60,7 @@ Finalement, les coordonnées des différents bars et brasseries ont été récup
 
 Un récapitulatif de la taille de notre base de données et des différents éléments la composant :
 
-| Eléments | Nombre |
+| Éléments | Nombre |
 |:--------:|:------:|
 |Bières    |678     |
 |Brasseries|205     |
@@ -96,7 +96,7 @@ Nous avons appliqué ce principe aux bières de notre base de données et calcul
 - Alcool
 - Amertume
 - Couleur
-- Style, selon une classification ascendante hiérarchique que nous avons rapporté sur des attributs successifs de catégories de plus en plus fines
+- Style, selon une classification ascendante hiérarchique que nous avons rapportée sur des attributs successifs de catégories de plus en plus fines
 
 Le calcul de la dissimilarité prenant en compte des données catégorielles, nous avons eu recours à la distance de Gower qui permet de prendre en compte à la fois des données numériques et des données catégorielles.
 
