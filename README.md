@@ -6,7 +6,7 @@ ___
 
 Envie d'une bonne ale?
 
-A la recherche de bières similaires à votre préférée ?
+À la recherche de bières similaires à votre préférée ?
 
 En savoir plus sur la mousse dégustée hier en terrasse ?
 
@@ -14,7 +14,7 @@ En savoir plus sur la mousse dégustée hier en terrasse ?
 
 Amertume, couleur, taux d'alcool, style ou brasserie, bientôt les bières n'auront plus de secret pour vous. Grâce à nos fonctions de recherche, en sélectionnant une mousse, vous obtenez également celles qui s'en rapprochent le plus. Ainsi, une fois votre style préféré découvert, partez à la découverte des breuvages similaires proposés par [**dataBinch**](https://databinch.github.io).
 
-Découverte aisée, car, pour chaque bière, vous pouvez savoir quels sont les bars où celle-ci est disponible. A l'aide de la carte et de sa fonction de localisation (_précision indépendante de notre volonté_), trouver les bars devient facile. La carte permet également de voir où se situent les plus de 200 brasseries inventoriées.
+Découverte aisée, car, pour chaque bière, vous pouvez savoir quels sont les bars où celle-ci est disponible. À l'aide de la carte et de sa fonction de localisation (_précision indépendante de notre volonté_), trouver les bars devient facile. La carte permet également de voir où se situent les plus de 200 brasseries inventoriées.
 
 Il est possible de faire tout ceci depuis son ordinateur en attendant l'_happy hour_, sa tablette en sirotant une cervoise fraîche à la maison ou encore son _smartphone_ pour connaître sa commande avant même d'arriver dans le bar.
 
