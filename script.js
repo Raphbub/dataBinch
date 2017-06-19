@@ -17,7 +17,7 @@ let dropDownBrass = d3.select("#filterbrass")
   .attr("class", "selecteur")
   .attr("class", "selectpicker")
   .attr("data-live-search", "true")
-  .attr("title", "Tapez pour rechercher");
+  .attr("title", "Une brasserie à découvrir ?");
 
 let dropDownBinch = d3.select("#filterbinch")
   .append("select")
@@ -25,7 +25,7 @@ let dropDownBinch = d3.select("#filterbinch")
   .attr("class", "selecteur")
   .attr("class", "selectpicker")
   .attr("data-live-search", "true")
-  .attr("title", "Tapez pour rechercher");
+  .attr("title", "Une bière intéressante ?");
 
 // Définitions des éléments relatifs au scatteplot
 const margins = {
@@ -490,7 +490,7 @@ function drawSvg(redraw) {
         // Affichage du tooltip, disparaît pour éviter un tooltip "coincé" sur les mobiles
         toolTip.transition()
           .duration(200)
-          .style("opacity", 0.9)
+          .style("opacity", 0.95)
           .transition()
           .duration(4500)
           .style("opacity", 0);
