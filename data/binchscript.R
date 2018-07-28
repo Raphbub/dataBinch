@@ -3,7 +3,7 @@ library("cluster")
 library("igraph")
 
 setwd("~/dataBinch")
-binches <- fromJSON("binches.json")
+binches <- fromJSON("data/binches.json")
 
 binches <- lapply(binches, function(x) {
   x[sapply(x, is.null)] <- NA

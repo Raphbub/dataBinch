@@ -19,4 +19,12 @@
   {"Bar":"CAPTAIN COOK", "Lat":46.519846, "Long":6.636892},
   {"Bar":"ZOO BURGER", "Lat":46.521329, "Long":6.639722},
   {"Bar":"TACOS", "Lat":46.521382, "Long":6.628463},
-{"Bar":"LES ARCHES", "Lat":46.520821, "Long":6.630855}]
+{"Bar":"LES ARCHES", "Lat":46.520821, "Long":6.630855},
+{"Bar":"L'EXPLO","Lat":43.945956,"Long":4.811847},
+{"Bar":"O'COLLIN'S","Lat":43.944484,"Long":4.805361},
+{"Bar":"BEER O'CLOCK","Lat":43.949309,"Long":4.811591},
+{"Bar":"GAMBRINUS","Lat":43.950818,"Long":4.814846},
+{"Bar":"RED SKY","Lat":43.948376,"Long":4.810660},
+{"Bar":"AU FUT ET A MESURE","Lat":43.948772,"Long":4.809882},
+{"Bar":"LALOGENE","Lat":43.948145,"Long":4.810737}
+]
