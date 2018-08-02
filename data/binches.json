@@ -4,7 +4,7 @@
 {"ID":132,"Bar":"BLEU LEZARD","Brasserie":"BRUNEHAUT","Biere":"Brunehaut blonde","ABV":6.5,"SRM":4,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"BELGIAN PALE ALE","STYLE4":"Belgian Blond Ale","IBU":9,"Lat":50.510056,"Long":3.387578},
 {"ID":131,"Bar":"BOSSETTE","Brasserie":"DE HALVE MAAN","Biere":"Brugse Zot Dubbel","ABV":7.5,"SRM":25,"STYLE1":"ALE","STYLE2":"DARK ALE","STYLE3":"TRAPPIST","STYLE4":"Dubbel","IBU":27,"Lat":51.202446,"Long":3.224179},
 {"ID":52,"Bar":"BOUCANIERS","Brasserie":"STONE BREWING","Biere":"Arrogant Bastard Ale","ABV":7.2,"SRM":22,"STYLE1":"ALE","STYLE2":"DARK ALE","STYLE3":"AMERICAN DARK ALE","STYLE4":"American Strong Ale","IBU":100,"Lat":33.115673,"Long":-117.119952},
-{"ID":61,"Bar":"BRUXELLES CAFE","Brasserie":"LEFEBVRE","Biere":"Barbar miel","ABV":8,"SRM":7,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"BELGIAN PALE ALE","STYLE4":"Belgian Golden Strong Ale","IBU":20,"Lat":50.674784,"Long":4.152074},
+{"ID":61,"Bar":"BRUXELLES CAFE","Brasserie":"LEFEBVRE","Biere":"Barbar miel","ABV":8,"SRM":5,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"BELGIAN PALE ALE","STYLE4":"Belgian Golden Strong Ale","IBU":20,"Lat":50.674784,"Long":4.152074},
 {"ID":970,"Bar":"CAFE DES ARTISANS","Brasserie":"DR GABS","Biere":"Ipanema","ABV":6,"SRM":15,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"INDIA PALE ALE","STYLE4":"India Pale Ale","IBU":50,"Lat":46.539196,"Long":6.706419},
 {"ID":1021,"Bar":"CAPTAIN COOK","Brasserie":"ARTOIS","Biere":"Stella Artois","ABV":5,"SRM":4,"STYLE1":"LAGER","STYLE2":"PALE LAGER","STYLE3":"PILSNER","STYLE4":"Pilsner","IBU":24,"Lat":50.889589,"Long":4.708583},
 {"ID":135,"Bar":"HAPPY DAYS","Brasserie":"BUDVAR","Biere":"Budweiser Budvar","ABV":5,"SRM":8,"STYLE1":"LAGER","STYLE2":"PALE LAGER","STYLE3":"LIGHT LAGER","STYLE4":"Premium Lager","IBU":32,"Lat":48.974722,"Long":14.474722},
@@ -1127,7 +1127,7 @@
 {"ID":1127,"Bar":"O'COLLIN'S","Brasserie":"KRONENBOURG","Biere":"Grimbergen Blonde","ABV":6.7,"SRM":7,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"BELGIAN PALE ALE","STYLE4":"Belgian Blond Ale","IBU":22,"Lat":48.475062,"Long":7.504628},
 {"ID":1128,"Bar":"O'COLLIN'S","Brasserie":"DUBUISSON","Biere":"Cuvee des Trolls","ABV":7,"SRM":2,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"BELGIAN PALE ALE","STYLE4":"Belgian Golden Strong Ale","IBU":19,"Lat":50.576319,"Long":3.557117},
 {"ID":1129,"Bar":"O'COLLIN'S","Brasserie":"GUINNESS","Biere":"Guinness Draught Stout","ABV":4.2,"SRM":66,"STYLE1":"ALE","STYLE2":"DARK ALE","STYLE3":"STOUT","STYLE4":"Dry Stout","IBU":45,"Lat":53.345083,"Long":-6.288221},
-{"ID":1130,"Bar":"O'COLLIN'S","Brasserie":"LEFEBVRE","Biere":"Barbar miel","ABV":8,"SRM":7,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"BELGIAN PALE ALE","STYLE4":"Belgian Golden Strong Ale","IBU":20,"Lat":50.674784,"Long":4.152074},
+{"ID":1130,"Bar":"O'COLLIN'S","Brasserie":"LEFEBVRE","Biere":"Barbar miel","ABV":8,"SRM":5,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"BELGIAN PALE ALE","STYLE4":"Belgian Golden Strong Ale","IBU":20,"Lat":50.674784,"Long":4.152074},
 {"ID":1131,"Bar":"O'COLLIN'S","Brasserie":"BROOKLYN","Biere":"Brooklyn East IPA","ABV":6.9,"SRM":14.9,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"INDIA PALE ALE","STYLE4":"India Pale Ale","IBU":47,"Lat":40.721667,"Long":-73.957778},
 {"ID":1132,"Bar":"O'COLLIN'S","Brasserie":"LA COMEDIENNE","Biere":"Trois Coups","ABV":6,"SRM":11,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"INDIA PALE ALE","STYLE4":"India Pale Ale","IBU":22,"Lat":43.931971,"Long":4.835514},
 {"ID":1133,"Bar":"O'COLLIN'S","Brasserie":"CARLSBERG","Biere":"Carlsberg","ABV":5,"SRM":3.5,"STYLE1":"LAGER","STYLE2":"PALE LAGER","STYLE3":"PALE LAGER","STYLE4":"Pale Lager","IBU":21,"Lat":55.667221,"Long":12.535084},
@@ -1161,7 +1161,7 @@
 {"ID":1161,"Bar":"BEER O'CLOCK","Brasserie":"PAULANER","Biere":"Paulaner Salvator","ABV":7.9,"SRM":19,"STYLE1":"LAGER","STYLE2":"DARK LAGER","STYLE3":"BOCK","STYLE4":"Doppelbock","IBU":28,"Lat":48.176752,"Long":11.436584},
 {"ID":1162,"Bar":"BEER O'CLOCK","Brasserie":"SIREN","Biere":"Broken Dream Breakfast Stout","ABV":6.5,"SRM":32,"STYLE1":"ALE","STYLE2":"DARK ALE","STYLE3":"STOUT","STYLE4":"Oatmeal Stout","IBU":42,"Lat":51.376041,"Long":-0.894428},
 {"ID":1163,"Bar":"BEER O'CLOCK","Brasserie":"LEFEBVRE","Biere":"Blanche de Bruxelles","ABV":4.5,"SRM":3,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"WHEAT","STYLE4":"Witbier","IBU":18,"Lat":50.674784,"Long":4.152074},
-{"ID":1164,"Bar":"BEER O'CLOCK","Brasserie":"LEFEBVRE","Biere":"Barbar miel","ABV":8,"SRM":7,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"BELGIAN PALE ALE","STYLE4":"Belgian Golden Strong Ale","IBU":20,"Lat":50.674784,"Long":4.152074},
+{"ID":1164,"Bar":"BEER O'CLOCK","Brasserie":"LEFEBVRE","Biere":"Barbar miel","ABV":8,"SRM":5,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"BELGIAN PALE ALE","STYLE4":"Belgian Golden Strong Ale","IBU":20,"Lat":50.674784,"Long":4.152074},
 {"ID":1165,"Bar":"BEER O'CLOCK","Brasserie":"LINDEMANS","Biere":"Cassis","ABV":3.5,"SRM":28,"STYLE1":"SOUR","STYLE2":"LAMBIC","STYLE3":"LAMBIC","STYLE4":"Lambic fruit","IBU":15,"Lat":50.815751,"Long":4.212783},
 {"ID":1166,"Bar":"BEER O'CLOCK","Brasserie":"BRLO","Biere":"German IPA","ABV":7,"SRM":14.5,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"INDIA PALE ALE","STYLE4":"India Pale Ale","IBU":50,"Lat":52.500058,"Long":13.373594},
 {"ID":1167,"Bar":"BEER O'CLOCK","Brasserie":"DE MOLEN","Biere":"Op & Top","ABV":4.5,"SRM":12.2,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"ENGLISH PALE ALE","STYLE4":"Bitter","IBU":38,"Lat":52.084957,"Long":4.740565},
@@ -1206,7 +1206,7 @@
 {"ID":1206,"Bar":"GAMBRINUS","Brasserie":"BREWDOG","Biere":"Punk IPA","ABV":5.6,"SRM":7.6,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"INDIA PALE ALE","STYLE4":"India Pale Ale","IBU":35,"Lat":57.370217,"Long":-2.052061},
 {"ID":1207,"Bar":"GAMBRINUS","Brasserie":"CHARLES WELLS","Biere":"Charlie Wells Triple Hop IPA","ABV":5.2,"SRM":5,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"INDIA PALE ALE","STYLE4":"India Pale Ale","IBU":32,"Lat":52.131943,"Long":-0.481540},
 {"ID":1208,"Bar":"GAMBRINUS","Brasserie":"BREWDOG","Biere":"Cocoa Psycho","ABV":10,"SRM":30,"STYLE1":"ALE","STYLE2":"DARK ALE","STYLE3":"STOUT","STYLE4":"Imperial Stout","IBU":85,"Lat":57.370217,"Long":-2.052061},
-{"ID":1209,"Bar":"GAMBRINUS","Brasserie":"LEFEBVRE","Biere":"Barbar miel","ABV":8,"SRM":7,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"BELGIAN PALE ALE","STYLE4":"Belgian Golden Strong Ale","IBU":20,"Lat":50.674784,"Long":4.152074},
+{"ID":1209,"Bar":"GAMBRINUS","Brasserie":"LEFEBVRE","Biere":"Barbar miel","ABV":8,"SRM":5,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"BELGIAN PALE ALE","STYLE4":"Belgian Golden Strong Ale","IBU":20,"Lat":50.674784,"Long":4.152074},
 {"ID":1210,"Bar":"GAMBRINUS","Brasserie":"BREWDOG","Biere":"Jack Hammer","ABV":7.2,"SRM":8,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"INDIA PALE ALE","STYLE4":"India Pale Ale","IBU":250,"Lat":57.370217,"Long":-2.052061},
 {"ID":1211,"Bar":"GAMBRINUS","Brasserie":"KONINGSHOEVEN","Biere":"La Trappe Quadrupel","ABV":10,"SRM":18,"STYLE1":"ALE","STYLE2":"DARK ALE","STYLE3":"TRAPPIST","STYLE4":"Quadrupel","IBU":22,"Lat":51.543560,"Long":5.128826},
 {"ID":1212,"Bar":"GAMBRINUS","Brasserie":"KONINGSHOEVEN","Biere":"La Trappe Tripel","ABV":8,"SRM":7,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"TRAPPIST","STYLE4":"Tripel","IBU":30,"Lat":51.543560,"Long":5.128826},
@@ -1311,7 +1311,7 @@
 {"ID":1312,"Bar":"AU FUT ET A MESURE","Brasserie":"HAACHT","Biere":"Rince Cochon","ABV":8.5,"SRM":6,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"BELGIAN PALE ALE","STYLE4":"Belgian Golden Strong Ale","IBU":22,"Lat":50.965666,"Long":4.609144},
 {"ID":1313,"Bar":"AU FUT ET A MESURE","Brasserie":"GOUDALE","Biere":"La Kékette Large","ABV":6.2,"SRM":5,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"BELGIAN PALE ALE","STYLE4":"Belgian Blond Ale","IBU":27,"Lat":43.266775,"Long":-1.965111},
 {"ID":1314,"Bar":"AU FUT ET A MESURE","Brasserie":"GOUDALE","Biere":"La Fessée","ABV":7.2,"SRM":5,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"BELGIAN PALE ALE","STYLE4":"Belgian Golden Strong Ale","IBU":24,"Lat":43.266775,"Long":-1.965111},
-{"ID":1315,"Bar":"AU FUT ET A MESURE","Brasserie":"LEFEBVRE","Biere":"Barbar miel","ABV":8,"SRM":7,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"BELGIAN PALE ALE","STYLE4":"Belgian Golden Strong Ale","IBU":20,"Lat":50.674784,"Long":4.152074},
+{"ID":1315,"Bar":"AU FUT ET A MESURE","Brasserie":"LEFEBVRE","Biere":"Barbar miel","ABV":8,"SRM":5,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"BELGIAN PALE ALE","STYLE4":"Belgian Golden Strong Ale","IBU":20,"Lat":50.674784,"Long":4.152074},
 {"ID":1316,"Bar":"AU FUT ET A MESURE","Brasserie":"FLYING DOG","Biere":"Snake Dog IPA","ABV":7.1,"SRM":7.5,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"INDIA PALE ALE","STYLE4":"India Pale Ale","IBU":60,"Lat":39.362799,"Long":-77.426816},
 {"ID":1317,"Bar":"LALOGENE","Brasserie":"KRONENBOURG","Biere":"Grimbergen Double Ambrée","ABV":6.5,"SRM":21,"STYLE1":"ALE","STYLE2":"DARK ALE","STYLE3":"TRAPPIST","STYLE4":"Dubbel","IBU":22,"Lat":48.475062,"Long":7.504628},
 {"ID":1318,"Bar":"LALOGENE","Brasserie":"LAGUNITAS","Biere":"Lagunitas IPA","ABV":6.2,"SRM":7,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"INDIA PALE ALE","STYLE4":"India Pale Ale","IBU":48,"Lat":38.272604,"Long":-122.661899},
@@ -1334,6 +1334,6 @@
 {"ID":1335,"Bar":"PI BAR","Brasserie":"WESTVLETEREN","Biere":"Trappist Westvleteren Blond","ABV":5.8,"SRM":6.5,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"BELGIAN PALE ALE","STYLE4":"Belgian Blond Ale","IBU":41,"Lat":50.895718,"Long":2.719949},
 {"ID":1336,"Bar":"ZELIG","Brasserie":"COTE WEST","Biere":"Summer Session","ABV":4.8,"SRM":8,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"AMERICAN PALE ALE","STYLE4":"Session IPA","IBU":30,"Lat":46.516136,"Long":6.609917},
 {"ID":1337,"Bar":"ZELIG","Brasserie":"COTE WEST","Biere":"Hoppy Kiss","ABV":6.6,"SRM":15.5,"STYLE1":"ALE","STYLE2":"PALE ALE","STYLE3":"INDIA PALE ALE","STYLE4":"India Pale Ale","IBU":55,"Lat":46.516136,"Long":6.609917},
-{"ID":1338,"Bar":"SATELLITE","Brasserie":"POHJALA","Biere":"Öö","ABV":10.5,"SRM":65,"STYLE1":"ALE","STYLE2":"DARK ALE","STYLE3":"PORTER","STYLE4":"Baltic Porter","IBU":60,"Lat":59.372819,"Long":24.689631}
+{"ID":1338,"Bar":"SATELLITE","Brasserie":"POHJALA","Biere":"Oo","ABV":10.5,"SRM":65,"STYLE1":"ALE","STYLE2":"DARK ALE","STYLE3":"PORTER","STYLE4":"Baltic Porter","IBU":60,"Lat":59.372819,"Long":24.689631}
 
 ]
