@@ -27,6 +27,15 @@ let dropDownBinch = d3.select("#filterbinch")
   .attr("data-live-search", "true")
   .attr("title", "Une bière intéressante ?");
 
+
+  let dropDownStyle = d3.select("#filterstyle")
+    .append("select")
+    .attr("id", "style-list")
+    .attr("class", "selecteur")
+    .attr("class", "selectpicker")
+    .attr("data-live-search", "true")
+    .attr("title", "Un style de bière favori ?");
+
 // Définitions des éléments relatifs au scatteplot
 const margins = {
   "left": 35,
@@ -227,6 +236,7 @@ function drawSvg(redraw) {
     const bars = [...new Set(binches.map(item => item.Bar).sort())];
     const biereUnique = [...new Set(binches.map(item => item.Biere).sort())];
     const brasserieUnique = [...new Set(binches.map(item => item.Brasserie).sort())];
+    const styleUnique = [...new Set(binches.map(item => item.STYLE4).sort())];
 
     // liste des bar où se trouvent les bières
     const biereBar = $.map(binches, function(n, i) {
@@ -468,6 +478,42 @@ function drawSvg(redraw) {
       // Déplace la carte pour centrer sur le bar sélectionné, ouvre le tooltip et le met au premier plan
       goToMarker(selectedBrasserie, brassMarkersObj);
     });
+
+
+
+    $("#style-list")
+      .append("html", '<option>TOUTES</option>')
+      .selectpicker('refresh');
+
+
+    // Assignement des brasseries au sélecteur
+    let optDropStyle = dropDownStyle.selectAll("option")
+      .data(["TOUTES"].concat(styleUnique))
+      .enter()
+      .append("option")
+      .attr("class", "optionsStyle");
+
+    // Ajout du texte
+    optDropStyle.text(d => d)
+      .attr("value", d => d);
+
+    // Actualisation pour affichage
+    $('#style-list').selectpicker('refresh');
+
+    // Fonction à la sélection d'une brasserie
+    dropDownStyle.on("change", function() {
+
+      let selectedStyle = this.value;
+
+      // Faire "disparaître" les bières non correspondantes
+      pickCircles(selectedStyle, "d.STYLE4");
+
+      // Màj des informations et sélecteurs
+      updateInfos(selectedStyle);
+      updateAllSelects(selectedStyle, "style-list");
+
+    });
+
 
     ////////////////////
     // ECHELLES ET AXES
