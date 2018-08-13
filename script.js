@@ -349,15 +349,15 @@ function drawSvg(redraw) {
 
       let srm_ddselected = returnsrm(selectedBinch);
 
-      if (srm_ddselected > 25) {
+      if (srm_ddselected >= 25) {
         beericon = "data/srm6.png";
-      } else if (srm_ddselected > 20 && srm_ddselected < 25) {
+      } else if (srm_ddselected >= 20 && srm_ddselected < 25) {
         beericon = "data/srm5.png";
-      } else if (srm_ddselected > 15 && srm_ddselected < 20) {
+      } else if (srm_ddselected >= 15 && srm_ddselected < 20) {
         beericon = "data/srm4.png";
-      } else if (srm_ddselected > 10 && srm_ddselected < 15) {
+      } else if (srm_ddselected >= 10 && srm_ddselected < 15) {
         beericon = "data/srm3.png";
-      } else if (srm_ddselected > 5 && srm_ddselected < 10) {
+      } else if (srm_ddselected >= 5 && srm_ddselected < 10) {
         beericon = "data/srm2.png";
       } else {
         beericon = "data/srm1.png";
@@ -605,15 +605,15 @@ function drawSvg(redraw) {
 
         // adaptation de l'image des bières proches
 
-        if (d.SRM > 25) {
+        if (d.SRM >= 25) {
           beericon = "data/srm6.png";
-        } else if (d.SRM > 20 && d.SRM < 25) {
+        } else if (d.SRM >= 20 && d.SRM < 25) {
           beericon = "data/srm5.png";
-        } else if (d.SRM > 15 && d.SRM < 20) {
+        } else if (d.SRM >= 15 && d.SRM < 20) {
           beericon = "data/srm4.png";
-        } else if (d.SRM > 10 && d.SRM < 15) {
+        } else if (d.SRM >= 10 && d.SRM < 15) {
           beericon = "data/srm3.png";
-        } else if (d.SRM > 5 && d.SRM < 10) {
+        } else if (d.SRM >= 5 && d.SRM < 10) {
           beericon = "data/srm2.png";
         } else {
           beericon = "data/srm1.png";
