@@ -2,8 +2,8 @@ library("RJSONIO")
 library("cluster")
 library("igraph")
 
-setwd("~/dataBinch")
-binches <- fromJSON("data/binches.json")
+setwd("~/dataBinch/data")
+binches <- fromJSON("binches.json")
 
 binches <- lapply(binches, function(x) {
   x[sapply(x, is.null)] <- NA
