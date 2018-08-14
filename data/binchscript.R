@@ -28,15 +28,12 @@ dist <- daisy(binchDist, metric = "gower")
 dist <- as.matrix(dist)
 rownames(dist) <- binchUnique[,1] 
 colnames(dist) <- binchUnique[,1] 
-
- json <- toJSON(dist, pretty = TRUE)
-
- g <- graph.adjacency(dist, mode = "directed", weighted = TRUE)
- e <- cbind( get.edgelist(g) , round( E(g)$weight, 3 ))
- e <- as.data.frame(e)
- colnames(e)[1]<-"Source"
- colnames(e)[2]<-"Target"
- colnames(e)[3]<-"Weight"
+g <- graph.adjacency(dist, mode = "directed", weighted = TRUE)
+e <- cbind( get.edgelist(g) , round( E(g)$weight, 3 ))
+e <- as.data.frame(e)
+colnames(e)[1]<-"Source"
+colnames(e)[2]<-"Target"
+colnames(e)[3]<-"Weight"
  
- write.csv(e, file="rowdist.csv", row.names = FALSE)
+write.csv(e, file="rowdist.csv", row.names = FALSE)
  
