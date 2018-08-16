@@ -12,6 +12,7 @@ let dropDownCity = d3.select("#filtercity")
   .attr("class", "selecteur")
   .attr("class", "selectpicker")
   .attr("data-live-search", "true")
+  .attr("data-toggle", "modal")
   .attr("title", "Une ville précise?");
 
 ////////////////////////////////
@@ -321,10 +322,6 @@ function drawSvg(redraw) {
     // BINCHES select
     // Assignement des bières au sélecteur
 
-    $("#binch-list")
-      .append("html", '<option>TOUTES</option>')
-      .selectpicker('refresh');
-
     let optDropBinch = dropDownBinch.selectAll("option")
       .data(["TOUTES"].concat(biereUnique))
       .enter()
@@ -458,10 +455,6 @@ function drawSvg(redraw) {
 
     // BRASSERIES select
 
-    $("#brass-list")
-      .append("html", '<option>TOUTES</option>')
-      .selectpicker('refresh');
-
 
     // Assignement des brasseries au sélecteur
     let optDropBrass = dropDownBrass.selectAll("option")
@@ -493,11 +486,6 @@ function drawSvg(redraw) {
       goToMarker(selectedBrasserie, brassMarkersObj);
     });
 
-
-
-    $("#style-list")
-      .append("html", '<option>TOUTES</option>')
-      .selectpicker('refresh');
 
 
     // Assignement des brasseries au sélecteur
@@ -791,15 +779,10 @@ d3.json('data/bars.json', function(error, barsLsne) {
   arrayVilles = [...new Set(barsLsne.map(item => item.Ville))];
   console.log(arrayVilles);
 
-  $("#city-list")
-    .append("html", '<option>TOUTES</option>')
-    .selectpicker('refresh');
-
-  $("select option").eq(index).before($("<option></option>").val(val).html(text));
 
   // Assignement des bars au sélecteur
   let optDropCity = dropDownCity.selectAll("option")
-    .data(["TOUS"].concat(arrayVilles))
+    .data(["TOUTES"].concat(arrayVilles))
     .enter()
     .append("option");
 
@@ -809,8 +792,6 @@ d3.json('data/bars.json', function(error, barsLsne) {
 
   // Actualisation pour affichage
   $('#city-list').selectpicker('refresh');
-
-
 
   // Ajout d'un marker par bar
   for (let i = 0; i < barsLsne.length; i++) {
