@@ -1,5 +1,19 @@
 /*jshint esnext: true */
 
+//// TEST message accueil
+let TeSt;
+d3.select("#TEST").on("click", function() {
+  TeSt = 4+2;
+})
+
+let dropDownCity = d3.select("#filtercity")
+  .append("select")
+  .attr("id", "city-list")
+  .attr("class", "selecteur")
+  .attr("class", "selectpicker")
+  .attr("data-live-search", "true")
+  .attr("title", "Une ville précise?");
+
 ////////////////////////////////
 // DEFINITION VARIABLES GLOBALES ET CONSTANTES
 ////////////////////////////////
@@ -772,6 +786,32 @@ d3.json('data/bars.json', function(error, barsLsne) {
   if (error) { // Si le fichier n'est pas chargé, log de l'erreur
     console.log(error);
   }
+
+  //// TEST ajout message accueil
+  arrayVilles = [...new Set(barsLsne.map(item => item.Ville))];
+  console.log(arrayVilles);
+
+  $("#city-list")
+    .append("html", '<option>TOUTES</option>')
+    .selectpicker('refresh');
+
+  $("select option").eq(index).before($("<option></option>").val(val).html(text));
+
+  // Assignement des bars au sélecteur
+  let optDropCity = dropDownCity.selectAll("option")
+    .data(["TOUS"].concat(arrayVilles))
+    .enter()
+    .append("option");
+
+  // Ajout du texte
+  optDropCity.text(d => d)
+    .attr("value", d => d);
+
+  // Actualisation pour affichage
+  $('#city-list').selectpicker('refresh');
+
+
+
   // Ajout d'un marker par bar
   for (let i = 0; i < barsLsne.length; i++) {
     let bar = barsLsne[i];

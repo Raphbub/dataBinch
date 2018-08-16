@@ -30,7 +30,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.60.0/L.Control.Locate.min.css" />
   <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
-  <link href="age-verification.css" rel="stylesheet">
+  <!-- <link href="age-verification.css" rel="stylesheet"> -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
 
 
@@ -38,6 +38,18 @@
 </head>
 
 <body id="bootstrap-overrides">
+
+  <!-- Test d'un popup pour demander la ville -->
+  <div id="modal_screen"></div>
+  <div id="modal_content">
+    <h2>Quelle ville ?</h2>
+    <div id="filtercity">
+      <b>Villes</b><br>
+    </div>
+    <button id="TEST">Le monde</button>
+  </div>
+
+
   <div class="row enTete 1ereColonne">
     <div class="colonneAvecSelect col-sm-12 col-md-9 col-lg-7">
       <div id="filterbar" class="select1 col-sm-4 col-md-4 col-lg-4">
@@ -80,8 +92,8 @@
       </div>
     </div>
   </div>
-  <script src="http://cdn.jsdelivr.net/jquery.cookie/1.4.1/jquery.cookie.min.js"></script>
-  <script src="age-verification.js"></script>
+  <!-- <script src="http://cdn.jsdelivr.net/jquery.cookie/1.4.1/jquery.cookie.min.js"></script> -->
+  <!-- <script src="age-verification.js"></script> -->
 
   <script src="script.js" charset="utf-8"></script>
 

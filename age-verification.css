@@ -39,7 +39,7 @@
 	background-image: "data/srm1.png";
 }
 
-#modal_content .content_wrapper {
+#modal_content.content_wrapper {
 	padding-top: 8em;
 	margin:3em auto 0;
 	text-align: center;
