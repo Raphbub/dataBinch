@@ -1,18 +1,11 @@
 /*jshint esnext: true */
 
-//// TEST message accueil
-let TeSt;
-d3.select("#TEST").on("click", function() {
-  TeSt = 4+2;
-})
 
 let dropDownCity = d3.select("#filtercity")
   .append("select")
   .attr("id", "city-list")
   .attr("class", "selecteur")
   .attr("class", "selectpicker")
-  .attr("data-live-search", "true")
-  .attr("data-toggle", "modal")
   .attr("title", "Une ville précise?");
 
 ////////////////////////////////
@@ -776,7 +769,7 @@ d3.json('data/bars.json', function(error, barsLsne) {
   }
 
   //// TEST ajout message accueil
-  arrayVilles = [...new Set(barsLsne.map(item => item.Ville))];
+  arrayVilles = [...new Set(barsLsne.map(item => item.Ville).sort())];
   console.log(arrayVilles);
 
 
