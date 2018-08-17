@@ -36,13 +36,13 @@ let dropDownBinch = d3.select("#filterbinch")
   .attr("title", "Une bière intéressante ?");
 
 
-  let dropDownStyle = d3.select("#filterstyle")
-    .append("select")
-    .attr("id", "style-list")
-    .attr("class", "selecteur")
-    .attr("class", "selectpicker")
-    .attr("data-live-search", "true")
-    .attr("title", "Un style de bière favori ?");
+let dropDownStyle = d3.select("#filterstyle")
+  .append("select")
+  .attr("id", "style-list")
+  .attr("class", "selecteur")
+  .attr("class", "selectpicker")
+  .attr("data-live-search", "true")
+  .attr("title", "Un style de bière favori ?");
 
 // Définitions des éléments relatifs au scatteplot
 const margins = {
@@ -80,6 +80,7 @@ d3.csv('data/rowdist.csv', function(error, data) {
   data.forEach(d => d.weight = +d.Weight);
   rowDist = data;
 });
+
 
 // Place où sauver les marqueurs
 let markers = {};
@@ -247,6 +248,9 @@ function drawSvg(redraw) {
     const styleUnique = [...new Set(binches.map(item => item.STYLE4).sort())];
 
     // liste des bar où se trouvent les bières
+
+
+
     const biereBar = $.map(binches, function(n, i) {
       return {
         biere: n.Biere,
@@ -771,6 +775,21 @@ d3.json('data/bars.json', function(error, barsLsne) {
   //// TEST ajout message accueil
   arrayVilles = [...new Set(barsLsne.map(item => item.Ville).sort())];
   console.log(arrayVilles);
+
+  const barVille = $.map(barsLsne, function(n, i) {
+    return {
+      bar: n.Bar,
+      ville: n.Ville
+    };
+  });
+
+  console.log(barVille);
+
+
+  barsVilleSelected = function() {
+    arrayselectedVille = barVille.filter(barVille.ville === selectedVille);
+    console.log(arrayselectedVille);
+  };
 
 
   // Assignement des bars au sélecteur
