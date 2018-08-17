@@ -281,9 +281,6 @@ function drawSvg(redraw) {
     // Ajout des options et interactions aux sélecteurs de bars, brasseries et bières
 
     // BARS select
-    $("#bar-list")
-      .append("html", '<option>TOUS</option>')
-      .selectpicker('refresh');
 
     // Assignement des bars au sélecteur
     let optDropBar = dropDownBar.selectAll("option")
@@ -295,8 +292,10 @@ function drawSvg(redraw) {
     optDropBar.text(d => d)
       .attr("value", d => d);
 
-    // Actualisation pour affichage
-    $('#bar-list').selectpicker('refresh');
+      $("#bar-list")
+        .append("html", '<option index = "1000">TOUS</option>')
+        .selectpicker('refresh');
+
 
     // Fonction à la sélection d'un bar
     dropDownBar.on("change", function() {
@@ -330,7 +329,9 @@ function drawSvg(redraw) {
       .attr("value", d => d);
 
     // Actualisation pour affichage
-    $('#binch-list').selectpicker('refresh');
+    $("#binch-list")
+      .append("html", '<option>TOUTES</option>')
+      .selectpicker('refresh');
 
     // Fonction à la sélection d'une bière
     dropDownBinch.on("change", function() {
@@ -465,7 +466,9 @@ function drawSvg(redraw) {
       .attr("value", d => d);
 
     // Actualisation pour affichage
-    $('#brass-list').selectpicker('refresh');
+    $("#brass-list")
+      .append("html", '<option>TOUTES</option>')
+      .selectpicker('refresh');
 
     // Fonction à la sélection d'une brasserie
     dropDownBrass.on("change", function() {
@@ -487,7 +490,7 @@ function drawSvg(redraw) {
 
     // Assignement des brasseries au sélecteur
     let optDropStyle = dropDownStyle.selectAll("option")
-      .data(["TOUTES"].concat(styleUnique))
+      .data(["TOUS"].concat(styleUnique))
       .enter()
       .append("option")
       .attr("class", "optionsStyle");
@@ -496,8 +499,9 @@ function drawSvg(redraw) {
     optDropStyle.text(d => d)
       .attr("value", d => d);
 
-    // Actualisation pour affichage
-    $('#style-list').selectpicker('refresh');
+      $("#style-list")
+        .append("html", '<option>TOUS</option>')
+        .selectpicker('refresh');
 
     // Fonction à la sélection d'une brasserie
     dropDownStyle.on("change", function() {
@@ -803,7 +807,9 @@ d3.json('data/bars.json', function(error, barsLsne) {
     .attr("value", d => d);
 
   // Actualisation pour affichage
-  $('#city-list').selectpicker('refresh');
+  $("#city-list")
+    .append("html", '<option>TOUTES</option>')
+    .selectpicker('refresh');
 
   // Ajout d'un marker par bar
   for (let i = 0; i < barsLsne.length; i++) {
