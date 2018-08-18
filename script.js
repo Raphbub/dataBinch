@@ -780,21 +780,6 @@ d3.json('data/bars.json', function(error, barsLsne) {
   arrayVilles = [...new Set(barsLsne.map(item => item.Ville).sort())];
   console.log(arrayVilles);
 
-  const barVille = $.map(barsLsne, function(n, i) {
-    return {
-      bar: n.Bar,
-      ville: n.Ville
-    };
-  });
-
-  console.log(barVille);
-
-
-  barsVilleSelected = function() {
-    arrayselectedVille = barVille.filter(barVille.ville === selectedVille);
-    console.log(arrayselectedVille);
-  };
-
 
   // Assignement des bars au sélecteur
   let optDropCity = dropDownCity.selectAll("option")

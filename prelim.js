@@ -11,14 +11,43 @@ $(document).ready(function() {
     console.log(selectedVille);
 
     av_closeModal();
-    barsVilleSelected();
+    binchesVilleSelected(selectedVille);
   });
 
 });
 
-barsVilleSelected = function() {
-  arrayselectedVille = barVille.filter(barVille.ville === selectedVille);
-  console.log(arrayselectedVille);
+binchesVilleSelected = function(villechoisie) {
+
+
+ $.ajax({
+    url: "data/bars.json",
+    async: false,
+    dataType: "json"
+    })
+  .done(function(data) {
+    window.bars = data;
+  });
+
+$.ajax({
+   url: "data/binches.json",
+   async: false,
+   dataType: "json"
+   })
+ .done(function(data) {
+   window.binches = data;
+ });
+
+
+  var barsVilleChoisie = bars.filter(f => villechoisie.includes(f.Ville)).map(f => f.Bar)
+
+  console.log(barsVilleChoisie);
+
+
+  var binchesVilleChoisie = binches.filter(f => barsVilleChoisie.includes(f.Bar))
+
+  console.log(binchesVilleChoisie);
+
+
 };
 
 
