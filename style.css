@@ -260,3 +260,26 @@ h3 {
     font-size: 1em;
   }
 }
+
+#boutonReset {
+  display: inline-block;
+  padding: 5px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 5px #999;
+}
+
+#boutonReset:hover {background-color: #3e8e41}
+
+#boutonReset:active {
+  background-color: #3e8e41;
+  box-shadow: 0 3px #666;
+  transform: translateY(2px);
+}
