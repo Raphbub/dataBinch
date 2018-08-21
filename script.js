@@ -155,8 +155,12 @@ if (villechoisie == 'TOUTES') {
       console.log(error);
     }
     data.forEach(d => d.weight = +d.Weight);
-    rowDist = data;
+    rowDistFilter = data.filter(d => binchesVilleChoisie.map(d=>d.Biere).includes(d.Target));
+
   });
+
+
+
 
 
   // Place où sauver les marqueurs
@@ -484,7 +488,7 @@ if (villechoisie == 'TOUTES') {
         }
 
         // Tri de la distance selon la bière
-        let filtered = rowDist.filter(item => item.Source === selectedBinch);
+        let filtered = rowDistFilter.filter(item => item.Source === selectedBinch);
         let rankdist = filtered.filter(item => item.weight < 0.5);
         rankdist.sort((a, b) => a.weight - b.weight);
 
@@ -526,7 +530,7 @@ if (villechoisie == 'TOUTES') {
 
 
             // Tri de la distance selon la bière
-            let filtered = rowDist.filter(item => item.Source === biereProcheSelect);
+            let filtered = rowDistFilter.filter(item => item.Source === biereProcheSelect);
             rankdist = filtered.filter(item => item.weight < 0.5);
             rankdist.sort((a, b) => a.weight - b.weight);
 
@@ -742,7 +746,7 @@ if (villechoisie == 'TOUTES') {
           /////// RETOUR DES BIERES SIMILAIRES
 
           // Tri de la distance selon la bière
-          let filtered = rowDist.filter(item => item.Source === d.Biere);
+          let filtered = rowDistFilter.filter(item => item.Source === d.Biere);
           let rankdist = filtered.filter(item => item.weight < 0.5);
           rankdist.sort((a, b) => a.weight - b.weight);
 
@@ -774,7 +778,7 @@ if (villechoisie == 'TOUTES') {
               pickCircles(biereProcheSelect, "d.Biere", 300);
 
               // Tri de la distance selon la bière
-              let filtered = rowDist.filter(item => item.Source === biereProcheSelect);
+              let filtered = rowDistFilter.filter(item => item.Source === biereProcheSelect);
               rankdist = filtered.filter(item => item.weight < 0.5);
               rankdist.sort((a, b) => a.weight - b.weight);
 
