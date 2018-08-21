@@ -155,8 +155,11 @@ if (villechoisie == 'TOUTES') {
       console.log(error);
     }
     data.forEach(d => d.weight = +d.Weight);
-    rowDistFilter = data.filter(d => binchesVilleChoisie.map(d=>d.Biere).includes(d.Target));
-
+    if (villechoisie == 'TOUTES') {
+      rowDistFilter = data;
+    } else {
+      rowDistFilter = data.filter(d => binchesVilleChoisie.map(d=>d.Biere).includes(d.Target));
+    }
   });
 
 
