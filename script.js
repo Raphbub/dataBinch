@@ -202,14 +202,27 @@ binchesVilleSelected = function(villechoisie) {
     ext: 'png'
   }); // Fond terrain
 
+
+
   // Définition de la carte
-  const carte = L.map('map', {
-    center: [46.52243400482112, 6.632995605468751],
-    zoom: 15
+
+let centerCarte =   (villechoisie == 'Lyon') ? [45.760315, 4.837746]
+                    : (villechoisie == 'Avignon') ? [43.948555, 4.809927]
+                    : (villechoisie == 'Lausanne') ? [46.52243400482112, 6.632995605468751]
+                    :   [45.499463, 5.780614] ;
+
+let zoomCarte =   (villechoisie == 'TOUTES') ?  4
+                  : (villechoisie == 'Lyon') ? 12
+                  : 15;
+
+const carte = L.map('map', {
+    center: centerCarte,
+    zoom: zoomCarte
   });
 
   // Ajout des couches à la carte
   carte.addLayer(cartodbLayer, stamenLayer);
+
 
   // Attribution des couches de bases pour le sélecteur
   const baseMaps = {
