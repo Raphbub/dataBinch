@@ -38,7 +38,7 @@ $.ajax({
     .selectpicker('refresh');
 
 
-var modal_content,
+let modal_content,
   modal_screen;
 
 
@@ -47,8 +47,12 @@ $(document).ready(function() {
   av_showmodal();
 
   $('#valider').click(function() {
-    var selectedVille = $('#city-list').val();
+    let selectedVille = $('#city-list').val();
     console.log(selectedVille);
+    // Si l'user valide sans choisir
+    if(!selectedVille) {
+      selectedVille = "TOUTES"
+    }
 
     av_closeModal();
     binchesVilleSelected(selectedVille);
@@ -58,31 +62,29 @@ $(document).ready(function() {
 
 binchesVilleSelected = function(villechoisie) {
 
+  $.ajax({
+     url: "data/binches.json",
+     async: false,
+     dataType: "json"
+     })
+   .done(function(data) {
+     window.binches = data;
+   });
 
+  if (villechoisie == 'TOUTES') {
+    window.barsVilleChoisie = bars;
+    console.log(barsVilleChoisie);
+    window.binchesVilleChoisie = binches;
+    console.log(binchesVilleChoisie);
+    window.binchesVilleChoisieavecCOO = bars;
 
-$.ajax({
-   url: "data/binches.json",
-   async: false,
-   dataType: "json"
-   })
- .done(function(data) {
-   window.binches = data;
- });
-
-if (villechoisie == 'TOUTES') {
-  window.barsVilleChoisie = bars;
-  console.log(barsVilleChoisie);
-  window.binchesVilleChoisie = binches;
-  console.log(binchesVilleChoisie);
-  window.binchesVilleChoisieavecCOO = bars;
-
-} else {
-  window.barsVilleChoisie = bars.filter(f => villechoisie.includes(f.Ville)).map(f => f.Bar);
-  console.log(barsVilleChoisie);
-  window.binchesVilleChoisie = binches.filter(f => barsVilleChoisie.includes(f.Bar));
-  console.log(binchesVilleChoisie);
-  window.binchesVilleChoisieavecCOO = bars.filter(f => barsVilleChoisie.includes(f.Bar))
-}
+  } else {
+    window.barsVilleChoisie = bars.filter(f => villechoisie.includes(f.Ville)).map(f => f.Bar);
+    console.log(barsVilleChoisie);
+    window.binchesVilleChoisie = binches.filter(f => barsVilleChoisie.includes(f.Bar));
+    console.log(binchesVilleChoisie);
+    window.binchesVilleChoisieavecCOO = bars.filter(f => barsVilleChoisie.includes(f.Bar))
+  }
 
 
   ////////////////////////////////
@@ -463,33 +465,6 @@ if (villechoisie == 'TOUTES') {
 
         /////// RETOUR DES BIERES SIMILAIRES
 
-        // fonction de retour du srm de la biere sélectionnée dans le dropdown
-        function returnsrm(input) {
-          for (var i = 0; i < biereSRM.length; i++) {
-            if (biereSRM[i].biere == input) {
-              return biereSRM[i].srm;
-            }
-          }
-        }
-
-        // adaptation de l'image des bières proches
-
-        let srm_ddselected = returnsrm(selectedBinch);
-
-        if (srm_ddselected >= 25) {
-          beericon = "data/srm6.png";
-        } else if (srm_ddselected >= 20 && srm_ddselected < 25) {
-          beericon = "data/srm5.png";
-        } else if (srm_ddselected >= 15 && srm_ddselected < 20) {
-          beericon = "data/srm4.png";
-        } else if (srm_ddselected >= 10 && srm_ddselected < 15) {
-          beericon = "data/srm3.png";
-        } else if (srm_ddselected >= 5 && srm_ddselected < 10) {
-          beericon = "data/srm2.png";
-        } else {
-          beericon = "data/srm1.png";
-        }
-
         // Tri de la distance selon la bière
         let filtered = rowDistFilter.filter(item => item.Source === selectedBinch);
         let rankdist = filtered.filter(item => item.weight < 0.5);
@@ -511,7 +486,11 @@ if (villechoisie == 'TOUTES') {
           }
           // Pour les x (limite) bières les plus proches, afficher leur nom avec un logo et les mettres sur le graphe en petit
           for (let i = 0; i < limite; i++) {
-            document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beericon}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`;
+            // Ajuste le logo en fonction du SRM de la bière proche
+            let srmSimi = binches.filter(b => b.Biere == rankdist[i].Target)[0].SRM;
+            let beerIconSimi = adjustLogo(srmSimi);
+
+            document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beerIconSimi}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`;
 
             d3.selectAll('circle')
               .filter(d => rankdist[i].Target == d.Biere)
@@ -554,7 +533,11 @@ if (villechoisie == 'TOUTES') {
 
             // Pour les x (limite) bières les plus proches, afficher leur nom avec un logo et les mettres sur le graphe en petit
             for (let i = 0; i < limite; i++) {
-              document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beericon}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`;
+              // Ajuste le logo en fonction du SRM de la bière proche
+              let srmSimi = binches.filter(b => b.Biere == rankdist[i].Target)[0].SRM;
+              let beerIconSimi = adjustLogo(srmSimi);
+
+              document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beerIconSimi}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`;
 
               d3.selectAll('circle')
                 .filter(d => rankdist[i].Target == d.Biere)
@@ -722,24 +705,6 @@ if (villechoisie == 'TOUTES') {
           // Faire "disparaître" les bières non correspondantes
           pickCircles(clickedBeer, "d.Biere", 300);
 
-          // adaptation de l'image des bières proches
-
-          if (d.SRM >= 25) {
-            beericon = "data/srm6.png";
-          } else if (d.SRM >= 20 && d.SRM < 25) {
-            beericon = "data/srm5.png";
-          } else if (d.SRM >= 15 && d.SRM < 20) {
-            beericon = "data/srm4.png";
-          } else if (d.SRM >= 10 && d.SRM < 15) {
-            beericon = "data/srm3.png";
-          } else if (d.SRM >= 5 && d.SRM < 10) {
-            beericon = "data/srm2.png";
-          } else {
-            beericon = "data/srm1.png";
-          }
-
-
-
           // Màj des informations et sélecteurs
           updateInfos(clickedBeer, binchesVilleChoisie, biereBar);
           updateAllSelects(clickedBeer, "binch-list");
@@ -764,7 +729,11 @@ if (villechoisie == 'TOUTES') {
           }
           // Pour les x (limite) bières les plus proches, afficher leur nom avec un logo et les mettres sur le graphe en petit
           for (let i = 0; i < limite; i++) {
-            document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beericon}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`;
+            // Ajuste le logo en fonction du SRM de la bière proche
+            let srmSimi = binches.filter(b => b.Biere == rankdist[i].Target)[0].SRM;
+            let beerIconSimi = adjustLogo(srmSimi);
+
+            document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beerIconSimi}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`;
             d3.selectAll('circle')
               .filter(d => rankdist[i].Target == d.Biere)
               .transition()
@@ -800,7 +769,11 @@ if (villechoisie == 'TOUTES') {
               }
               // Pour les x (limite) bières les plus proches, afficher leur nom avec un logo et les mettres sur le graphe en petit
               for (let i = 0; i < limite; i++) {
-                document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beericon}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`;
+                // Ajuste le logo en fonction du SRM de la bière proche
+                let srmSimi = binches.filter(b => b.Biere == rankdist[i].Target)[0].SRM;
+                let beerIconSimi = adjustLogo(srmSimi);
+
+                document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beerIconSimi}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`;
                 d3.selectAll('circle')
                   .filter(d => rankdist[i].Target == d.Biere)
                   .transition()
@@ -1038,3 +1011,24 @@ av_positionPrompt = function() {
     modal_content.fadeIn('slow');
   }
 };
+
+// Permet d'ajuster le logo en fonction du SRM
+adjustLogo = function(srmBinche) {
+  let logoDef;
+
+  if (srmBinche >= 25) {
+    logoDef = "data/srm6.png";
+  } else if (srmBinche >= 20 && srmBinche < 25) {
+    logoDef = "data/srm5.png";
+  } else if (srmBinche >= 15 && srmBinche < 20) {
+    logoDef = "data/srm4.png";
+  } else if (srmBinche >= 10 && srmBinche < 15) {
+    logoDef = "data/srm3.png";
+  } else if (srmBinche >= 5 && srmBinche < 10) {
+    logoDef = "data/srm2.png";
+  } else {
+    logoDef = "data/srm1.png";
+  }
+
+  return logoDef;
+}
