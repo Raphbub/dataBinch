@@ -46,5 +46,15 @@
 {"Bar":"WALLACE","Ville":"Lyon","Lat":45.766330,"Long":4.828449},
 {"Bar":"ACCASBEL","Ville":"Lyon","Lat":45.75065,"Long":4.826474},
 {"Bar":"LE SIRIUS","Ville":"Lyon","Lat":45.761079,"Long":4.840334},
-{"Bar":"DARTS CLUB DES GONES","Ville":"Lyon","Lat":45.764583,"Long":4.827438}
+{"Bar":"DARTS CLUB DES GONES","Ville":"Lyon","Lat":45.764583,"Long":4.827438},
+{"Bar":"ALUS CELLE","Ville":"Riga","Lat":56.958560,"Long":24.122518},
+{"Bar":"EASY BEER","Ville":"Riga","Lat":56.947138,"Long":24.111711},
+{"Bar":"TAKA","Ville":"Riga","Lat":56.961270,"Long":24.130152},
+{"Bar":"BEERFOX","Ville":"Riga","Lat":56.953341,"Long":24.135052},
+{"Bar":"AUSSIE BACKPACKERS","Ville":"Riga","Lat":56.946744,"Long":24.113797},
+{"Bar":"BEER HOUSE No 1","Ville":"Riga","Lat":56.949710,"Long":24.110422},
+{"Bar":"FOLKKLUBS","Ville":"Riga","Lat":56.946153,"Long":24.107740},
+{"Bar":"THE ARMOURY BAR","Ville":"Riga","Lat":56.946286,"Long":24.111246},
+{"Bar":"TROMPETE TAPROOM","Ville":"Riga","Lat":56.946024,"Long":24.108012}
+
 ]
