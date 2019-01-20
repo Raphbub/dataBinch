@@ -209,11 +209,12 @@ binchesVilleSelected = function(villechoisie) {
 let centerCarte =   (villechoisie == 'Lyon') ? [45.760315, 4.837746]
                     : (villechoisie == 'Avignon') ? [43.948555, 4.809927]
                     : (villechoisie == 'Lausanne') ? [46.52243400482112, 6.632995605468751]
+                    : (villechoisie == 'Riga') ? [56.952365, 24.115035]
                     :   [45.499463, 5.780614] ;
 
 let zoomCarte =   (villechoisie == 'TOUTES') ?  4
                   : (villechoisie == 'Lyon') ? 12
-                  : 15;
+                  : 14;
 
 const carte = L.map('map', {
     center: centerCarte,
