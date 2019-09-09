@@ -1,7 +1,9 @@
 # **dataBinch**
 #### Statistiques et visualisations d'une large sélection de bières de bars lausannois
 
-Disponible en ligne : https://databinch.github.io &emsp; *Sortie de la version 1.0, ~~Champagne !~~*
+Disponible en ligne : https://databinch.github.io
+
+*Version 2.0 en cours de développement*
 ___
 
 Envie d'une bonne ale?
