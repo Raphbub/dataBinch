@@ -318,9 +318,11 @@ const carte = new L.LeafletMap('map', {
 
   }
 
+  // Dict par nom et array des bières par bar
+  const biereParNom = new Map(binches.map(b => [String(b.Biere), b]));
+  const biereBar = binchesVilleChoisie.map(n => ({ biere: n.Biere, bar: n.Bar }));
 
   // Fonction qui dessine le svg et fait l'interaction avec la carte
-
   // prend un booleen indiquant si c'est redessiné (par ex. ajustement de la taille)
 
   function drawSvg(redraw) {
@@ -375,26 +377,6 @@ const carte = new L.LeafletMap('map', {
       const biereUnique = [...new Set(binchesVilleChoisie.map(item => item.Biere).sort())];
       const brasserieUnique = [...new Set(binchesVilleChoisie.map(item => item.Brasserie).sort())];
       const styleUnique = [...new Set(binchesVilleChoisie.map(item => item.STYLE4).sort())];
-
-      // liste des bar où se trouvent les bières
-
-
-
-      const biereBar = $.map(binchesVilleChoisie, function(n, i) {
-        return {
-          biere: n.Biere,
-          bar: n.Bar
-        };
-      });
-
-      // liste des bar où se trouvent les bières
-      const biereSRM = $.map(binchesVilleChoisie, function(n, i) {
-        return {
-          biere: n.Biere,
-          srm: n.SRM
-        };
-      });
-
 
       // Récupération des coordonnées des brasseries
       const brasseriesLatLon = $.map(binchesVilleChoisie, function(n, i) {
@@ -461,103 +443,7 @@ const carte = new L.LeafletMap('map', {
         .selectpicker('refresh');
 
       // Fonction à la sélection d'une bière
-      dropDownBinch.on("change", function() {
-        let selectedBinch = this.value;
-
-        // Faire "disparaître" les bières non correspondantes
-        pickCircles(selectedBinch, "d.Biere", 300);
-
-        // Déplace la carte sur la brasserie d'où vient la bière
-        goToMarker(selectedBinch, brassMarkersObj, binchesVilleChoisie);
-
-        /////// RETOUR DES BIERES SIMILAIRES
-
-        // Tri de la distance selon la bière
-        let filtered = rowDistFilter.filter(item => item.Source === selectedBinch);
-        let rankdist = filtered.filter(item => item.weight < 0.5);
-        rankdist.sort((a, b) => a.weight - b.weight);
-
-        // Màj des informations et sélecteurs
-        updateInfos(selectedBinch, binchesVilleChoisie, biereBar);
-        updateAllSelects(selectedBinch, "binch-list");
-
-        if (selectedBinch != 'TOUTES') {
-          // Ajustement du titre
-          document.getElementById('Biereproches').innerHTML += `<h3 id="titreSimi">Similaires à ${selectedBinch}</h3><br>`;
-          // Vérifier que la limite du nombre de bière n'est pas inférieur à celle définie
-          let limite;
-          if (limiteSimi > rankdist.length) {
-            limite = rankdist.length;
-          } else {
-            limite = limiteSimi;
-          }
-          // Pour les x (limite) bières les plus proches, afficher leur nom avec un logo et les mettres sur le graphe en petit
-          for (let i = 0; i < limite; i++) {
-            // Ajuste le logo en fonction du SRM de la bière proche
-            let srmSimi = binches.filter(b => b.Biere == rankdist[i].Target)[0].SRM;
-            let beerIconSimi = adjustLogo(srmSimi);
-
-            document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beerIconSimi}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`;
-
-            d3.selectAll('circle')
-              .filter(d => rankdist[i].Target == d.Biere)
-              .transition()
-              .duration(200)
-              .attr("r", radius * 0.5);
-          }
-
-        }
-
-        // Ajout d'un evtLis qui rend les bières similaires interactives
-        document.getElementById('Biereproches').addEventListener("click", function(event) {
-          // Vérifie que le click est fait sur une bière
-          if (!isNaN(event.target.id)) {
-            // Récupération de la bière sélectionnée
-            let biereProcheSelect = rankdist[event.target.id].Target;
-            // Ajustement du graphique
-            pickCircles(biereProcheSelect, "d.Biere", 300);
-
-
-            // Tri de la distance selon la bière
-            let filtered = rowDistFilter.filter(item => item.Source === biereProcheSelect);
-            rankdist = filtered.filter(item => item.weight < 0.5);
-            rankdist.sort((a, b) => a.weight - b.weight);
-
-            // Màj des informations et sélecteurs
-            updateInfos(biereProcheSelect, binchesVilleChoisie, biereBar);
-            updateAllSelects(biereProcheSelect, "binch-list");
-
-            // Màj des informations relatives à la bière sur la page
-            document.getElementById('Biereproches').innerHTML = `<h3 id="titreSimi">Similaires à ${biereProcheSelect}</h3><br>`;
-
-            // Vérifier que la limite du nombre de bière n'est pas inférieur à celle définie
-            let limite;
-            if (limiteSimi > rankdist.length) {
-              limite = rankdist.length;
-            } else {
-              limite = limiteSimi;
-            }
-
-            // Pour les x (limite) bières les plus proches, afficher leur nom avec un logo et les mettres sur le graphe en petit
-            for (let i = 0; i < limite; i++) {
-              // Ajuste le logo en fonction du SRM de la bière proche
-              let srmSimi = binches.filter(b => b.Biere == rankdist[i].Target)[0].SRM;
-              let beerIconSimi = adjustLogo(srmSimi);
-
-              document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beerIconSimi}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`;
-
-              d3.selectAll('circle')
-                .filter(d => rankdist[i].Target == d.Biere)
-                .transition()
-                .duration(200)
-                .attr("r", radius * 0.5);
-            }
-
-            // Déplace la carte sur la brasserie d'où vient la bière
-            goToMarker(biereProcheSelect, brassMarkersObj, binchesVilleChoisie);
-          }
-        });
-      });
+      dropDownBinch.on("change", function() { selectionnerBiere(this.value); });
 
       // BRASSERIES select
 
@@ -706,92 +592,7 @@ const carte = new L.LeafletMap('map', {
             .attr("r", radius)
             .style("opacity", 0.5);
         })
-        .on("click", function(event, d) {
-          let clickedBeer = this.id;
-
-          // Faire "disparaître" les bières non correspondantes
-          pickCircles(clickedBeer, "d.Biere", 300);
-
-          // Màj des informations et sélecteurs
-          updateInfos(clickedBeer, binchesVilleChoisie, biereBar);
-          updateAllSelects(clickedBeer, "binch-list");
-          // Déplace la carte sur la brasserie
-          goToMarker(clickedBeer, brassMarkersObj, binchesVilleChoisie);
-
-          /////// RETOUR DES BIERES SIMILAIRES
-
-          // Tri de la distance selon la bière
-          let filtered = rowDistFilter.filter(item => item.Source === d.Biere);
-          let rankdist = filtered.filter(item => item.weight < 0.5);
-          rankdist.sort((a, b) => a.weight - b.weight);
-
-          // Ajustement du titre
-          document.getElementById('Biereproches').innerHTML += `<h3 id="titreSimi">Similaires à ${d.Biere}</h3><br>`; //"<h3>Similaires à "+d.Biere+" </h3><br>";
-          // Vérifier que la limite du nombre de bière n'est pas inférieur à celle définie
-          let limite;
-          if (limiteSimi > rankdist.length) {
-            limite = rankdist.length;
-          } else {
-            limite = limiteSimi;
-          }
-          // Pour les x (limite) bières les plus proches, afficher leur nom avec un logo et les mettres sur le graphe en petit
-          for (let i = 0; i < limite; i++) {
-            // Ajuste le logo en fonction du SRM de la bière proche
-            let srmSimi = binches.filter(b => b.Biere == rankdist[i].Target)[0].SRM;
-            let beerIconSimi = adjustLogo(srmSimi);
-
-            document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beerIconSimi}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`;
-            d3.selectAll('circle')
-              .filter(d => rankdist[i].Target == d.Biere)
-              .transition()
-              .duration(200)
-              .attr("r", radius * 0.5);
-          }
-          // Ajout d'un evtLis qui rend les bières similaires interactives
-          document.getElementById('Biereproches').addEventListener("click", function(event) {
-            // Vérifie que le click est fait sur une bière
-            if (!isNaN(event.target.id)) {
-              // Récupération de la bière sélectionnée
-              let biereProcheSelect = rankdist[event.target.id].Target;
-              // Ajustement du graphique
-              pickCircles(biereProcheSelect, "d.Biere", 300);
-
-              // Tri de la distance selon la bière
-              let filtered = rowDistFilter.filter(item => item.Source === biereProcheSelect);
-              rankdist = filtered.filter(item => item.weight < 0.5);
-              rankdist.sort((a, b) => a.weight - b.weight);
-
-              // Màj des informations relatives à la bière sur la page
-              updateInfos(biereProcheSelect, binchesVilleChoisie, biereBar);
-              updateAllSelects(biereProcheSelect, "binch-list");
-
-              document.getElementById('Biereproches').innerHTML = `<h3 id="titreSimi">Similaires à ${biereProcheSelect}</h3><br>`;
-
-              // Màj des informations relatives à la bière sur la page
-              let limite;
-              if (limiteSimi > rankdist.length) {
-                limite = rankdist.length;
-              } else {
-                limite = limiteSimi;
-              }
-              // Pour les x (limite) bières les plus proches, afficher leur nom avec un logo et les mettres sur le graphe en petit
-              for (let i = 0; i < limite; i++) {
-                // Ajuste le logo en fonction du SRM de la bière proche
-                let srmSimi = binches.filter(b => b.Biere == rankdist[i].Target)[0].SRM;
-                let beerIconSimi = adjustLogo(srmSimi);
-
-                document.getElementById('Biereproches').innerHTML += `<img id=${i} class="bProches" src=${beerIconSimi}><b id=${i} class="bProches">${rankdist[i].Target}</b><br>`;
-                d3.selectAll('circle')
-                  .filter(d => rankdist[i].Target == d.Biere)
-                  .transition()
-                  .duration(200)
-                  .attr("r", radius * 0.5);
-              }
-              // Déplace la carte sur la brasserie d'où vient la bière
-              goToMarker(biereProcheSelect, brassMarkersObj, binchesVilleChoisie);
-            }
-          });
-        });
+        .on("click", function(event, d) { selectionnerBiere(String(d.Biere)); });
 
 
       //////////////
@@ -865,6 +666,11 @@ const carte = new L.LeafletMap('map', {
   // Dessin initial du graphique
   drawSvg(false);
 
+  document.getElementById('Biereproches').addEventListener('click', function(e) {
+    const cible = e.target.closest('[data-biere]');
+    if (cible) selectionnerBiere(cible.dataset.biere);
+  });
+
   // Rend les brasseries dans la description interactives
   document.getElementById('BrassSelectedBeer').addEventListener("click", function() {
     let selectedBrass = $('#BrassSelectedBeer').html().slice(0, -5);
@@ -928,7 +734,7 @@ const carte = new L.LeafletMap('map', {
     if (selected == 'TOUTES' || selected == 'TOUS') {
       $('#selectedBeer').html("");
     } else if (listeBiere) {
-      let binch = listeBiere.find(d => d.Biere === selected);
+      let binch = listeBiere.find(d => String(d.Biere) === selected);
       $('#BrassSelectedBeer').html(`${binch.Brasserie} <br>`);
       $('#selectedBeer').html(`${binch.Biere} &ensp; <i id ='brasspar'> brassée par  </i> &ensp;`);
       $('#ABVselectedBeer').html(`Alcool : ${binch.ABV} % | `);
@@ -964,21 +770,66 @@ const carte = new L.LeafletMap('map', {
     }
   }
 
-  // Détermine quels cercles sont à conserver sur le graphique
-  function pickCircles(selected, cible, t) {
-    if (!t) {
-      t = 400;
+  function afficherSimilaires(nom) {
+    const conteneur = document.getElementById('Biereproches');
+    conteneur.replaceChildren();
+    if (nom === 'TOUTES') return;
+    
+    // Récupérer les bières proches
+    const proches = (rowDistFilter || [])
+      .filter(r => r.Source === nom && r.weight < 0.5)
+      .sort((a, b) => a.weight - b.weight)
+      .slice(0, limiteSimi);
+
+    const titre = document.createElement('h3');
+    titre.id = 'titreSimi';
+    titre.textContent = `Similaires à ${nom}`;
+    conteneur.append(titre, document.createElement('br'));
+
+    // Créer la ligne logo et nom des proches
+    for (const r of proches) {
+      const logo = document.createElement('img');
+      logo.className = 'bProches';
+      logo.alt = '';
+      logo.src = adjustLogo(biereParNom.get(r.Target).SRM);
+      logo.dataset.biere = r.Target;
+
+      const nomBiere = document.createElement('b');
+      nomBiere.className = 'bProches';
+      nomBiere.textContent = r.Target;
+      nomBiere.dataset.biere = r.Target;
+
+      conteneur.append(logo, nomBiere, document.createElement('br'));
     }
+
+    // Les bières proches apparaissent en petit sur le graphique
+    const cibles = new Set(proches.map(r => r.Target));
+    svgScat.selectAll('circle')
+      .filter(d => cibles.has(String(d.Biere)))
+      .transition()
+      .duration(200)
+      .attr('r', radius * 0.5);
+  }
+
+  function selectionnerBiere(nom) {
+    pickCircles(nom, 'Biere', 300);
+    updateInfos(nom, binchesVilleChoisie, biereBar);
+    updateAllSelects(nom, 'binch-list');
+    goToMarker(nom, brassMarkersObj, binchesVilleChoisie);
+    afficherSimilaires(nom);
+  }
+
+  // Détermine quels cercles sont à conserver sur le graphique
+  function pickCircles(selected, champ, t = 400) {
     svgScat.selectAll('circle')
       .transition()
       .duration(t)
       .attr("r", 0)
-      .filter(d => selected == eval(cible))
+      .filter(d => String(d[champ]) === selected)
       .transition()
       .duration(t)
       .attr("r", radius);
   }
-
 
 };
 
