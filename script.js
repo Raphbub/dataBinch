@@ -191,16 +191,16 @@ binchesVilleSelected = function(villechoisie) {
   ////////////////////////////////////////////////////////
 
   // Définition des couches de base de la carte
-  const cartodbLayer = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+  const osmLayer = new L.TileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   }); // Fond simple clair
 
-  const stamenLayer = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.{ext}', {
-    attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    subdomains: 'abcd',
-    minZoom: 0,
-    ext: 'png'
-  }); // Fond terrain
+
+  const topoLayer = new L.TileLayer('https://tile.opentopomap.org/{z}/{x}/{y}.png', {
+    maxZoom: 17,
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+  });  // Fond terrain
 
 
 
@@ -216,66 +216,72 @@ let zoomCarte =   (villechoisie == 'TOUTES') ?  4
                   : (villechoisie == 'Lyon') ? 12
                   : 14;
 
-const carte = L.map('map', {
+const carte = new L.LeafletMap('map', {
     center: centerCarte,
     zoom: zoomCarte
   });
 
   // Ajout des couches à la carte
-  carte.addLayer(cartodbLayer, stamenLayer);
+  carte.addLayer(osmLayer);
 
 
   // Attribution des couches de bases pour le sélecteur
   const baseMaps = {
-    "Simple": cartodbLayer,
-    "Terrain": stamenLayer
+    "Simple": osmLayer,
+    "Terrain": topoLayer
   };
 
   // Ajout des couches au sélecteur et de ce dernier à la carte
-  L.control.layers(baseMaps).addTo(carte);
+  new L.Control.Layers(baseMaps).addTo(carte);
 
   // Ajout de l'échelle graphique, système métrique seulement
-  L.control.scale({
+  new L.Control.Scale({
     imperial: false
   }).addTo(carte);
 
   // Ajout du bouton et fonction de localisation
-  L.control.locate({
-    strings: {
-      title: "Localisation de l'appareil"
+  class ControleLocalisation extends L.Control {
+    onAdd(map) {
+      const conteneur = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+      const bouton = L.DomUtil.create('a', '', conteneur);
+      bouton.href = '#';
+      bouton.title = "Localisation de l'appareil";
+      bouton.setAttribute('role', 'button');
+      bouton.textContent = '◎';
+      L.DomEvent.on(bouton, 'click', function (e) {
+        L.DomEvent.stop(e);
+        map.locate({ setView: true, maxZoom: 15 });
+      });
+      return conteneur;
     }
-  }).addTo(carte);
+  }
+  new ControleLocalisation({ position: 'topleft' }).addTo(carte);
 
-  // Définition du style des marqueurs des brasseries
-  const brassMarker = L.AwesomeMarkers.icon({
-    icon: 'industry',
-    prefix: 'fa',
-    markerColor: 'white',
-    iconColor: 'black'
+  let positionUtilisateur;
+  carte.on('locationfound', function (e) {
+    if (positionUtilisateur) carte.removeLayer(positionUtilisateur);
+    positionUtilisateur = new L.CircleMarker(e.latlng, { radius: 8 }).addTo(carte);
+  });
+  carte.on('locationerror', function () {
+    alert("Localisation impossible : vérifiez l'autorisation du navigateur.");
   });
 
-  // Définition du style des marqueurs des bars
-  const barMarker = L.AwesomeMarkers.icon({
-    icon: 'beer',
-    prefix: 'fa',
-    markerColor: 'blue',
-    iconColor: 'white'
+  const creerIcone = (emoji, classe) => new L.DivIcon({
+    className: `marqueur ${classe}`,
+    html: `<span>${emoji}</span>`,
+    iconSize: [30, 30],
+    iconAnchor: [15, 15],
+    tooltipAnchor: [16, 0]
   });
 
-  // Rassemblement des marqueurs brasseries en clusters,finalement non-utilisé, mais laissé pour exemple
-  let brassMarkers = L.markerClusterGroup({
-    showCoverageOnHover: false, //Ne pas montrer les limites
-    disableClusteringAtZoom: 12,
-    spiderfyOnMaxZoom: false
-  });
+  const brassMarker = creerIcone('🏭', 'marqueur-brasserie');
+  const barMarker = creerIcone('🍺', 'marqueur-bar');
 
-  // Pareil pour les bars
-  // let barMarkers = L.markerClusterGroup({
-  //   showCoverageOnHover: false, //Ne pas montrer les limites
-  // });
+  // Rassemblement des marqueurs brasseries en clusters
+  let brassMarkers = new L.FeatureGroup();
 
   // Assembler les marqueurs en groupe
-  let barMarkers = L.featureGroup();
+  let barMarkers = new L.FeatureGroup();
 
 
   ////////////////////////////////////////////////
@@ -291,7 +297,7 @@ const carte = L.map('map', {
   for (let i = 0; i < binchesVilleChoisieavecCOO.length; i++) {
     let bar = binchesVilleChoisieavecCOO[i];
     // Enregistrement dans un objet pour référencement futur
-    markers[bar.Bar] = L.marker([bar.Lat, bar.Long], {
+    markers[bar.Bar] = new L.Marker([bar.Lat, bar.Long], {
         riseOnHover: true,
         icon: barMarker
       })
@@ -317,12 +323,6 @@ const carte = L.map('map', {
     // Ajout d'un ID
     markers[bar.Bar]._icon.id = bar.Bar;
 
-    // for (let i = 0 ; i < barsLsne.length; i++) {
-    //   let marker = new L.marker([barsLsne[i].Lat, barsLsne[i].Long], {icon: barMarker})
-    //       .bindPopup(barsLsne[i].Bar)
-    //       .addTo(carte); //.addTo(barMarkers); si cluster
-    // }
-    // carte.addLayer(barMarkers); si cluster
   }
 
 
@@ -807,7 +807,7 @@ const carte = L.map('map', {
       for (let i = 0; i < brasserieUnique.length; i++) {
         let brasserie = binchesVilleChoisie.find(d => d.Brasserie === brasserieUnique[i]);
 
-        brassMarkersObj[brasserie.Brasserie] = L.marker([brasserie.Lat, brasserie.Long], {
+        brassMarkersObj[brasserie.Brasserie] = new L.Marker([brasserie.Lat, brasserie.Long], {
             riseOnHover: true,
             icon: brassMarker
           })
@@ -955,7 +955,7 @@ const carte = L.map('map', {
   function goToMarker(selected, couche, listeBiere) {
     // Ferme les tooltips encore ouverts
     carte.eachLayer(function(l) {
-      carte.closeTooltip(l.getTooltip());
+      l.closeTooltip?.();
     });
     // Si tout est sélectionné, alors retour sur l'ensemble des bars
     if (selected == 'TOUS' || selected == 'TOUTES') {
