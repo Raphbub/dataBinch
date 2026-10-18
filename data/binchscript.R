@@ -1,39 +1,73 @@
-library("RJSONIO")
+library("jsonlite")
 library("cluster")
-library("igraph")
 
-setwd("~/dataBinch/data")
-binches <- fromJSON("binches.json")
+K <- 5 # voisins conservés par bière (le site en affiche 5)
+SEUIL <- 0.5 # au-delà, une bière n'est plus jugée similaire
 
-binches <- lapply(binches, function(x) {
-  x[sapply(x, is.null)] <- NA
-  unlist(x)
-})
+# Données
+binches <- fromJSON("data/binches.json")
+bars <- fromJSON("data/bars.json")
 
-binches <- do.call("rbind", binches)
+# Ajout des villes pour faire la correspondance par ville
+binches$Ville <- bars$Ville[match(binches$Bar, bars$Bar)]
 
-binches <- as.data.frame(binches)
+# Combinaisons correspondant aux bières uniques
+uniques <- unique(binches[, c(
+  "Biere",
+  "ABV",
+  "SRM",
+  "STYLE1",
+  "STYLE2",
+  "STYLE3",
+  "STYLE4",
+  "IBU"
+)])
 
-binchUnique <- binches[,4:11]
-binchUnique <- unique(binchUnique, incomparables = FALSE)
+# Factoriser les styles
+cols_styles <- paste0("STYLE", 1:4)
+uniques[cols_styles] <- lapply(uniques[cols_styles], factor)
 
-binchDist <- binchUnique[,-1]
+# Calculer les distances
+D <- as.matrix(daisy(uniques[, -1], metric = "gower"))
+dimnames(D) <- list(uniques$Biere, uniques$Biere)
+# Enlever les 0 pour éviter les auto-correspondances
+diag(D) <- Inf
 
 
-binchDist$ABV <- as.numeric(as.character(sub("," , ".", binchDist$ABV)))
-binchDist$IBU <- as.numeric(as.character(sub("," , ".", binchDist$IBU)))
-binchDist$SRM <- as.numeric(as.character(sub("," , ".", binchDist$SRM)))
+proches_par_ville <- function(noms, ville) {
+  # Trier sur les bières disponibles
+  sub_D <- D[noms, noms, drop = FALSE]
+  # Pour chaque source, prendre les K plus proches voisins (inférieurs au seuil)
+  res <- lapply(noms, function(src) {
+    d <- head(sort(sub_D[src, ]), K + 1)
+    d <- head(d[d < SEUIL], K)
+    if (length(d) == 0) {
+      return(NULL)
+    }
+    data.frame(
+      Ville = ville,
+      Source = src,
+      Target = names(d),
+      Weight = round(unname(d), 3)
+    )
+  })
+  do.call(rbind, res)
+}
 
-dist <- daisy(binchDist, metric = "gower")
-dist <- as.matrix(dist)
-rownames(dist) <- binchUnique[,1] 
-colnames(dist) <- binchUnique[,1] 
-g <- graph.adjacency(dist, mode = "directed", weighted = TRUE)
-e <- cbind( get.edgelist(g) , round( E(g)$weight, 3 ))
-e <- as.data.frame(e)
-colnames(e)[1]<-"Source"
-colnames(e)[2]<-"Target"
-colnames(e)[3]<-"Weight"
- 
-write.csv(e, file="rowdist.csv", row.names = FALSE)
- 
+bieres_villes <- c(
+  list(TOUTES = uniques$Biere),
+  lapply(split(binches$Biere, binches$Ville), unique)
+)
+
+bieres_similaires_villes <- do.call(
+  rbind,
+  lapply(names(bieres_villes), function(v) {
+    proches_par_ville(bieres_villes[[v]], v)
+  })
+)
+
+write.csv(
+  bieres_similaires_villes,
+  file = "data/rowdist.csv",
+  row.names = FALSE
+)

@@ -155,13 +155,10 @@ binchesVilleSelected = function(villechoisie) {
   d3.csv('data/rowdist.csv', function(error, data) {
     if (error) {
       console.log(error);
+      return;
     }
     data.forEach(d => d.weight = +d.Weight);
-    if (villechoisie == 'TOUTES') {
-      rowDistFilter = data;
-    } else {
-      rowDistFilter = data.filter(d => binchesVilleChoisie.map(d=>d.Biere).includes(d.Target));
-    }
+    rowDistFilter = data.filter(d => d.Ville === villechoisie);
   });
 
 
