@@ -152,14 +152,10 @@ binchesVilleSelected = function(villechoisie) {
 
   // Import de la "matrice" des distances
   let rowDist;
-  d3.csv('data/rowdist.csv', function(error, data) {
-    if (error) {
-      console.log(error);
-      return;
-    }
+  d3.csv('data/rowdist.csv').then(function(data) {
     data.forEach(d => d.weight = +d.Weight);
     rowDistFilter = data.filter(d => d.Ville === villechoisie);
-  });
+  }).catch(console.error);
 
 
 
@@ -181,7 +177,7 @@ binchesVilleSelected = function(villechoisie) {
     ]);
 
   // Couleurs selon le bar (evtl)
-  let barColorScale = d3.scaleOrdinal(d3.schemeCategory20);
+  // let barColorScale = d3.scaleOrdinal(d3.schemeCategory20);
 
   /////////////////////////////////////////////////////////
   // PARTIES RELATIVES A LA CARTE
@@ -634,7 +630,7 @@ const carte = new L.LeafletMap('map', {
       // Définition du domain des échelles selon les données
       xScale.domain(d3.extent(binchesVilleChoisie, d => d.ABV));
       yScale.domain([0, d3.max(binchesVilleChoisie, d => d.IBU)]); // si on veut que IBU commence à 0, sinon utiliser extent
-      barColorScale.domain(bars);
+      // barColorScale.domain(bars);
 
       // Ajout des axes du graphique
       let xAxis = svgScat.append("g")
@@ -675,14 +671,14 @@ const carte = new L.LeafletMap('map', {
       // Définition des interactions sur les cercles
       svgScat.selectAll(".dot")
         .data(binchesVilleChoisie)
-        .on("mouseover", function(d) {
+        .on("mouseover", function(event, d) {
 
           // Remplissage du tooltip
           toolTip.html(`<b>${d.Biere}</b><br><i>Style : ${d.STYLE4}\
                         <br>Amertume : ${d.IBU} IBU<br>Alcool : ${d.ABV} %\
                         <br>Brasserie : ${d.Brasserie} <br> Bar : ${d.Bar}</i>`)
-            .style("left", `${d3.event.pageX+20}px`)
-            .style("top", `${d3.event.pageY+20}px`);
+            .style("left", `${event.pageX+20}px`)
+            .style("top", `${event.pageY+20}px`);
 
           // Affichage du tooltip, disparaît pour éviter un tooltip "coincé" sur les mobiles
           toolTip.transition()
@@ -710,7 +706,7 @@ const carte = new L.LeafletMap('map', {
             .attr("r", radius)
             .style("opacity", 0.5);
         })
-        .on("click", function(d) {
+        .on("click", function(event, d) {
           let clickedBeer = this.id;
 
           // Faire "disparaître" les bières non correspondantes
