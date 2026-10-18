@@ -1,75 +1,82 @@
 //////////////////////
-// VISUS CARTES : BARS
+// DÉMARRAGE : CHARGEMENT DES DONNÉES ET CHOIX DE LA VILLE
 
+// fetch ne signale pas les erreurs HTTP (404...) : on le fait ici
+function chargerJSON(url) {
+  return fetch(url).then(function(reponse) {
+    if (!reponse.ok) throw new Error(`${url} : erreur ${reponse.status}`);
+    return reponse.json();
+  });
+}
 
-window.dropDownCity = d3.select("#filtercity")
-  .append("select")
-  .attr("id", "city-list")
-  .attr("class", "selecteur")
-  .attr("class", "selectpicker")
-  .attr("title", "Une ville précise?");
+// Ligne du CSV de distances, conversion du poids en nombre
+function ligneDistance(d) {
+  return { Ville: d.Ville, Source: d.Source, Target: d.Target, weight: +d.Weight };
+}
 
-$.ajax({
-   url: "data/bars.json",
-   async: false,
-   dataType: "json"
-   })
- .done(function(data) {
-   window.bars = data;
- });
-
-  //// TEST ajout message accueil
-  arrayVilles = [...new Set(bars.map(item => item.Ville).sort())];
-  console.log(arrayVilles);
-
-
-  // Assignement des bars au sélecteur
-  let optDropCity = dropDownCity.selectAll("option")
-    .data(["TOUTES"].concat(arrayVilles))
-    .enter()
-    .append("option");
-
-  // Ajout du texte
-  optDropCity.text(d => d)
-    .attr("value", d => d);
-
-  // Actualisation pour affichage
-  $("#city-list")
-    .selectpicker('refresh');
-
+function afficherErreur(e) {
+  console.error(e);
+  const bandeau = document.createElement('div');
+  bandeau.className = 'alert alert-danger';
+  bandeau.setAttribute('role', 'alert');
+  bandeau.textContent = `Impossible de charger les données (${e.message}). Rechargez la page.`;
+  document.body.prepend(bandeau);
+}
 
 let modal_content,
   modal_screen;
 
+async function demarrer() {
+  // Les trois téléchargements démarrent tout de suite, en parallèle
+  const pBars = chargerJSON("data/bars.json");
+  const pBinches = chargerJSON("data/binches.json");
+  const pDistances = d3.csv("data/rowdist.csv", ligneDistance);
 
-// Start Working ASAP.
-$(document).ready(function() {
+  // Attendre les bars (petit json) pour définir les villes
+  const bars = await pBars;
+
+  window.dropDownCity = d3.select("#filtercity")
+    .append("select")
+    .attr("id", "city-list")
+    .attr("class", "selecteur")
+    .attr("class", "selectpicker")
+    .attr("title", "Une ville précise?");
+
+  // Message accueil
+  arrayVilles = [...new Set(bars.map(item => item.Ville).sort())];
+
+  // Assignement des villes au sélecteur
+  dropDownCity.selectAll("option")
+    .data(["TOUTES"].concat(arrayVilles))
+    .enter()
+    .append("option")
+    .text(d => d)
+    .attr("value", d => d);
+
+  // Actualisation pour affichage
+  $("#city-list").selectpicker('refresh');
+
   av_showmodal();
 
-  $('#valider').click(function() {
-    let selectedVille = $('#city-list').val();
-    console.log(selectedVille);
-    // Si l'user valide sans choisir
-    if(!selectedVille) {
-      selectedVille = "TOUTES"
-    }
-
+  $('#valider').one('click', async function() {
+    const selectedVille = $('#city-list').val() || "TOUTES";
+    
     av_closeModal();
-    binchesVilleSelected(selectedVille);
+    try {
+      // Récupérer les contenus
+      const [binches, distances] = await Promise.all([pBinches, pDistances]);
+      binchesVilleSelected(selectedVille, bars, binches, distances);
+    } catch (e) {
+      afficherErreur(e);
+    }
   });
+}
 
+$(document).ready(function() {
+  demarrer().catch(afficherErreur);
 });
 
-binchesVilleSelected = function(villechoisie) {
-
-  $.ajax({
-     url: "data/binches.json",
-     async: false,
-     dataType: "json"
-     })
-   .done(function(data) {
-     window.binches = data;
-   });
+binchesVilleSelected = function(villechoisie, bars, binches, distances) {
 
   if (villechoisie == 'TOUTES') {
     window.barsVilleChoisie = bars;
@@ -151,15 +158,7 @@ binchesVilleSelected = function(villechoisie) {
   const limiteSimi = 5;
 
   // Import de la "matrice" des distances
-  let rowDist;
-  d3.csv('data/rowdist.csv').then(function(data) {
-    data.forEach(d => d.weight = +d.Weight);
-    rowDistFilter = data.filter(d => d.Ville === villechoisie);
-  }).catch(console.error);
-
-
-
-
+  const rowDistFilter = distances.filter(d => d.Ville === villechoisie);
 
   // Place où sauver les marqueurs
   let markers = {};
@@ -776,7 +775,7 @@ const carte = new L.LeafletMap('map', {
     if (nom === 'TOUTES') return;
     
     // Récupérer les bières proches
-    const proches = (rowDistFilter || [])
+    const proches = (rowDistFilter)
       .filter(r => r.Source === nom && r.weight < 0.5)
       .sort((a, b) => a.weight - b.weight)
       .slice(0, limiteSimi);
