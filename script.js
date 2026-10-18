@@ -23,8 +23,14 @@ function afficherErreur(e) {
   document.body.prepend(bandeau);
 }
 
-let modal_content,
-  modal_screen;
+function creerTomSelect(select, placeholder, options = {}) {
+  return new TomSelect(select, {
+    placeholder,
+    maxOptions: null,   // 50 par défaut : on veut toute la liste
+    render: { no_results: () => '<div class="no-results">Aucun résultat</div>' },
+    ...options
+  });
+}
 
 async function demarrer() {
   // Les trois téléchargements démarrent tout de suite, en parallèle
@@ -34,47 +40,37 @@ async function demarrer() {
 
   // Attendre les bars (petit json) pour définir les villes
   const bars = await pBars;
+  const villes = [...new Set(bars.map(item => item.Ville).sort())];
 
-  window.dropDownCity = d3.select("#filtercity")
-    .append("select")
-    .attr("id", "city-list")
-    .attr("class", "selecteur")
-    .attr("class", "selectpicker")
-    .attr("title", "Une ville précise?");
-
-  // Message accueil
-  arrayVilles = [...new Set(bars.map(item => item.Ville).sort())];
-
+  // Sélecteur de villes (accueil)
+  const selectVille = document.createElement('select');
+  selectVille.id = 'city-list';
+  selectVille.add(new Option('', ''));   // option vide placeholder
   // Assignement des villes au sélecteur
-  dropDownCity.selectAll("option")
-    .data(["TOUTES"].concat(arrayVilles))
-    .enter()
-    .append("option")
-    .text(d => d)
-    .attr("value", d => d);
+  for (const v of ["TOUTES", ...villes]) selectVille.add(new Option(v, v));
+  document.getElementById('filtercity').append(selectVille);
+  const tomVille = creerTomSelect(selectVille, 'Une ville précise?');
 
-  // Actualisation pour affichage
-  $("#city-list").selectpicker('refresh');
-
-  av_showmodal();
-
-  $('#valider').one('click', async function() {
-    const selectedVille = $('#city-list').val() || "TOUTES";
-    
-    av_closeModal();
+  const dialogue = document.getElementById('choix-ville');
+  let lance = false;
+  async function lancer() {
+    if (lance) return; // Valider et fermeture passent ici
+    lance = true;
+    const ville = tomVille.getValue() || 'TOUTES';
+    if (dialogue.open) dialogue.close();
     try {
-      // Récupérer les contenus
       const [binches, distances] = await Promise.all([pBinches, pDistances]);
-      binchesVilleSelected(selectedVille, bars, binches, distances);
+      binchesVilleSelected(ville, bars, binches, distances);
     } catch (e) {
       afficherErreur(e);
     }
-  });
+  }
+  document.getElementById('valider').addEventListener('click', lancer);
+  dialogue.addEventListener('close', lancer);   // Échap = « TOUTES »
+  dialogue.showModal();
 }
 
-$(document).ready(function() {
-  demarrer().catch(afficherErreur);
-});
+demarrer().catch(afficherErreur);
 
 binchesVilleSelected = function(villechoisie, bars, binches, distances) {
 
@@ -97,6 +93,7 @@ binchesVilleSelected = function(villechoisie, bars, binches, distances) {
   ////////////////////////////////
   // DEFINITION VARIABLES GLOBALES ET CONSTANTES
   ////////////////////////////////
+
   let dropDownBar = d3.select("#filterbar")
     .append("select")
     .attr("id", "bar-list")
@@ -830,43 +827,6 @@ const carte = new L.LeafletMap('map', {
       .attr("r", radius);
   }
 
-};
-
-
-av_showmodal = function() {
-  modal_screen = $('<div id="modal_screen"></div>');
-  modal_content = $('<div id="modal_content" style="display:none"><h2>Quelle ville ?</h2>');
-  var modal_content_wrapper = $('<div id="modal_content_wrapper" class="content_wrapper"></div>');
-
-  // Question Content
-  var content_heading = $('modal_content.h2');
-  var content_text = $('#filtercity');
-  var content_button = $('#validerbutton');
-  modal_content_wrapper.append(content_heading, content_text, content_button);
-  modal_content.append(modal_content_wrapper);
-  // Append the prompt to the end of the document
-  $('body').append(modal_screen, modal_content);
-  // Center the box
-  av_positionPrompt();
-};
-
-
-av_closeModal = function() {
-  modal_content.fadeOut();
-  modal_screen.fadeOut();
-
-};
-
-av_positionPrompt = function() {
-  var top = ($(window).outerHeight() - $('#modal_content').outerHeight()) / 2;
-  var left = ($(window).outerWidth() - $('#modal_content').outerWidth()) / 2;
-  modal_content.css({
-    'top': top,
-    'left': left
-  });
-  if (modal_content.is(':hidden')) {
-    modal_content.fadeIn('slow');
-  }
 };
 
 // Permet d'ajuster le logo en fonction du SRM

@@ -17,8 +17,10 @@
   <script src="lib/d3.min.js"></script>
   <script src="lib/bootstrap.min.js"></script>
   <script src="lib/leaflet-global.js"></script>
+  <script src="lib/tom-select/tom-select.complete.min.js"></script>
   
   <link rel="stylesheet" href="lib/bootstrap.min.css">
+  <link rel="stylesheet" href="lib/tom-select/tom-select.default.min.css">
   <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
   <link rel="shortcut icon" href="data/favicon.ico">
@@ -32,10 +34,11 @@
 
 <body id="bootstrap-overrides">
 
-  <div id="filtercity"></div>
-  <div id="validerbutton">
-    <button id="valider">Valider</button>
-  </div>
+  <dialog id="choix-ville">
+    <h2>Quelle ville ?</h2>
+    <div id="filtercity"></div>
+    <button id="valider" type="button" class="btn btn-success">Valider</button>
+  </dialog>
 
   <div class="row enTete 1ereColonne">
     <div class="colonneAvecSelect col-sm-12 col-md-9 col-lg-7">
