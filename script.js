@@ -32,6 +32,16 @@ function creerTomSelect(select, placeholder, options = {}) {
   });
 }
 
+function creerSelecteur(conteneurId, id, placeholder, toutes, valeurs, onChange) {
+  const select = document.createElement('select');
+  select.id = id;
+  select.add(new Option('', '')); // option vide placeholder
+  for (const v of [toutes, ...valeurs]) select.add(new Option(String(v), String(v)));
+  select.addEventListener('change', onChange);
+  document.getElementById(conteneurId).append(select);
+  return creerTomSelect(select, placeholder);
+}
+
 async function demarrer() {
   // Les trois téléchargements démarrent tout de suite, en parallèle
   const pBars = chargerJSON("data/bars.json");
@@ -93,39 +103,6 @@ binchesVilleSelected = function(villechoisie, bars, binches, distances) {
   ////////////////////////////////
   // DEFINITION VARIABLES GLOBALES ET CONSTANTES
   ////////////////////////////////
-
-  let dropDownBar = d3.select("#filterbar")
-    .append("select")
-    .attr("id", "bar-list")
-    .attr("class", "selecteur")
-    .attr("class", "selectpicker")
-    .attr("data-live-search", "true")
-    .attr("title", "Un bar en particulier ?");
-
-  let dropDownBrass = d3.select("#filterbrass")
-    .append("select")
-    .attr("id", "brass-list")
-    .attr("class", "selecteur")
-    .attr("class", "selectpicker")
-    .attr("data-live-search", "true")
-    .attr("title", "Une brasserie à découvrir ?");
-
-  let dropDownBinch = d3.select("#filterbinch")
-    .append("select")
-    .attr("id", "binch-list")
-    .attr("class", "selecteur")
-    .attr("class", "selectpicker")
-    .attr("data-live-search", "true")
-    .attr("title", "Une bière intéressante ?");
-
-
-  let dropDownStyle = d3.select("#filterstyle")
-    .append("select")
-    .attr("id", "style-list")
-    .attr("class", "selecteur")
-    .attr("class", "selectpicker")
-    .attr("data-live-search", "true")
-    .attr("title", "Un style de bière favori ?");
 
   // Définitions des éléments relatifs au scatteplot
   window.margins = {
@@ -305,7 +282,7 @@ const carte = new L.LeafletMap('map', {
 
         goToMarker(selectedBar, markers);
 
-        pickCircles(selectedBar, "d.Bar");
+        pickCircles(selectedBar, "Bar");
       })
       .addTo(barMarkers)
       .addTo(carte);
@@ -318,6 +295,42 @@ const carte = new L.LeafletMap('map', {
   const biereParNom = new Map(binches.map(b => [String(b.Biere), b]));
   const biereBar = binchesVilleChoisie.map(n => ({ biere: n.Biere, bar: n.Bar }));
 
+  // Listes de valeurs
+  const barsUniques = [...new Set(binchesVilleChoisie.map(d => d.Bar))].sort();
+  const brasseriesUniques = [...new Set(binchesVilleChoisie.map(d => d.Brasserie))].sort();
+  const bieresUniques = [...new Set(binchesVilleChoisie.map(d => d.Biere))].sort();
+  const stylesUniques = [...new Set(binchesVilleChoisie.map(d => d.STYLE4))].sort();
+
+  // Création des sélecteurs
+  const tomBar = creerSelecteur('filterbar', 'bar-list', 'Un bar en particulier ?', 'TOUS', barsUniques, function() {
+    const selectedBar = this.value;
+    pickCircles(selectedBar, "Bar");
+    updateInfos(selectedBar);
+    updateAllSelects(selectedBar, "bar-list");
+    goToMarker(selectedBar, markers);
+  });
+
+  const tomBrass = creerSelecteur('filterbrass', 'brass-list', 'Une brasserie à découvrir ?', 'TOUTES', brasseriesUniques, function() {
+    const selectedBrasserie = this.value;
+    pickCircles(selectedBrasserie, "Brasserie");
+    updateInfos(selectedBrasserie);
+    updateAllSelects(selectedBrasserie, "brass-list");
+    goToMarker(selectedBrasserie, brassMarkersObj);
+  });
+
+  const tomBinch = creerSelecteur('filterbinch', 'binch-list', 'Une bière intéressante ?', 'TOUTES', bieresUniques, function() {
+    selectionnerBiere(this.value);
+  });
+
+  const tomStyle = creerSelecteur('filterstyle', 'style-list', 'Un style de bière favori ?', 'TOUS', stylesUniques, function() {
+    const selectedStyle = this.value;
+    pickCircles(selectedStyle, "STYLE4");
+    updateInfos(selectedStyle);
+    updateAllSelects(selectedStyle, "style-list");
+  });
+
+  const selecteurs = { 'bar-list': tomBar, 'brass-list': tomBrass, 'binch-list': tomBinch, 'style-list': tomStyle };
+
   // Fonction qui dessine le svg et fait l'interaction avec la carte
   // prend un booleen indiquant si c'est redessiné (par ex. ajustement de la taille)
 
@@ -326,9 +339,9 @@ const carte = new L.LeafletMap('map', {
     $("#scatterplot").remove();
 
     // Récupère les valeurs des sélecteurs
-    let valBar = $('#bar-list').val();
-    let valBrass = $('#brass-list').val();
-    let valBinch = $('#binch-list').val();
+    let valBar = tomBar.getValue();
+    let valBrass = tomBrass.getValue();
+    let valBinch = tomBinch.getValue();
 
     // Ajuste de façon standard la taille
     graphWidth = $('.2r2c').width() - margins.left - margins.right;
@@ -367,13 +380,6 @@ const carte = new L.LeafletMap('map', {
       .range([graphHeight, 0])
       .nice();
 
-
-      // Récupération des différents bars, bières et brasseries
-      const bars = [...new Set(binchesVilleChoisie.map(item => item.Bar).sort())];
-      const biereUnique = [...new Set(binchesVilleChoisie.map(item => item.Biere).sort())];
-      const brasserieUnique = [...new Set(binchesVilleChoisie.map(item => item.Brasserie).sort())];
-      const styleUnique = [...new Set(binchesVilleChoisie.map(item => item.STYLE4).sort())];
-
       // Récupération des coordonnées des brasseries
       const brasseriesLatLon = $.map(binchesVilleChoisie, function(n, i) {
         return {
@@ -383,136 +389,13 @@ const carte = new L.LeafletMap('map', {
         };
       });
 
-      //////////////
-      // SELECTEURS
-      // Ajout des options et interactions aux sélecteurs de bars, brasseries et bières
-
-      // BARS select
-
-      // Assignement des bars au sélecteur
-      let optDropBar = dropDownBar.selectAll("option")
-        .data(["TOUS"].concat(bars))
-        .enter()
-        .append("option");
-
-      // Ajout du texte
-      optDropBar.text(d => d)
-        .attr("value", d => d);
-
-        $("#bar-list")
-          .selectpicker('refresh');
-
-
-      // Fonction à la sélection d'un bar
-      dropDownBar.on("change", function() {
-
-        let selectedBar = this.value;
-
-        // Faire "disparaître" les bières des bars non correspondants
-        pickCircles(selectedBar, "d.Bar");
-
-        // Màj des informations et sélecteurs
-        updateInfos(selectedBar);
-        updateAllSelects(selectedBar, "bar-list");
-
-        // Déplace la carte pour centrer sur le bar sélectionné, ouvre le tooltip et le met au premier plan
-        goToMarker(selectedBar, markers);
-
-        console.log("Bar choisi :" + $('select#bar-list.selecteur').val() + ", un bar magnifique");
-      });
-
-      // BINCHES select
-      // Assignement des bières au sélecteur
-
-      let optDropBinch = dropDownBinch.selectAll("option")
-        .data(["TOUTES"].concat(biereUnique))
-        .enter()
-        .append("option")
-        .attr("class", "optionsBiere");
-
-      // Ajout du texte
-      optDropBinch.text(d => d)
-        .attr("value", d => d);
-
-      // Actualisation pour affichage
-      $("#binch-list")
-        .selectpicker('refresh');
-
-      // Fonction à la sélection d'une bière
-      dropDownBinch.on("change", function() { selectionnerBiere(this.value); });
-
-      // BRASSERIES select
-
-
-      // Assignement des brasseries au sélecteur
-      let optDropBrass = dropDownBrass.selectAll("option")
-        .data(["TOUTES"].concat(brasserieUnique))
-        .enter()
-        .append("option")
-        .attr("class", "optionsBrass");
-
-      // Ajout du texte
-      optDropBrass.text(d => d)
-        .attr("value", d => d);
-
-      // Actualisation pour affichage
-      $("#brass-list")
-        .selectpicker('refresh');
-
-      // Fonction à la sélection d'une brasserie
-      dropDownBrass.on("change", function() {
-
-        let selectedBrasserie = this.value;
-
-        // Faire "disparaître" les bières non correspondantes
-        pickCircles(selectedBrasserie, "d.Brasserie");
-
-        // Màj des informations et sélecteurs
-        updateInfos(selectedBrasserie);
-        updateAllSelects(selectedBrasserie, "brass-list");
-
-        // Déplace la carte pour centrer sur le bar sélectionné, ouvre le tooltip et le met au premier plan
-        goToMarker(selectedBrasserie, brassMarkersObj);
-      });
-
-
-
-      // Assignement des brasseries au sélecteur
-      let optDropStyle = dropDownStyle.selectAll("option")
-        .data(["TOUS"].concat(styleUnique))
-        .enter()
-        .append("option")
-        .attr("class", "optionsStyle");
-
-      // Ajout du texte
-      optDropStyle.text(d => d)
-        .attr("value", d => d);
-
-        $("#style-list")
-          .selectpicker('refresh');
-
-      // Fonction à la sélection d'une brasserie
-      dropDownStyle.on("change", function() {
-
-        let selectedStyle = this.value;
-
-        // Faire "disparaître" les bières non correspondantes
-        pickCircles(selectedStyle, "d.STYLE4");
-
-        // Màj des informations et sélecteurs
-        updateInfos(selectedStyle);
-        updateAllSelects(selectedStyle, "style-list");
-
-      });
-
-
       ////////////////////
       // ECHELLES ET AXES
 
       // Définition du domain des échelles selon les données
       xScale.domain(d3.extent(binchesVilleChoisie, d => d.ABV));
       yScale.domain([0, d3.max(binchesVilleChoisie, d => d.IBU)]); // si on veut que IBU commence à 0, sinon utiliser extent
-      // barColorScale.domain(bars);
+      // barColorScale.domain(barsUniques);
 
       // Ajout des axes du graphique
       let xAxis = svgScat.append("g")
@@ -594,8 +477,8 @@ const carte = new L.LeafletMap('map', {
       //////////////
       // AJOUTS VISUS CARTES
       // Pour chaque brasserie, récupèrer les coordonnées et les assigner à un marqueur
-      for (let i = 0; i < brasserieUnique.length; i++) {
-        let brasserie = binchesVilleChoisie.find(d => d.Brasserie === brasserieUnique[i]);
+      for (let i = 0; i < brasseriesUniques.length; i++) {
+        let brasserie = binchesVilleChoisie.find(d => d.Brasserie === brasseriesUniques[i]);
 
         brassMarkersObj[brasserie.Brasserie] = new L.Marker([brasserie.Lat, brasserie.Long], {
             riseOnHover: true,
@@ -613,7 +496,7 @@ const carte = new L.LeafletMap('map', {
 
             goToMarker(selectedBrass, brassMarkersObj);
 
-            pickCircles(selectedBrass, "d.Brasserie");
+            pickCircles(selectedBrass, "Brasserie");
           })
           .addTo(brassMarkers)
           .addTo(carte);
@@ -669,9 +552,9 @@ const carte = new L.LeafletMap('map', {
 
   // Rend les brasseries dans la description interactives
   document.getElementById('BrassSelectedBeer').addEventListener("click", function() {
-    let selectedBrass = $('#BrassSelectedBeer').html().slice(0, -5);
+    const selectedBrass = this.textContent.trim();
     // Faire "disparaître" les bières non correspondantes
-    pickCircles(selectedBrass, "d.Brasserie");
+    pickCircles(selectedBrass, "Brasserie");
 
     goToMarker(selectedBrass, brassMarkersObj);
 
@@ -684,9 +567,9 @@ const carte = new L.LeafletMap('map', {
   // Rend les bars où la bière est disponible interactifs
   document.getElementById('BarSelectedBeer').addEventListener("click", function(e) {
     if (e.target !== e.currentTarget) {
-      let selectedBar = e.target.innerHTML.slice(0, -3);
+      const selectedBar = e.target.textContent.replace(/ \| $/, '');
 
-      pickCircles(selectedBar, "d.Bar");
+      pickCircles(selectedBar, "Bar");
 
       goToMarker(selectedBar, markers);
 
@@ -701,25 +584,16 @@ const carte = new L.LeafletMap('map', {
   // MàJ des sélecteurs et "réinitialisation" si tout est sélectionné
   function updateAllSelects(selected, selectId) {
     if (selected == 'TOUTES' || selected == 'TOUS') {
-      $('.selectpicker').selectpicker('val', 'default');
-
+      for (const ts of Object.values(selecteurs)) ts.clear(true); // true = sans déclencher d'événement
       svgScat.selectAll("circle")
         .transition()
         .duration(500)
         .attr("r", radius);
-
     } else {
-      $('.selectpicker').each(function() {
-        // Vérifie si le sélecteur n'est pas déjà à jour
-        if ($(this).val() != selected) {
-          // Sinon attribue au bon sélecteur la valeur en cours
-          if (this.id == selectId) {
-            $(`#${selectId}.selectpicker`).selectpicker('val', selected);
-          } else {
-            $(this).selectpicker('val', 'default');
-          }
-        }
-      });
+      for (const [id, ts] of Object.entries(selecteurs)) {
+        if (id === selectId) ts.setValue(selected, true);
+        else ts.clear(true);
+      }
     }
   }
 
