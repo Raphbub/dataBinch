@@ -84,6 +84,24 @@ async function demarrer() {
 
 demarrer().catch(afficherErreur);
 
+// Petit texte gris « brassée par » / « disponible chez »
+function legende(texte) {
+  const i = document.createElement('i');
+  i.className = 'legende-info';
+  i.textContent = texte;
+  return i;
+}
+
+// Dimensions de l'espace utile d'un élément (sans ses marges intérieures)
+function largeurUtile(el) {
+  const s = getComputedStyle(el);
+  return el.clientWidth - parseFloat(s.paddingLeft) - parseFloat(s.paddingRight);
+}
+function hauteurUtile(el) {
+  const s = getComputedStyle(el);
+  return el.clientHeight - parseFloat(s.paddingTop) - parseFloat(s.paddingBottom);
+}
+
 function binchesVilleSelected(villechoisie, bars, binches, distances) {
 
   const toutes = villechoisie === 'TOUTES';
@@ -112,15 +130,11 @@ function binchesVilleSelected(villechoisie, bars, binches, distances) {
 
   let svgScat = d3.select("#scatter-load").append("svg").attr("id", "scatterplot");
 
-  // Ajuste la taille de la carte à la page (seulement initiale)
-  document.getElementById('map').style.width = `${$('#conteneurCarte').width()}px`;
-
-  let graphWidth = $('.2r2c').width() - margins.left - margins.right;
-  let graphHeight = ($('.2emeRang').height() - margins.top - margins.bottom) * 2;
+  let graphWidth, graphHeight;
 
   const toolTip = d3.select("body")
     .append("div")
-    .attr("class", "tooltip")
+    .attr("class", "infobulle")
     .style("opacity", 0);
 
   // Icône accompagnant les bières
@@ -219,8 +233,8 @@ function binchesVilleSelected(villechoisie, bars, binches, distances) {
   // prend un booleen indiquant si c'est redessiné (par ex. ajustement de la taille)
 
   function drawSvg(redraw) {
-    //Enlever le scatterplot précédent
-    $("#scatterplot").remove();
+    // Enlever le scatterplot précédent
+    document.getElementById('scatterplot')?.remove();
 
     // Récupère les valeurs des sélecteurs
     let valBar = tomBar.getValue();
@@ -228,8 +242,8 @@ function binchesVilleSelected(villechoisie, bars, binches, distances) {
     let valBinch = tomBinch.getValue();
 
     // Ajuste de façon standard la taille
-    graphWidth = $('.2r2c').width() - margins.left - margins.right;
-    graphHeight = ($('.2emeRang').height() - margins.top - margins.bottom) * 2.1;
+    graphWidth = largeurUtile(document.getElementById('colonne-graphique')) - margins.left - margins.right;
+    graphHeight = (hauteurUtile(document.getElementById('rang-principal')) - margins.top - margins.bottom) * 2.1;
 
     // Ajuster la taille du graphique à la fenêtre
     if (window.innerHeight < window.innerWidth && window.innerWidth < 810) {
@@ -443,24 +457,29 @@ function binchesVilleSelected(villechoisie, bars, binches, distances) {
 
   // Actualisation des informations relatives à la brasserie, au bar et/ou aux bières
   function updateInfos(selected, listeBiere, listeBar) {
-    $('.infoSelected').html("");
-    $('#Biereproches').html("");
+    for (const e of document.querySelectorAll('.infoSelected')) e.replaceChildren();
+    document.getElementById('Biereproches').replaceChildren();
+    const ecrire = (id, ...contenu) => document.getElementById(id).replaceChildren(...contenu);
+
     if (selected == 'TOUTES' || selected == 'TOUS') {
-      $('#selectedBeer').html("");
+      ecrire('selectedBeer');
     } else if (listeBiere) {
-      let binch = listeBiere.find(d => String(d.Biere) === selected);
-      $('#BrassSelectedBeer').html(`${binch.Brasserie} <br>`);
-      $('#selectedBeer').html(`${binch.Biere} &ensp; <i id ='brasspar'> brassée par  </i> &ensp;`);
-      $('#ABVselectedBeer').html(`Alcool : ${binch.ABV} % | `);
-      $('#IBUselectedBeer').html(`${binch.IBU} IBU  &ensp; <i id ='brasspar'> disponible chez  </i> &ensp;`);
-      $('#StyleSelectedBeer').html(`${binch.STYLE4} | `);
-      for (let i = 0; i < listeBar.length; i++) {
-        if (listeBar[i].biere == selected) {
-          document.getElementById('BarSelectedBeer').innerHTML += `<span class="barDispo">${listeBar[i].bar} | </span>`;
+      const binch = listeBiere.find(d => String(d.Biere) === selected);
+      ecrire('BrassSelectedBeer', `${binch.Brasserie} `, document.createElement('br'));
+      ecrire('selectedBeer', `${binch.Biere} \u2002 `, legende(' brassée par '), ' \u2002');
+      ecrire('ABVselectedBeer', `Alcool : ${binch.ABV} % | `);
+      ecrire('IBUselectedBeer', `${binch.IBU} IBU \u2002 `, legende(' disponible chez '), ' \u2002');
+      ecrire('StyleSelectedBeer', `${binch.STYLE4} | `);
+      for (const ligne of listeBar) {
+        if (ligne.biere == selected) {
+          const span = document.createElement('span');
+          span.className = 'barDispo';
+          span.textContent = `${ligne.bar} | `;
+          document.getElementById('BarSelectedBeer').append(span);
         }
       }
     } else {
-      $('#selectedBeer').html(selected);
+      ecrire('selectedBeer', selected);   // texte brut : « & » reste « & »
     }
   }
 
