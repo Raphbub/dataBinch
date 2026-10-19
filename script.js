@@ -137,9 +137,6 @@ function binchesVilleSelected(villechoisie, bars, binches, distances) {
     .attr("class", "infobulle")
     .style("opacity", 0);
 
-  // Icône accompagnant les bières
-  let beericon = "data/srm1.png";
-
   // Nombre de bières similaires à retourner
   const limiteSimi = 5;
 
@@ -287,12 +284,12 @@ function binchesVilleSelected(villechoisie, bars, binches, distances) {
       // barColorScale.domain(barsUniques);
 
       // Ajout des axes du graphique
-      let xAxis = svgScat.append("g")
+      svgScat.append("g")
         .attr("class", "x axis")
         .attr("transform", `translate(0, ${graphHeight})`)
         .call(d3.axisBottom(xScale).tickPadding(5));
 
-      let yAxis = svgScat.append("g")
+      svgScat.append("g")
         .attr("class", "y axis")
         .call(d3.axisLeft(yScale).tickPadding(5));
 
@@ -348,7 +345,7 @@ function binchesVilleSelected(villechoisie, bars, binches, distances) {
             .attr("r", radius * 1.5)
             .style("opacity", 1);
         })
-        .on("mouseout", function(d) {
+        .on("mouseout", function() {
           // Disparition du toolTtp
           toolTip.transition()
             .duration(200)

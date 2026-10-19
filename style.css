@@ -17,13 +17,6 @@ body {
   color: #D77200;
 }
 
-.distances {
-  margin: 0;
-  background-color: rgb(0, 0, 0);
-  border-bottom-color: rgb(229, 229, 229);
-  border-bottom-width: 1px;
-}
-
 #selectedBeer {
   font-family: Lato;
   font-size: 22pt;
@@ -81,33 +74,6 @@ text {
   background: #37a9dd;
   color: white;
   font-weight: bold;
-}
-
-.box {
-  border: 1px solid #EEE;
-  margin: 3px;
-  padding: 5px;
-  background-color: white;
-  font-family: sans-serif;
-  font-size: 12px;
-}
-
-#infos-bieres {
-  position: absolute;
-  background-color: #424242;
-  color: white;
-  text-align: center;
-  pointer-events: none;
-  font-family: Lato;
-}
-
-.Biereproches {
-  border-bottom-color: rgb(229, 229, 229);
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
-  font-size: 19.2px;
-  font-weight: 600;
-  font-family: Lato;
 }
 
 h3 {
