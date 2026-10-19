@@ -50,6 +50,7 @@ text {
   text-align: center;
   padding: 8px;
   margin-top: -20px;
+  z-index: 1070;
   pointer-events: none;
 }
 

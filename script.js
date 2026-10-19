@@ -84,6 +84,14 @@ async function demarrer() {
 
 demarrer().catch(afficherErreur);
 
+// Liste des bars dans l'infobulle
+function libelleBars(bars) {
+  const libelle = bars.length > 3
+    ? `${bars.slice(0, 3).join(', ')} et ${bars.length - 3} autres`
+    : bars.join(', ');
+  return `${bars.length > 1 ? 'Bars' : 'Bar'} : ${libelle}`;
+}
+
 // Petit texte gris « brassée par » / « disponible chez »
 function legende(texte) {
   const i = document.createElement('i');
@@ -92,14 +100,11 @@ function legende(texte) {
   return i;
 }
 
+
 // Dimensions de l'espace utile d'un élément (sans ses marges intérieures)
 function largeurUtile(el) {
   const s = getComputedStyle(el);
   return el.clientWidth - parseFloat(s.paddingLeft) - parseFloat(s.paddingRight);
-}
-function hauteurUtile(el) {
-  const s = getComputedStyle(el);
-  return el.clientHeight - parseFloat(s.paddingTop) - parseFloat(s.paddingBottom);
 }
 
 function binchesVilleSelected(villechoisie, bars, binches, distances) {
@@ -166,14 +171,26 @@ function binchesVilleSelected(villechoisie, bars, binches, distances) {
   // AFFICHAGE VISUALISATION ET IMPORT DONNEES
   ////////////////////////////////////////////////
 
-  // Si la fenêtre est changée de taille alors le graphique est ajusté
+  // Si la largeur de la fenêtre change, le graphique est redessiné, une seule fois quand le
+  // redimensionnement s'arrête. Quand la barre d'adresse d'un mobile se masque, seule la
+  // hauteur change : on ne redessine pas dans ce cas.
+  let largeurPrecedente = window.innerWidth;
+  let minuteur;
   window.addEventListener("resize", function() {
-    drawSvg(true);
+    clearTimeout(minuteur);
+    minuteur = setTimeout(function() {
+      if (window.innerWidth === largeurPrecedente) return;
+      largeurPrecedente = window.innerWidth;
+      drawSvg(true);
+    }, 150);
   });
 
   // Dict par nom et array des bières par bar
   const biereParNom = new Map(binches.map(b => [String(b.Biere), b]));
   const biereBar = binchesVilleChoisie.map(n => ({ biere: n.Biere, bar: n.Bar }));
+  // Garder un point par bière avec la liste des bars
+  const pointsBieres = [...d3.group(binchesVilleChoisie, d => String(d.Biere))]
+    .map(([nom, lignes]) => ({ ...lignes[0], Biere: nom, bars: lignes.map(l => l.Bar) }));
 
   // Listes de valeurs
   const barsUniques = [...new Set(binchesVilleChoisie.map(d => d.Bar))].sort();
@@ -183,6 +200,7 @@ function binchesVilleSelected(villechoisie, bars, binches, distances) {
 
   // Création des sélecteurs
   const tomBar = creerSelecteur('filterbar', 'bar-list', 'Un bar en particulier ?', 'TOUS', barsUniques, function() {
+    if (!this.value) return reinitialiser();
     const selectedBar = this.value;
     pickCircles(selectedBar, "Bar");
     updateInfos(selectedBar);
@@ -191,6 +209,7 @@ function binchesVilleSelected(villechoisie, bars, binches, distances) {
   });
 
   const tomBrass = creerSelecteur('filterbrass', 'brass-list', 'Une brasserie à découvrir ?', 'TOUTES', brasseriesUniques, function() {
+    if (!this.value) return reinitialiser();
     const selectedBrasserie = this.value;
     pickCircles(selectedBrasserie, "Brasserie");
     updateInfos(selectedBrasserie);
@@ -199,10 +218,12 @@ function binchesVilleSelected(villechoisie, bars, binches, distances) {
   });
 
   const tomBinch = creerSelecteur('filterbinch', 'binch-list', 'Une bière intéressante ?', 'TOUTES', bieresUniques, function() {
+    if (!this.value) return reinitialiser();
     selectionnerBiere(this.value);
   });
 
   const tomStyle = creerSelecteur('filterstyle', 'style-list', 'Un style de bière favori ?', 'TOUS', stylesUniques, function() {
+    if (!this.value) return reinitialiser();
     const selectedStyle = this.value;
     pickCircles(selectedStyle, "STYLE4");
     updateInfos(selectedStyle);
@@ -239,23 +260,11 @@ function binchesVilleSelected(villechoisie, bars, binches, distances) {
     let valBinch = tomBinch.getValue();
 
     // Ajuste de façon standard la taille
-    graphWidth = largeurUtile(document.getElementById('colonne-graphique')) - margins.left - margins.right;
-    graphHeight = (hauteurUtile(document.getElementById('rang-principal')) - margins.top - margins.bottom) * 2.1;
-
-    // Ajuster la taille du graphique à la fenêtre
-    if (window.innerHeight < window.innerWidth && window.innerWidth < 810) {
-      graphHeight *= 0.3;
-    } else if (window.innerHeight < window.innerWidth && window.innerWidth < 1100) {
-      graphHeight *= 0.5;
-    } else if (window.innerHeight < 650) {
-      graphHeight *= 0.8;
-    } else if (window.innerHeight < 750) {
-      graphHeight *= 0.85;
-    } else if (window.innerHeight < 850) {
-      graphHeight *= 0.9;
-    } else if (window.innerWidth > 1100 && window.innerWidth < 1200 && window.innerHeight >= 850) {
-      graphHeight *= 0.75;
-    }
+    const largeur = largeurUtile(document.getElementById('colonne-graphique'));
+    // Rapport 4:3, sans dépasser 70 % de la hauteur de la fenêtre, avec un minimum lisible
+    const hauteur = Math.max(280, Math.min(largeur * 0.75, window.innerHeight * 0.7));
+    graphWidth = largeur - margins.left - margins.right;
+    graphHeight = hauteur - margins.top - margins.bottom;
 
     // Ajout du svg et du groupe adapté aux marges
     svgScat = d3.select("#scatter-load")
@@ -279,8 +288,8 @@ function binchesVilleSelected(villechoisie, bars, binches, distances) {
       // ECHELLES ET AXES
 
       // Définition du domain des échelles selon les données
-      xScale.domain(d3.extent(binchesVilleChoisie, d => d.ABV));
-      yScale.domain([0, d3.max(binchesVilleChoisie, d => d.IBU)]); // si on veut que IBU commence à 0, sinon utiliser extent
+      xScale.domain(d3.extent(pointsBieres, d => d.ABV));
+      yScale.domain([0, d3.max(pointsBieres, d => d.IBU)]); // si on veut que IBU commence à 0, sinon utiliser extent
       // barColorScale.domain(barsUniques);
 
       // Ajout des axes du graphique
@@ -307,7 +316,7 @@ function binchesVilleSelected(villechoisie, bars, binches, distances) {
       svgScat.append("g")
         .attr("class", "ensembleBinch")
         .selectAll("circle")
-        .data(binchesVilleChoisie)
+        .data(pointsBieres)
         .enter()
         .append("circle")
         .attr("id", d => d.Biere)
@@ -321,13 +330,13 @@ function binchesVilleSelected(villechoisie, bars, binches, distances) {
 
       // Définition des interactions sur les cercles
       svgScat.selectAll(".dot")
-        .data(binchesVilleChoisie)
+        .data(pointsBieres)
         .on("mouseover", function(event, d) {
 
           // Remplissage du tooltip
           toolTip.html(`<b>${d.Biere}</b><br><i>Style : ${d.STYLE4}\
                         <br>Amertume : ${d.IBU} IBU<br>Alcool : ${d.ABV} %\
-                        <br>Brasserie : ${d.Brasserie} <br> Bar : ${d.Bar}</i>`)
+                        <br>Brasserie : ${d.Brasserie} <br> ${libelleBars(d.bars)}</i>`)
             .style("left", `${event.pageX+20}px`)
             .style("top", `${event.pageY+20}px`);
 
@@ -383,7 +392,7 @@ function binchesVilleSelected(villechoisie, bars, binches, distances) {
       setTimeout(function() {
         if (valBar) {
           svgScat.selectAll("circle")
-            .filter(d => valBar == d.Bar)
+            .filter(d => d.bars.includes(valBar))
             .attr("r", radius);
         } else if (valBrass) {
           svgScat.selectAll("circle")
@@ -435,6 +444,11 @@ function binchesVilleSelected(villechoisie, bars, binches, distances) {
     e.stopPropagation();
   });
 
+  // Sélecteur vidé par l'utilisateur : retour à l'état initial, sans erreur
+  function reinitialiser() {
+    updateInfos('TOUTES');
+    updateAllSelects('TOUTES');
+  }
 
   // MàJ des sélecteurs et "réinitialisation" si tout est sélectionné
   function updateAllSelects(selected, selectId) {
@@ -467,14 +481,15 @@ function binchesVilleSelected(villechoisie, bars, binches, distances) {
       ecrire('ABVselectedBeer', `Alcool : ${binch.ABV} % | `);
       ecrire('IBUselectedBeer', `${binch.IBU} IBU \u2002 `, legende(' disponible chez '), ' \u2002');
       ecrire('StyleSelectedBeer', `${binch.STYLE4} | `);
-      for (const ligne of listeBar) {
-        if (ligne.biere == selected) {
-          const span = document.createElement('span');
-          span.className = 'barDispo';
-          span.textContent = `${ligne.bar} | `;
-          document.getElementById('BarSelectedBeer').append(span);
-        }
-      }
+      const conteneur = document.getElementById('BarSelectedBeer');
+      const bars = listeBar.filter(l => l.biere == selected).map(l => l.bar);
+      bars.forEach((bar, i) => {
+        if (i > 0) conteneur.append(' | ');
+        const span = document.createElement('span');
+        span.className = 'barDispo';
+        span.textContent = bar;
+        conteneur.append(span);
+      });
     } else {
       ecrire('selectedBeer', selected);   // texte brut : « & » reste « & »
     }
@@ -539,11 +554,16 @@ function binchesVilleSelected(villechoisie, bars, binches, distances) {
 
   // Détermine quels cercles sont à conserver sur le graphique
   function pickCircles(selected, champ, t = 400) {
+    // Un bar est une liste dans chaque point ; les autres champs sont des valeurs simples
+    const correspond = champ === 'Bar'
+      ? d => d.bars.includes(selected)
+      : d => String(d[champ]) === selected;
+    
     svgScat.selectAll('circle')
       .transition()
       .duration(t)
       .attr("r", 0)
-      .filter(d => String(d[champ]) === selected)
+      .filter(correspond)
       .transition()
       .duration(t)
       .attr("r", radius);
