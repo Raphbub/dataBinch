@@ -1,3 +1,5 @@
+import { creerCarte } from './carte.js';
+
 //////////////////////
 // DÉMARRAGE : CHARGEMENT DES DONNÉES ET CHOIX DE LA VILLE
 
@@ -82,22 +84,18 @@ async function demarrer() {
 
 demarrer().catch(afficherErreur);
 
-binchesVilleSelected = function(villechoisie, bars, binches, distances) {
+function binchesVilleSelected(villechoisie, bars, binches, distances) {
 
-  if (villechoisie == 'TOUTES') {
-    window.barsVilleChoisie = bars;
-    console.log(barsVilleChoisie);
-    window.binchesVilleChoisie = binches;
-    console.log(binchesVilleChoisie);
-    window.binchesVilleChoisieavecCOO = bars;
-
-  } else {
-    window.barsVilleChoisie = bars.filter(f => villechoisie.includes(f.Ville)).map(f => f.Bar);
-    console.log(barsVilleChoisie);
-    window.binchesVilleChoisie = binches.filter(f => barsVilleChoisie.includes(f.Bar));
-    console.log(binchesVilleChoisie);
-    window.binchesVilleChoisieavecCOO = bars.filter(f => barsVilleChoisie.includes(f.Bar))
-  }
+  const toutes = villechoisie === 'TOUTES';
+  const barsVilleChoisie = toutes
+    ? bars.map(b => b.Bar)
+    : bars.filter(b => b.Ville === villechoisie).map(b => b.Bar);
+  const binchesVilleChoisie = toutes
+    ? binches
+    : binches.filter(b => barsVilleChoisie.includes(b.Bar));
+  const binchesVilleChoisieavecCOO = toutes
+    ? bars
+    : bars.filter(b => barsVilleChoisie.includes(b.Bar));
 
 
   ////////////////////////////////
@@ -105,7 +103,7 @@ binchesVilleSelected = function(villechoisie, bars, binches, distances) {
   ////////////////////////////////
 
   // Définitions des éléments relatifs au scatteplot
-  window.margins = {
+  const margins = {
     "left": 35,
     "right": 35,
     "top": 30,
@@ -134,10 +132,6 @@ binchesVilleSelected = function(villechoisie, bars, binches, distances) {
   // Import de la "matrice" des distances
   const rowDistFilter = distances.filter(d => d.Ville === villechoisie);
 
-  // Place où sauver les marqueurs
-  let markers = {};
-  let brassMarkersObj = {};
-
   // Définitions des différentes échelles
   let radius = 4.5;
 
@@ -152,102 +146,9 @@ binchesVilleSelected = function(villechoisie, bars, binches, distances) {
   // Couleurs selon le bar (evtl)
   // let barColorScale = d3.scaleOrdinal(d3.schemeCategory20);
 
-  /////////////////////////////////////////////////////////
-  // PARTIES RELATIVES A LA CARTE
-  ////////////////////////////////////////////////////////
-
-  // Définition des couches de base de la carte
-  const osmLayer = new L.TileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-  }); // Fond simple clair
-
-
-  const topoLayer = new L.TileLayer('https://tile.opentopomap.org/{z}/{x}/{y}.png', {
-    maxZoom: 17,
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
-  });  // Fond terrain
-
-
-
-  // Définition de la carte
-
-let centerCarte =   (villechoisie == 'Lyon') ? [45.760315, 4.837746]
-                    : (villechoisie == 'Avignon') ? [43.948555, 4.809927]
-                    : (villechoisie == 'Lausanne') ? [46.52243400482112, 6.632995605468751]
-                    : (villechoisie == 'Riga') ? [56.952365, 24.115035]
-                    :   [45.499463, 5.780614] ;
-
-let zoomCarte =   (villechoisie == 'TOUTES') ?  4
-                  : (villechoisie == 'Lyon') ? 12
-                  : 14;
-
-const carte = new L.LeafletMap('map', {
-    center: centerCarte,
-    zoom: zoomCarte
-  });
-
-  // Ajout des couches à la carte
-  carte.addLayer(osmLayer);
-
-
-  // Attribution des couches de bases pour le sélecteur
-  const baseMaps = {
-    "Simple": osmLayer,
-    "Terrain": topoLayer
-  };
-
-  // Ajout des couches au sélecteur et de ce dernier à la carte
-  new L.Control.Layers(baseMaps).addTo(carte);
-
-  // Ajout de l'échelle graphique, système métrique seulement
-  new L.Control.Scale({
-    imperial: false
-  }).addTo(carte);
-
-  // Ajout du bouton et fonction de localisation
-  class ControleLocalisation extends L.Control {
-    onAdd(map) {
-      const conteneur = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
-      const bouton = L.DomUtil.create('a', '', conteneur);
-      bouton.href = '#';
-      bouton.title = "Localisation de l'appareil";
-      bouton.setAttribute('role', 'button');
-      bouton.textContent = '◎';
-      L.DomEvent.on(bouton, 'click', function (e) {
-        L.DomEvent.stop(e);
-        map.locate({ setView: true, maxZoom: 15 });
-      });
-      return conteneur;
-    }
-  }
-  new ControleLocalisation({ position: 'topleft' }).addTo(carte);
-
-  let positionUtilisateur;
-  carte.on('locationfound', function (e) {
-    if (positionUtilisateur) carte.removeLayer(positionUtilisateur);
-    positionUtilisateur = new L.CircleMarker(e.latlng, { radius: 8 }).addTo(carte);
-  });
-  carte.on('locationerror', function () {
-    alert("Localisation impossible : vérifiez l'autorisation du navigateur.");
-  });
-
-  const creerIcone = (emoji, classe) => new L.DivIcon({
-    className: `marqueur ${classe}`,
-    html: `<span>${emoji}</span>`,
-    iconSize: [30, 30],
-    iconAnchor: [15, 15],
-    tooltipAnchor: [16, 0]
-  });
-
-  const brassMarker = creerIcone('🏭', 'marqueur-brasserie');
-  const barMarker = creerIcone('🍺', 'marqueur-bar');
-
-  // Rassemblement des marqueurs brasseries en clusters
-  let brassMarkers = new L.FeatureGroup();
-
-  // Assembler les marqueurs en groupe
-  let barMarkers = new L.FeatureGroup();
+  /////////////////////////
+  // Création de la carte
+  const carte = creerCarte('map', villechoisie);
 
 
   ////////////////////////////////////////////////
@@ -258,38 +159,6 @@ const carte = new L.LeafletMap('map', {
   window.addEventListener("resize", function() {
     drawSvg(true);
   });
-
-
-  for (let i = 0; i < binchesVilleChoisieavecCOO.length; i++) {
-    let bar = binchesVilleChoisieavecCOO[i];
-    // Enregistrement dans un objet pour référencement futur
-    markers[bar.Bar] = new L.Marker([bar.Lat, bar.Long], {
-        riseOnHover: true,
-        icon: barMarker
-      })
-      .bindTooltip(bar.Bar, {
-        className: 'barTooltip'
-      })
-      .on("click", function(e) {
-        // Retrouver quel bar a été cliqué
-        let el = $(e.srcElement || e.target);
-        let id = el[0]._icon.id;
-        let selectedBar = id;
-
-        // Ajustement de la page en fonction du bar sélectionné
-        updateInfos(selectedBar);
-        updateAllSelects(selectedBar, "bar-list");
-
-        goToMarker(selectedBar, markers);
-
-        pickCircles(selectedBar, "Bar");
-      })
-      .addTo(barMarkers)
-      .addTo(carte);
-    // Ajout d'un ID
-    markers[bar.Bar]._icon.id = bar.Bar;
-
-  }
 
   // Dict par nom et array des bières par bar
   const biereParNom = new Map(binches.map(b => [String(b.Biere), b]));
@@ -307,7 +176,7 @@ const carte = new L.LeafletMap('map', {
     pickCircles(selectedBar, "Bar");
     updateInfos(selectedBar);
     updateAllSelects(selectedBar, "bar-list");
-    goToMarker(selectedBar, markers);
+    goToMarker(selectedBar, 'bar');
   });
 
   const tomBrass = creerSelecteur('filterbrass', 'brass-list', 'Une brasserie à découvrir ?', 'TOUTES', brasseriesUniques, function() {
@@ -315,7 +184,7 @@ const carte = new L.LeafletMap('map', {
     pickCircles(selectedBrasserie, "Brasserie");
     updateInfos(selectedBrasserie);
     updateAllSelects(selectedBrasserie, "brass-list");
-    goToMarker(selectedBrasserie, brassMarkersObj);
+    goToMarker(selectedBrasserie, 'brasserie');
   });
 
   const tomBinch = creerSelecteur('filterbinch', 'binch-list', 'Une bière intéressante ?', 'TOUTES', bieresUniques, function() {
@@ -330,6 +199,21 @@ const carte = new L.LeafletMap('map', {
   });
 
   const selecteurs = { 'bar-list': tomBar, 'brass-list': tomBrass, 'binch-list': tomBinch, 'style-list': tomStyle };
+
+  carte.ajouterBars(binchesVilleChoisieavecCOO, (nom) => {
+    updateInfos(nom);
+    updateAllSelects(nom, 'bar-list');
+    carte.allerAuBar(nom);
+    pickCircles(nom, 'Bar');
+  });
+
+  const brasseries = [...new Map(binchesVilleChoisie.map(b => [b.Brasserie, b])).values()];
+  carte.ajouterBrasseries(brasseries, (nom) => {
+    updateInfos(nom);
+    updateAllSelects(nom, 'brass-list');
+    carte.allerALaBrasserie(nom);
+    pickCircles(nom, 'Brasserie');
+  });
 
   // Fonction qui dessine le svg et fait l'interaction avec la carte
   // prend un booleen indiquant si c'est redessiné (par ex. ajustement de la taille)
@@ -379,15 +263,6 @@ const carte = new L.LeafletMap('map', {
     let yScale = d3.scaleLinear()
       .range([graphHeight, 0])
       .nice();
-
-      // Récupération des coordonnées des brasseries
-      const brasseriesLatLon = $.map(binchesVilleChoisie, function(n, i) {
-        return {
-          brasserie: n.Brasserie,
-          Lat: n.Lat,
-          Long: n.Long
-        };
-      });
 
       ////////////////////
       // ECHELLES ET AXES
@@ -474,37 +349,6 @@ const carte = new L.LeafletMap('map', {
         .on("click", function(event, d) { selectionnerBiere(String(d.Biere)); });
 
 
-      //////////////
-      // AJOUTS VISUS CARTES
-      // Pour chaque brasserie, récupèrer les coordonnées et les assigner à un marqueur
-      for (let i = 0; i < brasseriesUniques.length; i++) {
-        let brasserie = binchesVilleChoisie.find(d => d.Brasserie === brasseriesUniques[i]);
-
-        brassMarkersObj[brasserie.Brasserie] = new L.Marker([brasserie.Lat, brasserie.Long], {
-            riseOnHover: true,
-            icon: brassMarker
-          })
-          .bindTooltip(brasserie.Brasserie)
-          .on("click", function(e) {
-            // Retrouver quelle brasserie a été cliquée et modifier la page en conséquence
-            let el = $(e.srcElement || e.target);
-            let id = el[0]._icon.id;
-            let selectedBrass = id;
-
-            updateInfos(selectedBrass);
-            updateAllSelects(selectedBrass, "brass-list");
-
-            goToMarker(selectedBrass, brassMarkersObj);
-
-            pickCircles(selectedBrass, "Brasserie");
-          })
-          .addTo(brassMarkers)
-          .addTo(carte);
-        // Ajout d'un ID pour le référencement du tooltip
-        brassMarkersObj[brasserie.Brasserie]._icon.id = brasserie.Brasserie;
-      }
-
-
     // Légendes des axes
     svgScat.append("text")
       .attr("class", "x label")
@@ -556,7 +400,7 @@ const carte = new L.LeafletMap('map', {
     // Faire "disparaître" les bières non correspondantes
     pickCircles(selectedBrass, "Brasserie");
 
-    goToMarker(selectedBrass, brassMarkersObj);
+    goToMarker(selectedBrass, 'brasserie');
 
     // Màj des informations et sélecteurs
     updateInfos(selectedBrass);
@@ -571,7 +415,7 @@ const carte = new L.LeafletMap('map', {
 
       pickCircles(selectedBar, "Bar");
 
-      goToMarker(selectedBar, markers);
+      goToMarker(selectedBar, 'bar');
 
       // Màj des informations et sélecteurs
       updateInfos(selectedBar);
@@ -621,23 +465,11 @@ const carte = new L.LeafletMap('map', {
   }
 
   // Déplace la carte sur le marker, ouvre son tooltip et le met en avant
-  function goToMarker(selected, couche, listeBiere) {
-    // Ferme les tooltips encore ouverts
-    carte.eachLayer(function(l) {
-      l.closeTooltip?.();
-    });
-    // Si tout est sélectionné, alors retour sur l'ensemble des bars
-    if (selected == 'TOUS' || selected == 'TOUTES') {
-      carte.flyToBounds(barMarkers.getBounds());
-    } else {
-      if (listeBiere) {
-        let brass = listeBiere.find(d => d.Biere == selected).Brasserie;
-        selected = brass;
-      }
-      carte.flyTo(couche[selected].getLatLng(), 15);
-      couche[selected].openTooltip();
-      couche[selected].setZIndexOffset(1000);
-    }
+  function goToMarker(selected, type, listeBiere) {
+    if (selected == 'TOUS' || selected == 'TOUTES') return carte.toutVoir();
+    if (listeBiere) selected = biereParNom.get(String(selected)).Brasserie;
+    if (type === 'bar') carte.allerAuBar(selected);
+    else carte.allerALaBrasserie(selected);
   }
 
   function afficherSimilaires(nom) {
@@ -685,7 +517,7 @@ const carte = new L.LeafletMap('map', {
     pickCircles(nom, 'Biere', 300);
     updateInfos(nom, binchesVilleChoisie, biereBar);
     updateAllSelects(nom, 'binch-list');
-    goToMarker(nom, brassMarkersObj, binchesVilleChoisie);
+    goToMarker(nom, 'brasserie', binchesVilleChoisie);
     afficherSimilaires(nom);
   }
 
@@ -701,10 +533,10 @@ const carte = new L.LeafletMap('map', {
       .attr("r", radius);
   }
 
-};
+}
 
 // Permet d'ajuster le logo en fonction du SRM
-adjustLogo = function(srmBinche) {
+function adjustLogo(srmBinche) {
   let logoDef;
 
   if (srmBinche >= 25) {
