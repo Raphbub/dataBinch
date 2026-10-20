@@ -9,11 +9,28 @@ const VUES = {
   Riga:     { centre: [56.952365, 24.11503], zoom: 14 },
 };
 
-function creerIcone(emoji, classe) {
+// Épingles en SVG (une goutte avec un pictogramme), sans bibliothèque d'icônes.
+const GOUTTE = 'M15 1C7.3 1 1 7.3 1 15c0 9.8 14 26 14 26s14-16.2 14-26C29 7.3 22.7 1 15 1z';
+
+// Chope de bière (blanc, sur fond bleu)
+const PICTO_BAR = `
+  <path d="M9 10.5h9v9.2a1.8 1.8 0 0 1-1.8 1.8h-5.4A1.8 1.8 0 0 1 9 19.7z" fill="#fff"/>
+  <path d="M18 12.5h1.6a1.7 1.7 0 0 1 1.7 1.7v2.4a1.7 1.7 0 0 1-1.7 1.7H18" fill="none" stroke="#fff" stroke-width="1.6"/>
+  <path d="M9.6 10.5c0-1.7 1.3-2.7 2.6-2.4.7-1 2.4-1 3 .1 1.5-.2 2.6.9 2.6 2.3z" fill="#fff"/>`;
+
+// Usine à toit en dents de scie (gris foncé, sur fond clair)
+const PICTO_BRASSERIE = `
+  <path d="M8 21.5V14.5l4 2.5v-2.5l4 2.5V8.5h3.5v13z" fill="#37474f"/>
+  <path d="M10 19h1.6v1.6H10zM13.5 19h1.6v1.6h-1.6zM17 19h1.6v1.6H17z" fill="#fff"/>`;
+
+function creerIcone(fond, contour, picto, classe) {
   return new L.DivIcon({
     className: `marqueur ${classe}`,
-    html: `<span>${emoji}</span>`,
-    iconSize: [30, 30], iconAnchor: [15, 15], tooltipAnchor: [16, 0],
+    html: `<svg viewBox="0 0 30 42" width="30" height="42" aria-hidden="true">
+             <path d="${GOUTTE}" fill="${fond}" stroke="${contour}" stroke-width="1.5"/>${picto}</svg>`,
+    iconSize: [30, 42],
+    iconAnchor: [15, 41],      // la pointe de la goutte repère le lieu
+    tooltipAnchor: [14, -26],
   });
 }
 
@@ -61,8 +78,8 @@ export function creerCarte(idConteneur, ville) {
   });
 
   // Marqueurs : un dictionnaire nom -> marqueur par type
-  const iconeBar = creerIcone('🍺', 'marqueur-bar');
-  const iconeBrasserie = creerIcone('🏭', 'marqueur-brasserie');
+  const iconeBar = creerIcone('#37a9dd', '#2a85b0', PICTO_BAR, 'marqueur-bar');
+  const iconeBrasserie = creerIcone('#ffffff', '#78909c', PICTO_BRASSERIE, 'marqueur-brasserie');
   const groupeBars = new L.FeatureGroup();
   const marqueurs = { bar: {}, brasserie: {} };
 

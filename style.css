@@ -142,13 +142,10 @@ h3 {
 
 /* Marqueurs */
 .marqueur {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  border: 2px solid #fff;
-  border-radius: 50%;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, .4);
+  background: none;
+  border: none;
 }
-.marqueur-bar { background: #2a81cb; }
-.marqueur-brasserie { background: #fff; border-color: #666; }
+
+.marqueur svg {
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.35));
+}
