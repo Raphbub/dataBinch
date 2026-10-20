@@ -28,6 +28,7 @@ function afficherErreur(e) {
 function creerTomSelect(select, placeholder, options = {}) {
   return new TomSelect(select, {
     placeholder,
+    plugins: { clear_button: { title: 'Effacer' } },
     maxOptions: null,   // 50 par défaut : on veut toute la liste
     render: { no_results: () => '<div class="no-results">Aucun résultat</div>' },
     ...options
