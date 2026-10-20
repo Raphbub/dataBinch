@@ -1,5 +1,4 @@
 body {
-  margin-left: 10px;
   font-family: Lato;
 }
 
@@ -18,13 +17,6 @@ body {
   color: #D77200;
 }
 
-.distances {
-  margin: 0;
-  background-color: rgb(0, 0, 0);
-  border-bottom-color: rgb(229, 229, 229);
-  border-bottom-width: 1px;
-}
-
 #selectedBeer {
   font-family: Lato;
   font-size: 22pt;
@@ -33,7 +25,7 @@ body {
   margin-bottom: 0;
 }
 
-#brasspar {
+.legende-info {
   font-family: Lato;
   color: darkgrey;
   font-size: 12pt;
@@ -51,13 +43,14 @@ text {
   fill: #666666;
 }
 
-.tooltip {
+.infobulle {
   position: absolute;
   background-color: #424242;
   color: white;
   text-align: center;
   padding: 8px;
   margin-top: -20px;
+  z-index: 1070;
   pointer-events: none;
 }
 
@@ -68,8 +61,7 @@ text {
 }
 
 #map {
-  /*A modifier dynamiquement dans le js*/
-  width: 500px;
+  width: 100%;
   height: 300px;
   position: relative;
   z-index: 1;
@@ -83,33 +75,6 @@ text {
   background: #37a9dd;
   color: white;
   font-weight: bold;
-}
-
-.box {
-  border: 1px solid #EEE;
-  margin: 3px;
-  padding: 5px;
-  background-color: white;
-  font-family: sans-serif;
-  font-size: 12px;
-}
-
-#infos-bieres {
-  position: absolute;
-  background-color: #424242;
-  color: white;
-  text-align: center;
-  pointer-events: none;
-  font-family: Lato;
-}
-
-.Biereproches {
-  border-bottom-color: rgb(229, 229, 229);
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
-  font-size: 19.2px;
-  font-weight: 600;
-  font-family: Lato;
 }
 
 h3 {
@@ -126,141 +91,30 @@ h3 {
   cursor: pointer;
 }
 
-/*!
- * Prelim css
- */
-
-#modal_screen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  z-index: 1100;
-  background-color: rgba(0, 0, 0, .8);
-}
-
-#modal_screen.nope {
-  background-color: #1e0924;
-}
-
-#modal_content {
-  position: fixed;
-  z-index: 1101;
-  margin: 0 auto;
-  background-color: #fff;
-  border: 4px solid #444;
-  border-radius: 100%;
-  font-size: 12px;
+/* Fenêtre de choix de ville */
+#choix-ville {
   width: 290px;
-  /* if you adjust it from the original 290px, adjust the difference in the width of #modal_content nav too */
   height: 290px;
-  /* if you adjust it from the original 290px, adjust the difference in the width of #modal_content nav too */
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -ms-box-sizing: border-box;
-  -o-box-sizing: border-box;
-  box-sizing: border-box;
-  background-position: center 2em;
-  background-repeat: no-repeat;
-  background-size: 90px auto;
-}
-
-#modal_content.content_wrapper {
-  padding-top: 8em;
-  margin: 3em auto 0;
-  text-align: center;
-}
-
-#modal_content h2 {
-  padding-left: 4em;
-  font: 11px/1.5em "Lato", Helvetica, arial, sans-serif;
-}
-
-#modal_content p {
-  max-width: 75%;
-  font: 11px/1.5em "Lato", Helvetica, arial, sans-serif;
-}
-
-#modal_content nav {
-  font-size: 16px;
-  display: table;
-  width: 282px;
-}
-
-#modal_content nav ul {
-  display: table-row;
-  width: 100%;
-  margin: 0;
   padding: 0;
-}
-
-#modal_content nav li {
-  display: table-cell;
-  text-align: right;
-  width: auto;
-}
-
-#modal_content nav:after {
-  content: "";
-  display: block;
-  clear: both;
-}
-
-#modal_content nav small {
-  display: block;
+  border: 4px solid #444;
+  border-radius: 50%;
+  background: #fff;
+  overflow: visible;   /* la liste déroulante peut dépasser du cercle */
   text-align: center;
-  color: #888;
-  margin: 1em 0 0;
 }
-
-#modal_content nav .av_go {
-  background-color: #7fbf4d;
+#choix-ville[open] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
 }
-
-#modal_content nav .av_no {
-  background-color: #938d95;
-}
-
-#modal_content nav .av_btn:hover {
-  background-color: #1e0924;
-}
-
+#choix-ville::backdrop { background: rgba(0, 0, 0, .8); }
+#choix-ville h2 { margin: 0; font-size: 1.4em; }
+#filtercity { width: 70%; text-align: left; }
 @media (min-width: 688px) {
-  #modal_content {
-    top: 10em;
-    top: 30vh;
-    left: 30vw;
-    width: 90%;
-    max-width: 500px;
-    height: 500px;
-    padding: 3em;
-    border-radius: 100%;
-    background-position: center 3em;
-    background-size: 160px auto;
-    font-size: 16px;
-  }
-  #modal_content .content_wrapper {
-    padding-top: 25px;
-    margin: 3em auto 0;
-    text-align: center;
-  }
-  #modal_content h2 {
-    font-size: 1.875em;
-  }
-  #validerbutton {
-    padding-top: 25px;
-    font-size: 1em;
-    line-height: 1.9em;
-  }
-  #modal_content nav {
-    width: 396px;
-  }
-  #modal_content nav a.av_btn {
-    padding: 1em 2.5em;
-    margin: 1.6em auto 0;
-    font-size: 1em;
-  }
+  #choix-ville { width: 500px; height: 500px; }
+  #choix-ville h2 { font-size: 1.875em; }
 }
 
 #boutonReset {
@@ -284,4 +138,14 @@ h3 {
   background-color: #3e8e41;
   box-shadow: 0 3px #666;
   transform: translateY(2px);
+}
+
+/* Marqueurs */
+.marqueur {
+  background: none;
+  border: none;
+}
+
+.marqueur svg {
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.35));
 }

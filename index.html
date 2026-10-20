@@ -1,76 +1,57 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="Statistiques et visualisations d'une large sélection de bières de bars lausannois">
-  <meta name="keywords" content="dataviz, beer, beers, beer-statistics, brewery, breweries, bière, bières, bar, bars, Lausanne">
+  <meta name="description" content="Statistiques et visualisations d'une large sélection de bières de bars Lausanne, Lyon, Riga et Avignon">
+  <meta name="keywords" content="dataviz, beer, beers, beer-statistics, brewery, breweries, bière, bières, bar, bars, LausanneLyon, Riga, Avignon">
   <meta name="author" content="Raphaël Bubloz, Romain Lacroix">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="-1">
-  <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>DataBinch</title>
 
   <!-- Imports des librairies jQuery, D3, bootstrap, leaflet et autres packages-->
-  <script src="lib/jquery-3.2.1.min.js" charset="utf-8"></script>
   <script src="lib/d3.min.js"></script>
-  <script src="lib/bootstrap.min.js"></script>
-  <script src="https://use.fontawesome.com/87f532b576.js"></script>
-  <script src="lib/leaflet.js"></script>
-  <script src="https://unpkg.com/leaflet.markercluster@1.0.5/dist/leaflet.markercluster.js" charset="utf-8"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.min.js" charset="utf-8"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.60.0/L.Control.Locate.min.js" charset="utf-8"></script>
-
-  <link rel="stylesheet" href="lib/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.0.5/dist/MarkerCluster.Default.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.0.5/dist/MarkerCluster.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.60.0/L.Control.Locate.min.css" />
-  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
+  <script src="lib/leaflet-global.js"></script>
+  <script src="lib/tom-select/tom-select.complete.min.js"></script>
+  
+  <link rel="stylesheet" href="lib/bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" href="lib/tom-select/tom-select.bootstrap5.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
   <link rel="shortcut icon" href="data/favicon.ico">
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
-
+  <link rel="stylesheet" href="lib/leaflet.css">
 
   <link rel="stylesheet" href="style.css">
 </head>
 
-<body id="bootstrap-overrides">
+<body>
 
-  <div id="filtercity"></div>
-  <div id="validerbutton">
-    <button id="valider">Valider</button>
-  </div>
+  <dialog id="choix-ville">
+    <h2>Quelle ville ?</h2>
+    <div id="filtercity"></div>
+    <button id="valider" type="button" class="btn btn-success">Valider</button>
+  </dialog>
 
-  <div class="row enTete 1ereColonne">
-    <div class="colonneAvecSelect col-sm-12 col-md-9 col-lg-7">
-      <div id="filterbar" class="select1 col-sm-4 col-md-4 col-lg-4">
-        <b>Bar</b><br>
-      </div>
-      <div id="filterbrass" class="select2 col-sm-4 col-md-4 col-lg-4">
-        <b>Brasserie</b><br>
-      </div>
-      <div id="filterstyle" class="select4 col-sm-4 col-md-4 col-lg-4">
-        <b>Style</b><br>
-      </div>
-      <div id="filterbinch" class="select3 col-sm-4 col-md-4 col-lg-4">
-        <b>Bière</b><br>
+  <div class="container-fluid">
+  <div class="row" id="entete">
+    <div class="col-12 col-lg-9 col-xl-7">
+      <div class="row">
+        <div id="filterbar" class="col-12 col-md-4"><b>Bar</b><br></div>
+        <div id="filterbrass" class="col-12 col-md-4"><b>Brasserie</b><br></div>
+        <div id="filterstyle" class="col-12 col-md-4"><b>Style</b><br></div>
+        <div id="filterbinch" class="col-12 col-md-4"><b>Bière</b><br></div>
       </div>
     </div>
-    <div class="colonneSansSelect col-sm-0 col-md-3 col-lg-3">
-      <input type="button" id = "boutonReset" value="Reset" onClick="window.location.reload()">
-
+    <div class="col-lg-3">
+      <input type="button" id="boutonReset" value="Reset" onClick="window.location.reload()">
     </div>
   </div>
-  <div class="row 2emeRang">
-    <div class="col-sm-12 col-md-12 col-lg-6 2r2c">
+
+  <div class="row" id="rang-principal">
+    <div class="col-12 col-xl-6" id="colonne-graphique">
       <div id="scatter-load">
         <p class="binchselected"><span id="selectedBeer"></span>
-          <span id="BrassSelectedBeer" class="infoSelected"></span>
-        </p>
+          <span id="BrassSelectedBeer" class="infoSelected"></span></p>
         <p class="binchattributes">
           <span id="StyleSelectedBeer" class="infoSelected"></span>
           <span id="ABVselectedBeer" class="infoSelected"></span>
@@ -80,17 +61,15 @@
       </div>
     </div>
 
-    <div class="col-sm-0 col-md-0 col-lg-6">
-
-      <div id="conteneurCarte" class="carte col-sm-6 col-md-6 col-lg-12">
-        <div id="map" class=""> </div>
-      </div>
-      <div id="distances" class="similaires col-sm-6 col-md-6">
-        <div id="Biereproches"></div>
+    <div class="col-12 col-xl-6">
+      <div class="row">
+        <div id="conteneurCarte" class="carte col-12 col-md-6 col-xl-12"><div id="map"></div></div>
+        <div id="distances" class="similaires col-12 col-md-6"><div id="Biereproches"></div></div>
       </div>
     </div>
   </div>
-  <script src="script.js" charset="utf-8"></script>
+</div>
+<script type="module" src="script.js" charset="utf-8"></script>
 
 
 </body>
