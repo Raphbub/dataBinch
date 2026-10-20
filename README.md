@@ -12,11 +12,11 @@ Envie d'une bonne ale?
 
 En savoir plus sur la mousse dégustée hier en terrasse ?
 
-[**dataBinch**](https://databinch.github.io) est la solution à ces questions et à bien d'autres encore ! Notre site interactif répertorie plus de 650 bières qui sont ou ont été disponibles à la carte de 20 bars lausannois.
+[**dataBinch**](https://databinch.github.io) est la solution à ces questions et à bien d'autres encore ! Notre site interactif répertorie plus de 1400 bières qui sont ou ont été disponibles à la carte de 57 bars répartis dans quatre villes : Lausanne, Lyon, Avignon et Riga.
 
 Amertume, couleur, taux d'alcool, style ou brasserie, bientôt les bières n'auront plus de secret pour vous. Grâce à nos fonctions de recherche, en sélectionnant une mousse, vous obtenez également celles qui s'en rapprochent le plus. Ainsi, une fois votre style préféré découvert, partez à la découverte des breuvages similaires proposés par [**dataBinch**](https://databinch.github.io).
 
-Découverte aisée, car, pour chaque bière, vous pouvez savoir quels sont les bars où celle-ci est disponible. À l'aide de la carte et de sa fonction de localisation (_précision indépendante de notre volonté_), trouver les bars devient facile. La carte permet également de voir où se situent les plus de 200 brasseries inventoriées.
+Découverte aisée, car, pour chaque bière, vous pouvez savoir quels sont les bars où celle-ci est disponible. À l'aide de la carte et de sa fonction de localisation (_précision indépendante de notre volonté_), trouver les bars devient facile. La carte permet également de voir où se situent les plus de 430 brasseries inventoriées.
 
 Il est possible de faire tout ceci depuis son ordinateur en attendant l'_happy hour_, sa tablette en sirotant une cervoise fraîche à la maison ou encore son _smartphone_ pour connaître sa commande avant même d'arriver dans le bar.
 
@@ -25,7 +25,7 @@ Il suffit d'avoir accès à internet et de se rendre [ici](https://databinch.git
 
 Vous devriez ensuite trouver cette page d'accueil (_varie en fonction du support utilisé_) :
 
-![alt text](/data/img_readme/1_acc.PNG "Page d'acceuil")
+![alt text](/data/img_readme/1_acc.PNG "Page d'accueil")
 
 La page est divisée en 3 parties interactivement liées. Il y a les différents sélecteurs, le graphique comprenant les bières et la carte avec ses différents marqueurs.
 
@@ -33,7 +33,7 @@ Il est possible de survoler une bière du graphique ou un marqueur de la carte p
 
 ![alt text](/data/img_readme/2_survol.PNG "Tooltip graphique au survol") &emsp; ![alt text](/data/img_readme/2bis_survol.PNG "Tooltip carte au survol")
 
-Il y a plusieurs moyens de sélectionner une bière : soit en cliquant directement sur la bière dans le graphique, soit en effectuant une recherche à l'aide des sélecteurs (pareil pour bar et brasserie) situés en haut de la page :
+Il y a plusieurs moyens de sélectionner une bière : soit en cliquant directement sur la bière dans le graphique, soit en effectuant une recherche à l'aide des sélecteurs (pareil pour bar, brasserie et style) situés en haut de la page :
 
 ![alt text](/data/img_readme/3_rech.PNG "Recherche dans le sélecteur")
 
@@ -62,11 +62,13 @@ Finalement, les coordonnées des différents bars et brasseries ont été récup
 
 Un récapitulatif de la taille de notre base de données et des différents éléments la composant :
 
-| Éléments | Nombre |
-|:--------:|:------:|
-|Bières    |678     |
-|Brasseries|205     |
-|Bars      |20      |
+|   Ville  | Bières | Brasseries | Bars |
+|:--------:|:------:|:----------:|:----:|
+| Lausanne |   679  |     207    |  21  |
+|   Lyon   |   622  |     251    |  20  |
+|  Avignon |   200  |     101    |   7  |
+|   Riga   |   186  |     78     |   9  |
+|   Total  |  1 408 |     432    |  57  |
 
 | Bière         |
 |:-------------:|
@@ -102,12 +104,12 @@ Nous avons appliqué ce principe aux bières de notre base de données et calcul
 
 Le calcul de la dissimilarité prenant en compte des données catégorielles, nous avons eu recours à la distance de Gower qui permet de prendre en compte à la fois des données numériques et des données catégorielles.
 
-La distance étant une dissimilarité, nous trions les distances par ordre croissant de façon à retourner les valeurs de distance les plus faibles afin d'obtenir les bières les plus proches de la bière sélectionnée.
+La distance étant une dissimilarité, nous trions les distances par ordre croissant de façon à retourner les valeurs de distance les plus faibles afin d'obtenir les bières les plus proches de la bière sélectionnée. Le calcul est fait séparément pour chaque ville et limité à 5 bières proches afin d'obtenir un fichier `rowdist.csv` plus léger.
 
 ### Cadre
 Ce projet a été réalisé par Raphaël Bubloz et Romain Lacroix dans le cadre du cours _Visualisation de données (SP17)_ donné par Isaac Pante à l'Université de Lausanne.
 
-Nous avons ainsi choisi de constituer notre propre jeu de données et de construire la visualisation sur celui-ci. L'ajout de la carte est un clin d'oeil à notre formation de géographes. Certaines parties du code mélangent les genres (par ex. sélections avec _jQuery_ ou en _javascript_ pur), mais reflètent ainsi les différentes habitudes au sein du duo. Habitudes que nous n'avons pas nécessairement voulu standardiser jusqu'au bout.
+Nous avons ainsi choisi de constituer notre propre jeu de données et de construire la visualisation sur celui-ci. L'ajout de la carte est un clin d'oeil à notre formation de géographes. Certaines parties du code mélangent les genres (par ex. sélections avec _jQuery_ ou en _javascript_ pur), mais reflètent ainsi les différentes habitudes au sein du duo. Habitudes que nous n'avons pas nécessairement voulu standardiser jusqu'au bout. Cependant la version plus récente privilégie le js natif pour réduire les dépendances.
 
 ##### tl;dr
 Statistiques et visualisations d'une large sélection de bières de bars lausannois
